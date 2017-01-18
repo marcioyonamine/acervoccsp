@@ -55,8 +55,8 @@ $catalogador = $_SESSION['idUsuario'];
 
 if(isset($_POST['cadastraRegistro'])){
 	$sql_insere = "INSERT INTO `acervo_partituras` 
-	(`planilha`, `catalogador`, `tipo_geral`, `tipo_especifico`, `tombo`, `editora`, `registro`, `tipo_data`, `data_gravacao`, `local_gravacao`, `descricao_fisica`, `medidas`, `paginas`, `faixas`, `titulo_disco`, `titulo_uniforme`, `titulo_obra`, `conteudo`, `notas`, `obs`, `exemplares`) 
-	VALUES ('$planilha', '$catalogador', '$geral', '$especifico', '$tombo', '$editora', '$registro', '$tipo_data', '$data_gravacao', '$local', '$fisico', '$medidas', '$paginas', '$n_partituras', '$titulo', '$titulo_uniforme', '$titulo_geral', '$conteudo', '$notas', '$obs', '$exemplares');";
+	(`planilha`, `catalogador`, `tipo_geral`, `tipo_especifico`, `tombo`, `tombo_antigo`, `editora`, `registro`, `tipo_data`, `data_gravacao`, `local_gravacao`, `descricao_fisica`, `medidas`, `paginas`, `faixas`, `titulo_disco`, `titulo_uniforme`, `titulo_obra`, `conteudo`, `notas`, `obs`, `exemplares`) 
+	VALUES ('$planilha', '$catalogador', '$geral', '$especifico', '$tombo', '$tombo_antigo', '$editora', '$registro', '$tipo_data', '$data_gravacao', '$local', '$fisico', '$medidas', '$paginas', '$n_partituras', '$titulo', '$titulo_uniforme', '$titulo_geral', '$conteudo', '$notas', '$obs', '$exemplares');";
 	$query_insere = mysqli_query($con,$sql_insere);
 	if($query_insere){
 		$ultimo = mysqli_insert_id($con);
@@ -102,6 +102,7 @@ if(isset($_POST['atualizaRegistro'])){
 	`tipo_geral` =  '$geral', 
 	`tipo_especifico` = '$especifico', 
 	`tombo` = '$tombo', 
+	`tombo_antigo` = '$tombo_antigo', 
 	`editora` = '$editora', 
 	`registro` = '$registro', 
 	`tipo_data` = '$tipo_data', 
@@ -177,6 +178,11 @@ $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 					<div class="col-md-offset-2 col-md-8"><strong>Tombo / Localização</strong><br/>
 					  <input type="text" class="form-control soNumero" id="duracao" name="tombo"  value="<?php echo $disco['tombo']; ?>" >
                       </div>
+				  </div>
+                                                      <div class="form-group">
+					<div class="col-md-offset-2 col-md-8"><strong>Tombo Antigo</strong><br/>
+					  <input type="text" class="form-control soNumero" id="duracao" name="tombo"  value="<?php echo $disco['tombo_antigo']; ?>" >
+                      </div>
 				  </div>	
 				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-6"><strong>Tipo Geral:</strong><br/>
@@ -233,14 +239,14 @@ $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 						?> 
                         </select> 
 					</div>				  
-					<div class=" col-md-6"><strong>Data da gravação:</strong><br/>
+					<div class=" col-md-6"><strong>Data da edição/publicação:</strong><br/>
 					  <input type="text" class="form-control" id="CCM" name="data_gravacao"  value="<?php echo $disco['data_gravacao']; ?>" >
 					</div>
 				  </div>
 
 
                   <div class="form-group">
-					<div class="col-md-offset-2 col-md-8"><strong>Local da gravação:</strong><br/>
+					<div class="col-md-offset-2 col-md-8"><strong>Local da edição/publicação:</strong><br/>
 					                	  <select class="form-control" id="tipoDocumento" name="local" >
 					   <option>Selecione o local da gravação</option>
 
@@ -290,12 +296,13 @@ $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 					  <input type="text" class="form-control" id="Nome" name="titulo_uniforme" value="<?php echo $disco['titulo_uniforme']; ?>" >
 					</div>
 				  </div>
+                  <!--
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Título da Obra *:</strong><br/>
 					  <input type="text" class="form-control" id="Nome" name="titulo_geral" value="<?php echo $disco['titulo_obra']; ?>" >
 					</div>
 				  </div>
-
+				-->
 				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Conteúdo:</strong><br/>
 					 <textarea name="conteudo" class="form-control" rows="10" placeholder=""><?php echo $disco['conteudo']; ?></textarea>
@@ -346,7 +353,7 @@ $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 <?php if($disco['faixas'] > 1){ ?>
 				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
-<a href="?perfil=discoteca&p=frm_analiticas_partitura" class="btn btn-theme btn-block" >Faixas (Analítica)</a>
+<a href="?perfil=discoteca&p=frm_analiticas_partitura" class="btn btn-theme btn-block" >Partituras/Analítica</a>
 					</div>
 				  </div>				  
 <?php } ?>

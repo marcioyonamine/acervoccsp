@@ -156,7 +156,7 @@ if(isset($_POST['apagar'])){
 					</div>
 				  </div>
                   <div class="form-group">
-					<div class="col-md-offset-2 col-md-8"><strong>Título da faixa*:</strong><br/>
+					<div class="col-md-offset-2 col-md-8"><strong>Título da partitura / analítica *:</strong><br/>
 					  <input type="text" class="form-control" id="Nome" name="titulo"  value="" >
 					</div>
 				  </div>
@@ -165,11 +165,13 @@ if(isset($_POST['apagar'])){
 					  <input type="text" class="form-control" id="Nome" name="titulo_uniforme" value="" >
 					</div>
 				  </div>
+                  <!--
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Título Geral *:</strong><br/>
 					  <input type="text" class="form-control" id="Nome" name="titulo_geral" value="" >
 					</div>
 				  </div>
+                  -->
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Notas:</strong><br/>
 					 <textarea name="notas" class="form-control" rows="10" placeholder=""></textarea>
@@ -211,7 +213,7 @@ $pag_inicial = $_POST['pag_inicial'];
 $pag_final = $_POST['pag_final'];
 $titulo = $_POST['titulo'];
 $titulo_uniforme = $_POST['titulo_uniforme'];
-$titulo_geral = $_POST['titulo_geral'];
+//$titulo_geral = $_POST['titulo_geral'];
 $conteudo = $_POST['conteudo'];
 $notas = $_POST['notas'];
 $obs = $_POST['obs'];
@@ -223,8 +225,8 @@ $matriz = $_SESSION['idDisco'];
 if(isset($_POST['cadastraRegistro'])){
 
 	$sql_insere = "INSERT INTO `acervo_partituras` 
-	(`planilha`, `catalogador`, `pag_inicial`, `pag_final`, `matriz`,  `titulo_disco`, `titulo_uniforme`, `titulo_geral`, `conteudo`, `notas`, `obs`) 
-	VALUES ('$planilha', '$catalogador', '$pag_inicial', '$pag_final', '$matriz',   '$titulo', '$titulo_uniforme', '$titulo_geral', '$conteudo', '$notas', '$obs');";
+	(`planilha`, `catalogador`, `pag_inicial`, `pag_final`, `matriz`,  `titulo_disco`, `titulo_uniforme`,  `conteudo`, `notas`, `obs`) 
+	VALUES ('$planilha', '$catalogador', '$pag_inicial', '$pag_final', '$matriz',   '$titulo', '$titulo_uniforme',  '$conteudo', '$notas', '$obs');";
 	$query_insere = mysqli_query($con,$sql_insere);
 	if($query_insere){
 		$ultimo = mysqli_insert_id($con);
@@ -249,7 +251,6 @@ if(isset($_POST['atualizaRegistro'])){
 	`pag_final` = '$pag_final', 
 	`titulo_disco` = '$titulo', 
 	`titulo_uniforme` =  '$titulo_uniforme', 
-	`titulo_geral` = '$titulo_geral', 
 	`conteudo` = '$conteudo', 
 	`notas` = '$notas', 
 	`obs` = '$obs' 

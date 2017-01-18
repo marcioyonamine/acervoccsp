@@ -91,14 +91,14 @@ include 'includes/menuPartitura.php';
 						?> 
                         </select> 
 					</div>				  
-					<div class=" col-md-6"><strong>Data da gravação:</strong><br/>
+					<div class=" col-md-6"><strong>Data da edição/publicação:</strong><br/>
 					  <input type="text" class="form-control" id="CCM" name="data_gravacao"  value="" >
 					</div>
 				  </div>
 
 
                   <div class="form-group">
-					<div class="col-md-offset-2 col-md-8"><strong>Local da gravação:</strong><br/>
+					<div class="col-md-offset-2 col-md-8"><strong>Local da edição/publicação:</strong><br/>
 					                	  <select class="form-control" id="tipoDocumento" name="local" >
 					   <option>Selecione o local da gravação</option>
 
@@ -146,12 +146,12 @@ include 'includes/menuPartitura.php';
 					<div class="col-md-offset-2 col-md-8"><strong>Título Uniforme *:</strong><br/>
 					  <input type="text" class="form-control" id="Nome" name="titulo_uniforme" value="" >
 					</div>
-				  </div>
+				  </div><!--
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Título da Obra *:</strong><br/>
 					  <input type="text" class="form-control" id="Nome" name="titulo_geral" value="" >
 					</div>
-				  </div>
+				  </div>-->
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Conteúdo:</strong><br/>
 					 <textarea name="conteudo" class="form-control" rows="10" placeholder=""></textarea>
@@ -159,7 +159,57 @@ include 'includes/menuPartitura.php';
 				  </div>
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Notas:</strong><br/>
-					 <textarea name="notas" class="form-control" rows="10" placeholder=""></textarea>
+					 <textarea name="notas" class="form-control" rows="10" placeholder="">Acompanha CD
+Acompanha fascículo
+Acompanha livro
+Anotações de ordem musical (anotações de autor)
+Anotações marginálias impressas
+Anotações marginálias manuscritas: dedicatória
+Apresenta fotografias e ilustrações
+Apresenta textos com bibliografias
+Apresenta textos com biografias
+Apresenta textos com discografia
+Apresenta textos sobre a obra
+Apresenta textos sobre o compositor
+Apresenta textos sobre o compositor e a obra
+Coleção
+Cópia heliográfica
+Cópia Reprográfica
+Cópia Reprográfica (não temos original impresso)
+Cópia Reprográfica (temos original impresso)
+Data da composição
+Duplicata: a Discoteca possui mais 1 cópia reprográfica desta obra
+Duplicata: a Discoteca possui mais 1 exemplar desta obra
+Duplicata: a Discoteca possui mais 2 cópias reprográficas desta obra
+Duplicata: a Discoteca possui mais 2 exemplares desta obra
+Duplicata: a Discoteca possui mais 3 cópias reprográficas desta obra
+Duplicata: a Discoteca possui mais 3 cópias reprográficas desta obra
+Duração (Durata):
+Edição bilíngue (Português/inglês)
+Idioma: Espanhol
+Idioma: Inglês
+Idioma: Italiano
+Idioma: Português
+Lei de Incentivo à Cultura - Ministério da Cultura
+Local da composição
+Manuscrito
+Notação: Cifras
+Notação: Cifras (com indicação de acordes e digitação)
+Notação: Cifras (com indicação de acordes)
+Notação: Cifras (com indicação de digitação)
+Notação: Cifras e Letra
+Notação: Cifras e Linha Melódica
+Notação: Cifras e Tablatura
+Notação: Partitura
+Notação: Partitura e Letra
+Notação: Partitura e Tablatura
+Patrocínio:
+Primeira execução
+Procedência: Compra N.Aq.
+Procedência: cópia produzida na Discoteca
+Procedência: Doação anônima
+Procedência: não identificada
+</textarea>
 					</div>
 				  </div>
                   <div class="form-group">

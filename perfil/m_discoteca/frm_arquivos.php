@@ -96,7 +96,15 @@ if( isset( $_POST['enviar'] ) ) {
 			$sql = "INSERT INTO `acervo_arquivos` (`idArquivo`, `idReg`, `nome`, `tipo`, `publicado`, `destaque`) 
 											VALUES (NULL, '$idReg', '$arquivo_base', '$tipo', '1', '0')";
 			//$sql = "INSERT INTO ig_arquivo (idArquivo , arquivo , ig_evento_idEvento, publicado) VALUES( NULL , '$arquivo_base' , '$idEvento', '1' );";
-			mysqli_query($con,$sql);
+			if(mysqli_query($con,$sql)){
+				$men = "Bd ok";
+					
+			}
+			/*
+			else{
+				$men = "Erro Bd - $sql";	
+			}
+			*/
 			//gravarLog($sql);
 			
             if( !move_uploaded_file( $arquivoTmp, $arquivo ) ) {

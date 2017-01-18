@@ -145,6 +145,10 @@ switch($_GET['tipo']){
    							<td></td>
    							<td></td>
 							</tr>
+
+                            
+                            
+                            
 						<?php 
 $autoridade = listaTermos($registro['id_registro'],$_GET['tipo']);
 							for($i = 0; $i < $autoridade['total'];$i++){
@@ -341,6 +345,9 @@ $num_resultado = mysqli_num_rows($query);
 						</tr>
 					</thead>
 					<tbody>
+
+                    
+                    
 		
 <?php while($resultado = mysqli_fetch_array($query)){ //02?>
 	<tr>
