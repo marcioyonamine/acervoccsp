@@ -58,7 +58,7 @@ if(isset($_POST['apagar'])){
 				<table class="table table-condensed">
 					<thead>
 						<tr class='list_menu'>
-						<td>Faixa</td>
+						<td>Página</td>
 						<td>Título</td>
    						<td>Autoridades</td>
 							<td width="10%"></td>
@@ -102,7 +102,7 @@ if(isset($_POST['apagar'])){
 				</table>
                 
                 <?php }else{  ?>
-                <h5> Não há nenhum pedido de contratação cadastrado. </h5>
+                <h5> Não há partitura cadastrada. </h5>
 
                 <?php } ?>
    <div class="form-group">
@@ -211,12 +211,12 @@ if(isset($_POST['apagar'])){
 		$hoje = date("Y-m-d H:i:s");
 $pag_inicial = $_POST['pag_inicial'];
 $pag_final = $_POST['pag_final'];
-$titulo = $_POST['titulo'];
-$titulo_uniforme = $_POST['titulo_uniforme'];
+$titulo = addslashes($_POST['titulo']);
+$titulo_uniforme = addslashes($_POST['titulo_uniforme']);
 //$titulo_geral = $_POST['titulo_geral'];
-$conteudo = $_POST['conteudo'];
-$notas = $_POST['notas'];
-$obs = $_POST['obs'];
+$conteudo = addslashes($_POST['conteudo']);
+$notas = addslashes($_POST['notas']);
+$obs = addslashes($_POST['obs']);
 $publicado = 1;
 $catalogador = $_SESSION['idUsuario'];
 $colecao = $registro['id_acervo'];

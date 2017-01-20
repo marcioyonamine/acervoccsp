@@ -17,6 +17,7 @@ $pasta = "?perfil=discoteca&p=";
 									<li><a href="<?php echo $pasta."frm_lista_sonoro"; ?>">Listar registros</a></li>
 									<li><a href="<?php echo $pasta."frm_insere_sonoro"; ?>">Inserir registro</a></li>
    									<li><a href="<?php echo $pasta."frm_insere_gravadora"; ?>">Inserir gravadora</a></li>
+   									<li><a href="<?php echo $pasta."frm_busca_sonoro"; ?>">Busca fonograma</a></li>
 							</ul>
 						</li>
 						<li><a href="#">Partituras</a>	
@@ -24,6 +25,7 @@ $pasta = "?perfil=discoteca&p=";
 									<li><a href="<?php echo $pasta."frm_lista_partitura"; ?>">Listar partituras</a></li>
 									<li><a href="<?php echo $pasta."frm_insere_partitura"; ?>">Inserir partitura</a></li>
    									<li><a href="<?php echo $pasta."frm_insere_editora"; ?>">Inserir editora</a></li>
+   									<li><a href="<?php echo $pasta."frm_busca_partitura"; ?>">Busca partitura</a></li>
 									</ul>
 						</li>
 						<li><a href="#">Audiovisual</a>	

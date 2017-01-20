@@ -12,7 +12,7 @@ $pasta = "?perfil=discoteca&p=";
 						<li><a href="<?php echo $pasta."frm_lista_sonoro"; ?>">Listar registros</a></li>
 									<li><a href="<?php echo $pasta."frm_insere_sonoro"; ?>">Inserir registro</a></li>
    									<li><a href="<?php echo $pasta."frm_insere_gravadora"; ?>">Inserir gravadora</a></li>
-
+   									<li><a href="<?php echo $pasta."frm_busca_sonoro"; ?>">Busca fonograma</a></li>
 
  							<li><a href="#">Outras Opções</a> 
     

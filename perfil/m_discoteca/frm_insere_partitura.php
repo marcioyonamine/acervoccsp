@@ -79,7 +79,7 @@ include 'includes/menuPartitura.php';
                       </div>
 				  </div>
 				  <div class="form-group">
-					<div class="col-md-offset-2 col-md-8"><strong>Registro:</strong><br/>
+					<div class="col-md-offset-2 col-md-8"><strong>Registro / Número de Chapa / Copyright:</strong><br/>
 					  <input type="text" class="form-control soNumero" id="Nome" name="registro"  value="" >
 					</div>
 				  </div>

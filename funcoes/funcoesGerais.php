@@ -18,13 +18,14 @@ Esta é a página para as funções gerais do sistema.
 
 
 // Conecta-se ao banco de dados MySQL
+/*
 function verificaMysql($sql_inserir){ 	//Verifica erro na string/query
 	$mysqli = new mysqli("localhost", "user", "pass","db");
 	if (!$mysqli->query($sql_inserir)) {
     printf("Errormessage: %s\n", $mysqli->error);
 	}
 }
-
+*/
 function habilitarErro(){
 
    @ini_set('display_errors', '1');

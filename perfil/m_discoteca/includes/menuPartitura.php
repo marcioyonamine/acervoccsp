@@ -12,6 +12,7 @@ $pasta = "?perfil=discoteca&p=";
 						<li><a href="<?php echo $pasta."frm_lista_partitura"; ?>">Listar partituras</a></li>
 									<li><a href="<?php echo $pasta."frm_insere_partitura"; ?>">Inserir partitura</a></li>
    									<li><a href="<?php echo $pasta."frm_insere_editora"; ?>">Inserir editora</a></li>
+   									<li><a href="<?php echo $pasta."frm_busca_partitura"; ?>">Busca partitura</a></li>
 
 
  							<li><a href="#">Outras Opções</a> 

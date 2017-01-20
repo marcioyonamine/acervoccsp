@@ -43,12 +43,12 @@ $local = $_POST['local'];
 $fisico = $_POST['fisico'];
 $paginas = $_POST['paginas'];
 $medidas = $_POST['medidas'];
-$titulo = $_POST['titulo'];
-$titulo_uniforme = $_POST['titulo_uniforme'];
-$titulo_geral = $_POST['titulo_geral'];
-$conteudo = $_POST['conteudo'];
-$notas = $_POST['notas'];
-$obs = $_POST['obs'];
+$titulo = addslashes($_POST['titulo']);
+$titulo_uniforme = addslashes($_POST['titulo_uniforme']);
+$titulo_geral = addslashes($_POST['titulo_geral']);
+$conteudo = addslashes($_POST['conteudo']);
+$notas = addslashes($_POST['notas']);
+$obs = addslashes($_POST['obs']);
 $publicado = 1;
 $catalogador = $_SESSION['idUsuario'];
 }
@@ -121,7 +121,7 @@ if(isset($_POST['atualizaRegistro'])){
 	`exemplares` = '$exemplares'
 	 WHERE idDisco = '$ultimo'";
 	$query_atualiza = mysqli_query($con,$sql_atualiza);
-	verificaMysql($sql_atualiza);
+	//verificaMysql($sql_atualiza);
 	if($query_atualiza){
 		$sql_update_registro = "UPDATE `acervo_registro` SET
 		`id_acervo` = '$colecao',
@@ -181,7 +181,7 @@ $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 				  </div>
                                                       <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Tombo Antigo</strong><br/>
-					  <input type="text" class="form-control soNumero" id="duracao" name="tombo"  value="<?php echo $disco['tombo_antigo']; ?>" >
+					  <input type="text" class="form-control soNumero" id="duracao" name="tombo_antigo"  value="<?php echo $disco['tombo_antigo']; ?>" >
                       </div>
 				  </div>	
 				  <div class="form-group">
@@ -310,7 +310,7 @@ $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 				  </div>
                                     <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Notas:</strong><br/>
-					 <textarea name="notas" class="form-control" rows="10" placeholder=""><?php echo $disco['notas']; ?></textarea>
+					 <textarea name="notas" class="form-control" rows="10" placeholder=""><?php echo ($disco['notas']); ?></textarea>
 					</div>
 				  </div>
                   

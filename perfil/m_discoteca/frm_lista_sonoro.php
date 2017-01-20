@@ -19,7 +19,7 @@ if(isset($_SESSION['idFaixa'])){
 
 if(isset($_POST['apaga'])){
 	$id = $_POST['idDisco'];
-	$sql_apaga = "UPDATE acervo_registro SET publicado = '0' WHERE id_registro = '$id' AND tabela = '87'";
+	$sql_apaga = "UPDATE acervo_registro SET publicado = '0' WHERE id_tabela = '$id' AND tabela = '87'";
 	$query_apaga = mysqli_query($con,$sql_apaga);
 	if($query_apaga){
 		$mensagem = "Apagado com sucesso.";
@@ -39,6 +39,7 @@ if(isset($_POST['apaga'])){
              <div class="col-md-offset-2 col-md-8">
                 <div class="text-hide">
                 <h2>Registros Sonoros / Matriz</h2>
+				<?php if(isset($mensagem)){echo $mensagem;} ?>
 	                <h5>Por ordem decrescente de data de início</h5>
 					<?php
 					if($filtro == "user")
@@ -110,7 +111,7 @@ if(isset($_POST['apaga'])){
 					<form action="?perfil=discoteca&p=frm_lista_sonoro" method="post">
 <input type="hidden" name="idDisco" value="<?php echo $x['id_tabela']?>" />
 <input type="hidden" name="apaga" value="1">
-<input type="submit" class="btn btn-theme btn-block" value='Apagar' name='Apagar'></form></td>
+<input type="submit" class="btn btn-theme btn-block" value='apagar' name='apagar'></form></td>
 
 					</tr>
 						<?php } ?>

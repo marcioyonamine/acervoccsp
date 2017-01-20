@@ -42,11 +42,11 @@ $local = $_POST['local'];
 $fisico = $_POST['fisico'];
 $estereo = $_POST['estereo'];
 $polegadas = $_POST['polegadas'];
-$titulo = $_POST['titulo'];
-$titulo_uniforme = $_POST['titulo_uniforme'];
-$conteudo = $_POST['conteudo'];
-$notas = $_POST['notas'];
-$obs = $_POST['obs'];
+$titulo = addslashes($_POST['titulo']);
+$titulo_uniforme = addslashes($_POST['titulo_uniforme']);
+$conteudo = addslashes($_POST['conteudo']);
+$notas = addslashes($_POST['notas']);
+$obs = addslashes($_POST['obs']);
 $publicado = 1;
 $catalogador = $_SESSION['idUsuario'];
 }
@@ -81,6 +81,7 @@ if(isset($_POST['atualizaRegistro'])){
 	`tipo_geral` =  '$geral', 
 	`tipo_especifico` = '$especifico', 
 	`tombo` = '$tombo', 
+	`estereo` = '$estereo', 
 	`gravadora` = '$gravadora', 
 	`registro` = '$registro', 
 	`tipo_data` = '$tipo_data', 
@@ -205,7 +206,7 @@ $registro = recuperaDados("acervo_registro",$ultimo,"id_tabela");
                       </div>
 				  </div>
 				  <div class="form-group">
-					<div class="col-md-offset-2 col-md-8"><strong>Registro:</strong><br/>
+					<div class="col-md-offset-2 col-md-8"><strong>Registro / Número de Chapa / Copyright:</strong><br/>
 					  <input type="text" class="form-control soNumero" id="Nome" name="registro"  value="<?php echo $disco['registro']; ?>" >
 					</div>
 				  </div>
