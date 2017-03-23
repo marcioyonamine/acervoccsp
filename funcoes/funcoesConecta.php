@@ -4,10 +4,10 @@
 
 // Cria conexao ao banco. Substitui o include "conecta_mysql.php" .
 function bancoMysqli(){ 
-	$servidor = '';
-	$usuario = '';
+	$servidor = 'localhost';
+	$usuario = 'root';
 	$senha = '';
-	$banco = '';
+	$banco = 'acervo';
 	$con = mysqli_connect($servidor,$usuario,$senha,$banco); 
 	mysqli_set_charset($con,"utf8");
 	return $con;
