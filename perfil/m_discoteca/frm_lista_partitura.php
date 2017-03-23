@@ -9,6 +9,11 @@ if(isset($_SESSION['idReg'])){
 	unset($_SESSION['idReg']);		
 }
 
+if(isset($_SESSION['idFaixa'])){
+	unset($_SESSION['idFaixa']);
+	
+}
+
 if(isset($_POST['apaga'])){
 	$id = $_POST['idDisco'];
 	$sql_apaga = "UPDATE acervo_registro SET publicado = '0' WHERE id_tabela = '$id' AND tabela = '97'";
@@ -33,14 +38,14 @@ if(isset($_POST['apaga'])){
                 <h2>Partituras / Matriz</h2>
 	                <h5>Por ordem decrescente de data de início</h5>
 					<?php
-					if($ordem == "dataEnvio")
+					if($filtro == "user")
 					{ ?>
-						<h5><a href="?perfil=producao&p=lista&order=dataInicio">Ordenar por período de realização</a></h5>
+						<h5><a href="?perfil=discoteca&p=frm_lista_partitura">Sem filtro</a></h5>
 					<?php 
 					}
 					else
 					{ ?>
-						<h5><a href="?perfil=producao&p=lista&order=dataEnvio">Ordenar por envio</a></h5>
+						<h5><a href="?perfil=discoteca&p=frm_lista_partitura&user=<?php echo $_SESSION['idUsuario'] ?>">Filtrar por usuário</a></h5>
 			  <?php } ?>	
 					</div>
             </div>
@@ -48,14 +53,21 @@ if(isset($_POST['apaga'])){
 				<table class="table table-condensed"><script type=text/javascript language=JavaScript src=../js/find2.js> </script>
 					<thead>
 						<tr class="list_menu">
-							<td width="30%">Título</td>
-							<td width="20%">Autoridades</td>
-							<td width="20%"></td>
-							<td width="20%"></td>
-   							<td>Status</td>
+							<td width="5%">Tombo/Antigo</td>
+							<td width="20%">Título</td>
+							<td width="30%">Autoridades</td>
+							<td width="10%"></td>
+							<td width="10%"></td>
 						</tr>
+						
 						<?php 
-						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela,acervo_registro.id_registro FROM acervo_registro,acervo_partituras WHERE acervo_partituras.planilha = '17' AND acervo_registro.id_tabela = acervo_partituras.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '97' ORDER BY idDisco DESC";
+						$idUsuario = $_SESSION['idUsuario'];
+						if(isset($_GET['user'])){
+							$filtro = " AND acervo_registro.idUsuario = '$idUsuario' ";
+						}else{
+							$filtro = "";
+						}
+						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela,acervo_registro.id_registro, acervo_partituras.tombo, acervo_partituras.tombo_antigo  FROM acervo_registro,acervo_partituras WHERE acervo_partituras.planilha = '17' AND acervo_registro.id_tabela = acervo_partituras.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '97' $filtro ORDER BY idDisco DESC";
 						$query_lista = mysqli_query($con,$sql_lista);
 													//paginacao
 	$num01 = mysqli_num_rows($query_lista);
@@ -75,6 +87,7 @@ if(isset($_POST['apaga'])){
 							$autoridades = retornaAutoridades($x['id_registro']);
 						?>
 					<tr>
+					<td class="list_description"><?php echo $x['tombo'];?> / <?php echo $x['tombo_antigo'];?> </td>
 					<td class="list_description"><?php echo $x['titulo'];?></td>
 					<td class="list_description">
                     <?php 
@@ -84,7 +97,7 @@ if(isset($_POST['apaga'])){
 					?>
                     
                     </td>
-					<td class="list_description"></td>
+
 					<td class="list_description">
 					<form action="?perfil=discoteca&p=frm_atualiza_partitura" method="post">
 <input type="hidden" name="idDisco" value="<?php echo $x['id_tabela']?>" />

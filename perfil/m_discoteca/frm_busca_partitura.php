@@ -1,5 +1,5 @@
 ﻿<?php  
-include 'includes/menuSonoro.php';
+include 'includes/menuPartitura.php';
 ?>
 
 <?php
@@ -35,7 +35,7 @@ if(isset($_POST['pesquisar'])){
 				<div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
 				<h5>É preciso que o título ou o número de tombo seja inserido.</h5>
-							<form method="POST" action="?perfil=discoteca&p=frm_busca" class="form-horizontal" role="form">
+							<form method="POST" action="?perfil=discoteca&p=frm_busca_partitura" class="form-horizontal" role="form">
 						<label>Título</label>
 						<input type="text" name="titulo" class="form-control" id="titulo" placeholder="Insira o titulo por parte dele" ><br />
 						<label>Tombo</label>
@@ -72,7 +72,14 @@ if(isset($_POST['pesquisar'])){
 		</section>   
 <?php
 }else{
-$sql_busca = "SELECT id_registro, titulo, id_acervo, id_tabela, tabela FROM acervo_registro WHERE titulo LIKE '%$titulo%' ORDER BY id_registro DESC";
+$sql_busca = "SELECT DISTINCT idDisco FROM acervo_partituras WHERE 
+	planilha = 17 AND (
+	titulo_disco LIKE '%$titulo%' OR
+	titulo_faixa LIKE '%$titulo%' OR
+	titulo_uniforme LIKE '%$titulo%'OR
+	conteudo LIKE '%$titulo%') 
+	ORDER BY idDisco DESC 
+	";
 $query_busca = mysqli_query($con,$sql_busca);
 $num = mysqli_num_rows($query_busca);
 
@@ -83,33 +90,69 @@ $num = mysqli_num_rows($query_busca);
 		<div class="container">
 			 <h3>Resultado da busca</3>
              <h5>Foram encontrados <?php echo $num; ?> registros.</h5>
-               <h5><a href="?perfil=discoteca&p=frm_busca">Fazer outra busca</a></h5>
+               <h5><a href="?perfil=discoteca&p=frm_busca_partitura">Fazer outra busca</a></h5>
 			<div class="table-responsive list_info">
 				<table class="table table-condensed">
 					<thead>
 						<tr class="list_menu">
-						<td>Tombo</td>
-						<td>Titulo</td>
-						<td>Tipo</td>
-						<td>Coleção</td>
-						<td></td>
+							<td width="5%">Tombo/Antigo</td>
+							<td width="20%">Título</td>
+							<td width="30%">Autoridades</td>
+							<td width="10%"></td>
+							<td width="10%"></td>
 						</tr>
+						
 					</thead>
 					<tbody>
 
 <?php 
 
-while ($registro = mysqli_fetch_array($query_busca)){ ?>
-<tr>
-<td class='lista'><?php echo $registro['id_tabela']; ?> </td>
-<td class='lista'><?php echo $registro['titulo']; ?> </td>
-<td class='lista'><?php echo $registro['tabela']; ?></td>
-<td class='lista'><?php echo $registro['id_acervo']; ?></td>
-<td class='lista'></td>
+						while($y = mysqli_fetch_array($query_busca)){
+							$x = recuperaDados("acervo_partituras",$y['idDisco'],"idDisco");
+							$idReg = idReg($y['idDisco'],97);
+							$autoridades = retornaAutoridades($idReg);
+							if(trim($x['titulo_disco']) == ""){
+								if(trim($x['titulo_faixa']) == ""){
+									if(trim($x['titulo_unifrome']) == ""){
+										$titulo = $x['conteudo'];
+									}else{
+										$titulo = trim($x['titulo_uniforme']);
+									}	
+							
+									
+								}else{
+									$titulo = trim($x['titulo_faixa']);	
+								}
+								
+							}else{
+								$titulo = trim($x['titulo_disco']);
+							}
+						?>
+					<tr>
+					<td class="list_description"><?php echo $x['tombo'];?> / <?php echo $x['tombo_antigo'];?> </td>
+					<td class="list_description"><?php echo $titulo;?></td>
+					<td class="list_description">
+                    <?php 
+					if($autoridades['total'] > 0){
+						echo $autoridades['string'];
+					}
+					?>
+                    
+                    </td>
 
-</tr>
-<?php } ?>
-	
+					<td class="list_description">
+					<form action="?perfil=discoteca&p=frm_atualiza_partitura" method="post">
+<input type="hidden" name="idDisco" value="<?php echo $y['idDisco']?>" />
+<input type="hidden" name="valor" value="1">
+<input type="submit" class="btn btn-theme btn-block" value='Editar' name='enviar'></form></td>
+					<td class="list_description">
+					<form action="?perfil=discoteca&p=frm_lista_partitura" method="post">
+<input type="hidden" name="idDisco" value="<?php echo $y['idDisco']?>" />
+<input type="hidden" name="apaga" value="1">
+<input type="submit" class="btn btn-theme btn-block" value='Apagar' name='Apagar'></form></td>
+
+					</tr>
+						<?php } ?>
 
 	
 					
@@ -147,7 +190,7 @@ while ($registro = mysqli_fetch_array($query_busca)){ ?>
             <div class="form-group">
             	<div class="col-md-offset-2 col-md-8">
             <h5><?php if(isset($mensagem)){ echo $mensagem; } ?>
-                        <form method="POST" action="?perfil=discoteca&p=frm_busca" class="form-horizontal" role="form">
+                        <form method="POST" action="?perfil=discoteca&p=frm_busca_partitura" class="form-horizontal" role="form">
             		<label>Título</label>
             		<input type="text" name="titulo" class="form-control" id="titulo" placeholder="Insira o titulo por parte dele" ><br />
             		<label>Tombo</label>
