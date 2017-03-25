@@ -1,6 +1,7 @@
 <?php
 //geram o insert pro framework da igsis
 $pasta = "?perfil=discoteca&p=";
+$tab = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
 ?>
 
 
@@ -11,18 +12,18 @@ $pasta = "?perfil=discoteca&p=";
 						<ul class="dl-menu">						<li><a href="#">Autoridades</a> 
 	                        <ul class="dl-submenu">
                                 <li><a href="<?php echo $pasta ?>frm_termos&tipo=1">Listar </a></li>
-								<li><a href="<?php echo $pasta ?>frm_termos&tipo=1&pag=busca">Buscar</a></li>
+								<li><a href="<?php echo $pasta ?>frm_insere_autoridade">Buscar</a></li>
                              </ul>
                         </li>
 						<li><a href="#">Termos</a> 
 	                        <ul class="dl-submenu">
-                                <li><a href="<?php echo $pasta ?>frm_termos&tipo=15">Listar </a></li>
-								<li><a href="<?php echo $pasta ?>frm_termos&tipo=15&pag=busca">Buscar</a></li>
+                                <li><a href="<?php echo $pasta ?>frm_termos&tipo=0">Listar </a></li>
+								<li><a href="<?php echo $pasta ?>frm_insere_termo">Buscar</a></li>
                              </ul>
                         </li>
 						
                         <?php 
-                        if($_SESSION['tabela'] == 87){
+                        if($tab['tabela'] == 87){
 							if(!isset($_SESSION['idFaixa'])){ ?>
 							<li><a href="<?php echo $pasta."frm_atualiza_sonoro"; ?>">Voltar</a></li>
 							
@@ -37,7 +38,7 @@ $pasta = "?perfil=discoteca&p=";
                         ?>
                         
                         <?php 
-                        if($_SESSION['tabela'] == 97){
+                        if($tab['tabela'] == 97){
 							if(!isset($_SESSION['idFaixa'])){ ?>
 							<li><a href="<?php echo $pasta."frm_atualiza_partitura"; ?>">Voltar</a></li>
 							

@@ -114,6 +114,11 @@ if($termo['tipo'] == 1){
                     <br />
                     <br />
                </div>
+			   				  <div class="form-group">
+					<div class="col-md-offset-2 col-md-8">
+					<p><a href="?perfil=discoteca&p=frm_termos">Voltar a lista de autoridades</a></p>
+                  </div>
+				  </div>
 
 	  		<div class="row">
 	  			<div class="col-md-offset-1 col-md-10">
@@ -154,6 +159,8 @@ if($termo['tipo'] == 1){
 
 					</div>
 				  </div>
+
+				 
                 </form>
             <?php if(isset($_SESSION['idDisco']) AND $action == "atualiza"){ ?>    
             	<form class="form-horizontal" role="form" action="?perfil=discoteca&p=frm_termos" method="post">                
@@ -162,7 +169,7 @@ if($termo['tipo'] == 1){
 					<div class="col-md-offset-2 col-md-8">
                     <input type="hidden" name="insereTermo" value="1"/>
                     <input type="hidden" name="termo" value="<?php echo $id; ?>" />
-                    <input type="hidden" name="tipo" value="1" />
+                    <input type="hidden" name="tipo" value="<?php echo $termo['tipo']; ?>" />
                     <input type="hidden" name="id_registro" value="<?php echo $_SESSION['idReg']; ?>" />
  
  					 <input type="submit" value="Inserir no registro" class="btn btn-theme btn-lg btn-block">

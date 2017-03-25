@@ -130,15 +130,20 @@ $query = mysqli_query($con,$busca);
 $num = mysqli_num_rows($query);
 
 
-?>
-<section id="services" class="home-section bg-white">
-		<div class="container">
-        	<div class="form-group">
-					<h4>Autoridade</h4>
-                    <?php echo $mensagem; ?>
+?><br /><br /><br />
 
-               </div>
-               <div class="row">
+	<section id="list_items">
+
+
+	<div class="container">
+	        	<div class="form-group">
+			<div class="col-md-offset-2 col-md-8">
+					<h2>Autoridade</h2>
+                    <p><?php echo $mensagem; ?></p>
+			</div>             
+			 </div>
+        <div class="row">
+
 		<?php if($num > 0){ //01?>
 			<div class="table-responsive list_info">
 				<table class="table table-condensed">
@@ -174,6 +179,7 @@ if($resultado['adotado'] == 0){//03
 					</tbody>
 				</table>
 </div>
+
 <?php if(isset($_SESSION['idDisco'])){ // insere na base e no registro?>
             <p>Gostaria de incluir <strong><?php echo $termo; ?></strong> ao registro <strong> <?php echo $disco ?></strong>?</p>
             <p> Lembre-se que essa ação insere o termo na base comum de termos do sistema.</p>
@@ -202,13 +208,15 @@ if($resultado['adotado'] == 0){//03
 <?php } ?>
             			
 <?php  }else{ ?>
-<h3> Não foram encontrados termos  "<?php echo $termo; ?>" como autoridades</h3>
+
 
 <?php if(isset($_SESSION['idDisco'])){ // insere na base e no registro?>
-            <p>Gostaria de incluir <strong><?php echo $termo; ?></strong> ao registro <strong> <?php echo $disco ?></strong>?</p>
-            <p> Lembre-se que essa ação insere o termo na base comum de termos do sistema.</p>
+           
 	  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
+<h3> Não foram encontrados termos  "<?php echo $termo; ?>" como autoridades</h3>
+					<p>Gostaria de incluir <strong><?php echo $termo; ?></strong> ao registro <strong> <?php echo $disco ?></strong>?</p>
+            <p> Lembre-se que essa ação insere o termo na base comum de termos do sistema.</p>
 					<form method='POST' action='?perfil=discoteca&p=frm_edita_termo'>
                     <input type="hidden" name="adicionaTermo" value="1" />
                     <input type="hidden" name="termo_insere" value="<?php echo $termo; ?>" />
@@ -218,9 +226,10 @@ if($resultado['adotado'] == 0){//03
 					</div>
 				  </div>
 <?php }else{ ?>
-            <p>Gostaria de incluir <strong><?php echo $termo; // insere só na base ?></strong> na base comum de termos do sistema?</p>
 	  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
+            <p>Gostaria de incluir <strong><?php echo $termo; // insere só na base ?></strong> na base comum de termos do sistema?</p>
+
 					<form method='POST' action='?perfil=discoteca&p=frm_edita_termo'>
                     <input type="hidden" name="adicionaTermo" value="1" />
                     <input type="hidden" name="termo_insere" value="<?php echo $termo; ?>" />
@@ -230,12 +239,15 @@ if($resultado['adotado'] == 0){//03
 					</div>
 				  </div>
 <?php } ?>
-	
-            		</div>
-                    </div>
-	</section>
+
+
 
 <?php } ?>
 <?php break; ?>
 
 <?php } ?>
+  		</div> 
+                    </div>
+				
+	</section>
+	<br /><Br />

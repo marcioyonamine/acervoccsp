@@ -15,7 +15,7 @@ include 'includes/menuTermos.php';
 if(isset($_POST['id_registro'])){
 	$rec_reg = $_POST['id_registro'];
 }else{
-	$rec_reg = idReg($ultimo,$_SESSION['tabela']);
+	$rec_reg = $_SESSION['idReg'];
 }
 $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro"); 
 $con = bancoMysqli();
@@ -114,7 +114,11 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 	default:
 		$tipo_str = "Termos";
 		$cat = 0;
-		$tipo = 0;
+		if(isset($_POST['tipo'])){
+			$tipo = $_POST['tipo'];
+		}else{
+			$tipo = 0;	
+		}
 	
 		break;
 	
@@ -137,17 +141,25 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
                     <br />
 		</div>
         <?php 
-        $autoridade = listaTermos($registro['id_registro'],$tipo);
+		if($tipo == 1){
+			$autoridade = listaTermos($registro['id_registro'],1);
+		}else{
+			$autoridade = listaTermos($registro['id_registro'],$GLOBALS['acervo_tipo']);
+			//echo $autoridade['sql'];
+			
+		}
         if($autoridade['total'] > 0){
         ?>
 		<div class="row">
         
-        			<div class="table-responsive list_info">
+	<section id="list_items">
+			<div class="table-responsive list_info">
+
 				<table class="table table-condensed">
 					<thead>
 						<tr class="list_menu">
 							<td>Termo</td>
-							<td>Categoria</td>
+							<td>Tipo</td>
    							<td></td>
    							<td></td>
 							</tr>
@@ -174,10 +186,9 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 <input type="hidden" name="atualizar" value="1">
 <input type="submit" class="btn btn-theme btn-block" value='Atualizar' name='enviar'></td></form>
 					<?php }else{?>
+					<td class="list_description"><?php echo $autoridade[$i]['tipo']; ?></td>
                     <td class="list_description"></td>
-                    <td class="list_description"></td>
-					<?php }?>
-
+					<?php } ?>
 					<td class="list_description">
 					<form action="?perfil=discoteca&p=frm_termos&tipo=<?php echo $tipo ?>" method="post">
 <input type="hidden" name="idTermoRelacao" value="<?php echo $autoridade[$i]['idRel']?>" />
@@ -197,7 +208,7 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 			<?php if($tipo == 1){ ?>
 				<a href="?perfil=discoteca&p=frm_insere_autoridade" class="btn btn-theme btn-block" >Inserir <?php echo $tipo_str; ?></a>
 			<?php }else{ ?>
-				<a href="?perfil=discoteca&p=frm_edita_termo" class="btn btn-theme btn-block" >Inserir <?php echo $tipo_str; ?></a>
+				<a href="?perfil=discoteca&p=frm_insere_termo" class="btn btn-theme btn-block" >Inserir <?php echo $tipo_str; ?></a>
 			<?php } ?>
             		</div>
 			  </div>	
@@ -215,7 +226,7 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 			<?php if($tipo == 1){ ?>
 				<a href="?perfil=discoteca&p=frm_insere_autoridade" class="btn btn-theme btn-block" >Inserir <?php echo $tipo_str; ?></a>
 			<?php }else{ ?>
-				<a href="?perfil=discoteca&p=frm_edita_termo" class="btn btn-theme btn-block" >Inserir <?php echo $tipo_str; ?></a>
+				<a href="?perfil=discoteca&p=frm_insere_termo" class="btn btn-theme btn-block" >Inserir <?php echo $tipo_str; ?></a>
 			<?php } ?>
             		</div>
 			  </div>	
@@ -225,7 +236,7 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 
 		<?php } //total > 0?>
 
-
+</div>
 	</div> <!-- container-->
 </section>
 

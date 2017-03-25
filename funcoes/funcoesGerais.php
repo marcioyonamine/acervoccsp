@@ -852,7 +852,7 @@ function opcaoTermoCat($idTipo,$select = NULL){
 
 function listaTermos($idReg,$tipo){
 	$con = bancoMysqli();
-	$sql = "SELECT * FROM acervo_relacao_termo WHERE idReg = '$idReg' AND idTipo = '$tipo' AND publicado = '1'";
+	$sql = "SELECT * FROM acervo_relacao_termo WHERE idReg = '$idReg' AND idTipo IN($tipo) AND publicado = '1'";
 	$query = mysqli_query($con,$sql);
 	$num = mysqli_num_rows($query);
 	if($num > 0){	
@@ -860,9 +860,12 @@ function listaTermos($idReg,$tipo){
 		while($x = mysqli_fetch_array($query)){
 			
 			$termo = recuperaDados("acervo_termo",$x['idTermo'],"id_termo");
+			$tipo = recuperaDados("acervo_tipo",$x['idTipo'],"id_tipo");
 			$w[$y]['idRel'] = $x['idRel'];
 			$w[$y]['termo'] = $termo['termo'];
 			$w[$y]['idTermo'] = $x['idTermo'];
+			$w[$y]['tipo'] = $tipo['tipo'];
+			$w[$y]['idTipo'] = $x['idTipo'];
 			$w[$y]['categoria'] = "";
 			$w[$y]['idCat'] = $x['idCat'];
 			$y++;
@@ -871,6 +874,7 @@ function listaTermos($idReg,$tipo){
 	}else{
 		$w['total'] = 0;
 	}
+	$w['sql'] = $sql;
 	return $w;
 }
 
