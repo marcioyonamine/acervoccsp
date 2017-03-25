@@ -10,10 +10,20 @@ $pasta = "?perfil=discoteca&p=";
 						<button class="dl-trigger">Open Menu</button>
 						<ul class="dl-menu">
 						<li><a href="<?php echo $pasta."frm_lista_sonoro"; ?>">Listar registros</a></li>
-									<li><a href="<?php echo $pasta."frm_insere_sonoro"; ?>">Inserir registro</a></li>
-   									<li><a href="<?php echo $pasta."frm_insere_gravadora"; ?>">Inserir gravadora</a></li>
-   									<li><a href="<?php echo $pasta."frm_busca_sonoro"; ?>">Busca fonograma</a></li>
-
+						<li><a href="<?php echo $pasta."frm_insere_sonoro"; ?>">Inserir registro</a></li>
+						<li><a href="<?php echo $pasta."frm_busca_sonoro"; ?>">Busca registro</a></li>
+                      	<li><a href="#">Autoridades</a>	
+								<ul class="dl-submenu">
+									<li><a href="<?php echo $pasta."frm_busca_autoridades"; ?>">Buscar Autoridades</a></li>
+									<li><a href="<?php echo $pasta."frm_insere_autoridades"; ?>">Inserir Autoridades</a></li>
+									</ul>
+						</li>
+                       	<li><a href="#">Termos</a>	
+								<ul class="dl-submenu">
+									<li><a href="<?php echo $pasta."frm_lista_av"; ?>">Buscar termo</a></li>
+									<li><a href="<?php echo $pasta."frm_insere_av"; ?>">Inserir termo</a></li>
+									</ul>
+						</li>
  							<li><a href="#">Outras Opções</a> 
     
                                     <ul class="dl-submenu">

@@ -73,14 +73,14 @@ if(isset($_POST['apagar'])){
 					<td class='list_description'><?php echo $fax['titulo_disco'] ?></td>
 					<td class='list_description'>
 					<?php 
-					$autoridades = retornaAutoridades(idReg($fax['idDisco'],87));
+					$autoridades = retornaAutoridades(idReg($fax['idDisco'],97));
 					
 					
 					if($autoridades['total'] > 0){
 						echo $autoridades['string'];	
 					}else{
 						
-						$autoridades_matriz = retornaAutoridades($disco['idDisco']);
+						$autoridades_matriz = retornaAutoridades(idReg($disco['idDisco'],97));
 						echo "Matriz: ".$autoridades_matriz['string'];
 					} 
 					?>

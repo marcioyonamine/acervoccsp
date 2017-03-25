@@ -78,7 +78,7 @@ if(isset($_POST['apagar'])){
 						echo $autoridades['string'];	
 					}else{
 						
-						$autoridades_matriz = retornaAutoridades($disco['idDisco']);
+						$autoridades_matriz = retornaAutoridades(idReg($disco['idDisco'],87));
 						echo "Matriz: ".$autoridades_matriz['string'];
 					} 
 					?>

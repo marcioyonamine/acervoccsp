@@ -14,31 +14,13 @@ $pasta = "?perfil=discoteca&p=";
 								<li><a href="<?php echo $pasta ?>frm_termos&tipo=1&pag=busca">Buscar</a></li>
                              </ul>
                         </li>
-						<li><a href="#">Forma / Gênero</a> 
+						<li><a href="#">Termos</a> 
 	                        <ul class="dl-submenu">
                                 <li><a href="<?php echo $pasta ?>frm_termos&tipo=15">Listar </a></li>
 								<li><a href="<?php echo $pasta ?>frm_termos&tipo=15&pag=busca">Buscar</a></li>
                              </ul>
                         </li>
-						<li><a href="#">Série</a> 
-	                        <ul class="dl-submenu">
-                                <li><a href="<?php echo $pasta ?>frm_termos&tipo=85">Listar </a></li>
-								<li><a href="<?php echo $pasta ?>frm_termos&tipo=85&pag=busca">Buscar</a></li>
-                             </ul>
-                        </li>
-						<li><a href="#">Meio de Expressão</a> 
-	                        <ul class="dl-submenu">
-                                <li><a href="<?php echo $pasta ?>frm_termos&tipo=13">Listar </a></li>
-								<li><a href="<?php echo $pasta ?>frm_termos&tipo=13&pag=busca">Buscar</a></li>
-                             </ul>
-                        </li>
-						<li><a href="#">Descritor / Assunto</a> 
-	                        <ul class="dl-submenu">
-                                <li><a href="?perfil=discoteca">Listar </a></li>
-								<li><a href="?secao=perfil">Buscar</a></li>
-                             </ul>
-                        </li>
-                        
+						
                         <?php 
                         if($_SESSION['tabela'] == 87){
 							if(!isset($_SESSION['idFaixa'])){ ?>

@@ -1,11 +1,21 @@
 <?php 
 $con = bancoMysqli();
+
+
 include 'includes/menu.php';
 
 if(isset($_GET['pag'])){
 	$pag = $_GET['pag'];
 }else{
 	$pag = "busca";	
+}
+
+if(isset($_SESSION['idDisco'])){
+	$dis = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
+	$disco = $dis['titulo'];
+	$mensagem = "Você está inserindo autoridades/termos para o registro <strong>$disco</strong>.<br />";	
+}else{
+	$mensagem = "";	
 }
 
 switch($pag){
@@ -18,13 +28,13 @@ if(isset($_POST['termo'])){
 	VALUES ('$termo', '', '1', '', '', '1', '$hoje', '1')";
 	$query_insere = mysqli_query($con,$sql_insere);
 	if($query_insere){
-		$mensagem = "$termo inserido como Autoridade!";	
+		$mensagem .= "$termo inserido como Autoridade!";	
 	}else{
-		$mensagem = "Erro ao inserir. Tente novamente.";	
+		$mensagem .= "Erro ao inserir. Tente novamente.";	
 	}	
 	
 }else{
-	$mensagem = "Erro ao inserir gravadora";	
+	$mensagem .= "Erro ao inserir gravadora";	
 }
 ?>
 
@@ -38,7 +48,7 @@ if(isset($_POST['termo'])){
 
 	  		<div class="row">
 	  			<div class="col-md-offset-1 col-md-10">
-<p><?php echo $mensagem; ?></p>
+<p><?php echo idReg($_SESSION['idDisco'],87); ?></p>
 
                   		  
 
@@ -49,7 +59,7 @@ if(isset($_POST['termo'])){
 			
 				
 	  		</div>
-			
+			</div>
 
 	  	</div>
 	  </section>  
@@ -62,6 +72,7 @@ case "busca":
 	  	<div class="container">
 			  <div class="form-group">
 					<h4>Autoridade</h4>
+                    <?php echo $mensagem; ?>
                     <br />
                     <br />
                </div>
@@ -120,54 +131,111 @@ $num = mysqli_num_rows($query);
 
 
 ?>
-	 <section id="services" class="home-section bg-white">
+<section id="services" class="home-section bg-white">
 		<div class="container">
-        			  <div class="form-group">
-					<h2>Gravadora</h2>
-					<br />
-                    <br />
+        	<div class="form-group">
+					<h4>Autoridade</h4>
+                    <?php echo $mensagem; ?>
+
                </div>
-			  <div class="row">
-				  <div class="col-md-offset-2 col-md-8">
-					<div class="section-heading">
-					 <h4>Resultados para "<i><?php echo $termo; ?></i>"</h4>
+               <div class="row">
+		<?php if($num > 0){ //01?>
+			<div class="table-responsive list_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="list_menu">
+							<td>Termo</td>
+                            <td width="15%"></td>
+						</tr>
+					</thead>
+					<tbody>
+
+                    
+                    
+		
+<?php while($resultado = mysqli_fetch_array($query)){ //02?>
+	<tr>
+<td class='list_description'><?php echo $resultado['termo']; 
+if($resultado['adotado'] == 0){//03
+	 echo " (Adotado)";} //03
+
+?></td>
+<td class='list_description'>
+			<form method='POST' action='?perfil=discoteca&p=frm_termos'>
+			<input type='hidden' name='insereTermo' value='1'>
+			<input type='hidden' name='termo' value='<?php echo $resultado['id_termo']; ?>'>
+			<input type='hidden' name='tipo' value='<?php echo $resultado['tipo']; ?>'>
+			<input type='hidden' name='id_registro' value='<?php echo $_SESSION['idReg']; ?>'>
+            
+			<input type ='submit' class='btn btn-theme btn-md btn-block' value='inserir ao registro'></form></td>
+</tr>
+<?php } // 02?>
+						
+					</tbody>
+				</table>
+</div>
+<?php if(isset($_SESSION['idDisco'])){ // insere na base e no registro?>
+            <p>Gostaria de incluir <strong><?php echo $termo; ?></strong> ao registro <strong> <?php echo $disco ?></strong>?</p>
+            <p> Lembre-se que essa ação insere o termo na base comum de termos do sistema.</p>
+	  <div class="form-group">
+					<div class="col-md-offset-2 col-md-8">
+					<form method='POST' action='?perfil=discoteca&p=frm_edita_termo'>
+                    <input type="hidden" name="adicionaTermo" value="1" />
+                    <input type="hidden" name="termo_insere" value="<?php echo $termo; ?>" />
+                    <input type="hidden" name="tipo_insere" value="1" />
+ 					 <input type="submit" value="Adicionar <?php echo $termo; ?>" class="btn btn-theme btn-lg btn-block">
+					 </form>
 					</div>
 				  </div>
-			  </div>
+<?php }else{ ?>
+            <p>Gostaria de incluir <strong><?php echo $termo; // insere só na base ?></strong> na base comum de termos do sistema?</p>
+	  <div class="form-group">
+					<div class="col-md-offset-2 col-md-8">
+					<form method='POST' action='?perfil=discoteca&p=frm_edita_termo'>
+                    <input type="hidden" name="adicionaTermo" value="1" />
+                    <input type="hidden" name="termo_insere" value="<?php echo $termo; ?>" />
+                    <input type="hidden" name="tipo_insere" value="<?php echo $tipo; ?>" />
+ 					 <input type="submit" value="Adicionar <?php echo $termo; ?>" class="btn btn-theme btn-lg btn-block">
+					 </form>
+					</div>
+				  </div>
+<?php } ?>
+            			
+<?php  }else{ ?>
+<h3> Não foram encontrados termos  "<?php echo $termo; ?>" como autoridades</h3>
 
-        <?php if($num > 0){ ?>
-            <div class="form-group">
-			<div class="col-md-offset-2 col-md-8">
-<?php while($resultado = mysqli_fetch_array($query)){?>
-<?php echo $resultado['termo']; 
-if($resultado['adotado'] == 0){ echo "(Adotado)";}
-?><?php } ?>
-</div>
-			</div>
-            <?php }else{
-				?>
-            <div class="form-group">
-			<div class="col-md-offset-2 col-md-8">
-			<p>Não foram encontradas nenhuma Autoridade com o termo <?php echo $termo; ?></p>	
-			</div>
-			</div>
-                
-                <?php
-				
-				} ?>
-            <div class="form-group">
-			<div class="col-md-offset-2 col-md-8">
-			<p>Inserir o <?php echo "<i>$termo</i>"; ?> como Autoridade?</p>	
-			<form method='POST' action='?perfil=discoteca&p=frm_insere_autoridade&pag=insere'>
-			<input type='hidden' name='termo' value='<?php echo $termo; ?>'>
-			<input type ='submit' class='btn btn-theme btn-md btn-block' value='inserir'></form>
-			</div>
-			</div>
-
-            		</div>
-	</section>
+<?php if(isset($_SESSION['idDisco'])){ // insere na base e no registro?>
+            <p>Gostaria de incluir <strong><?php echo $termo; ?></strong> ao registro <strong> <?php echo $disco ?></strong>?</p>
+            <p> Lembre-se que essa ação insere o termo na base comum de termos do sistema.</p>
+	  <div class="form-group">
+					<div class="col-md-offset-2 col-md-8">
+					<form method='POST' action='?perfil=discoteca&p=frm_edita_termo'>
+                    <input type="hidden" name="adicionaTermo" value="1" />
+                    <input type="hidden" name="termo_insere" value="<?php echo $termo; ?>" />
+                    <input type="hidden" name="tipo_insere" value="1" />
+ 					 <input type="submit" value="Adicionar <?php echo $termo; ?>" class="btn btn-theme btn-lg btn-block">
+					 </form>
+					</div>
+				  </div>
+<?php }else{ ?>
+            <p>Gostaria de incluir <strong><?php echo $termo; // insere só na base ?></strong> na base comum de termos do sistema?</p>
+	  <div class="form-group">
+					<div class="col-md-offset-2 col-md-8">
+					<form method='POST' action='?perfil=discoteca&p=frm_edita_termo'>
+                    <input type="hidden" name="adicionaTermo" value="1" />
+                    <input type="hidden" name="termo_insere" value="<?php echo $termo; ?>" />
+                    <input type="hidden" name="tipo_insere" value="<?php echo $tipo; ?>" />
+ 					 <input type="submit" value="Adicionar <?php echo $termo; ?>" class="btn btn-theme btn-lg btn-block">
+					 </form>
+					</div>
+				  </div>
+<?php } ?>
 	
+            		</div>
+                    </div>
+	</section>
 
+<?php } ?>
 <?php break; ?>
 
 <?php } ?>

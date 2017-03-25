@@ -26,29 +26,29 @@ function dataAcervo($tipo,$data){
 
 
 if(isset($_POST['cadastraRegistro']) OR isset($_POST['atualizaRegistro'])){
-$planilha = 17;
-$hoje = date("Y-m-d H:i:s");
-$colecao = $_POST['colecao'];
-$tombo = $_POST['tombo'];
-$geral = $_POST['geral'];
-$especifico = $_POST['especifico'];
-$faixas = $_POST['faixas'];
-$exemplares = $_POST['exemplares'];
-$gravadora = $_POST['gravadora'];
-$registro = $_POST['registro'];
-$tipo_data = $_POST['tipo_data'];
-$data_gravacao = $_POST['data_gravacao'];
-$local = $_POST['local'];
-$fisico = $_POST['fisico'];
-$estereo = $_POST['estereo'];
-$polegadas = $_POST['polegadas'];
-$titulo = addslashes($_POST['titulo']);
-$titulo_uniforme = addslashes($_POST['titulo_uniforme']);
-$conteudo = addslashes($_POST['conteudo']);
-$notas = addslashes($_POST['notas']);
-$obs = addslashes($_POST['obs']);
-$publicado = 1;
-$catalogador = $_SESSION['idUsuario'];
+	$planilha = 17;
+	$hoje = date("Y-m-d H:i:s");
+	$colecao = $_POST['colecao'];
+	$tombo = $_POST['tombo'];
+	$geral = $_POST['geral'];
+	$especifico = $_POST['especifico'];
+	$faixas = $_POST['faixas'];
+	$exemplares = $_POST['exemplares'];
+	$gravadora = $_POST['gravadora'];
+	$registro = $_POST['registro'];
+	$tipo_data = $_POST['tipo_data'];
+	$data_gravacao = $_POST['data_gravacao'];
+	$local = $_POST['local'];
+	$fisico = $_POST['fisico'];
+	$estereo = $_POST['estereo'];
+	$polegadas = $_POST['polegadas'];
+	$titulo = addslashes($_POST['titulo']);
+	$titulo_uniforme = addslashes($_POST['titulo_uniforme']);
+	$conteudo = addslashes($_POST['conteudo']);
+	$notas = addslashes($_POST['notas']);
+	$obs = addslashes($_POST['obs']);
+	$publicado = 1;
+	$catalogador = $_SESSION['idUsuario'];
 }
 
 if(isset($_POST['cadastraRegistro'])){
@@ -127,6 +127,12 @@ if(!isset($ultimo)){
 }
 $disco = recuperaDados("acervo_discoteca",$ultimo,"idDisco");
 $registro = recuperaDados("acervo_registro",$ultimo,"id_tabela");
+
+
+
+$_SESSION['idReg'] = $registro['id_registro'];
+$_SESSION['idDisco'] = $disco['idDisco'];
+$_SESSION['idAnalitica'] = "";
 
 // Define as sessions
 
