@@ -29,7 +29,7 @@ include 'includes/menuSonoro.php';
 				  </div>	
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Tombo / Localização</strong><br/>
-					  <input type="text" class="form-control soNumero" id="duracao" name="tombo"  value="" >
+					  <input type="text" class="form-control" id="tombo" name="tombo"  value="" >
                       </div>
 				  </div>	
 				  <div class="form-group">
@@ -75,7 +75,7 @@ include 'includes/menuSonoro.php';
 				  </div>
 				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Registro:</strong><br/>
-					  <input type="text" class="form-control soNumero" id="Nome" name="registro"  value="" >
+					  <input type="text" class="form-control" id="Nome" name="registro"  value="" >
 					</div>
 				  </div>
 				  <div class="form-group">

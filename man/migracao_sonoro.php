@@ -293,6 +293,8 @@ break;
 	echo "<br /><br /> Importação executada em $tempo segundos";
 	break;
 
+
+
 	case "tombo":
 	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
 	echo "<h1>Criando os registros...</h1><br />";
@@ -330,6 +332,35 @@ break;
 	break;
 	
 	
+	case "tombo_update":
+	
+	//Sistema de controle de tempo
+	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+	echo "<h1>Atualizando tombos...</h1><br />";
+	$hoje = date('Y-m-d H:i:s');
+		
+	$sql = "SELECT idDisco, tombo FROM temp_acervo_discoteca $teste"; //seleciona o idDisco e o tombo da tabela antiga
+	$query = mysqli_query($con,$sql); //roda  query
+	while($disco = mysqli_fetch_array($query)){
+		$idDisco = $disco['idDisco'];
+		$tombo = $disco['tombo'];
+		$sql_update = "UPDATE acervo_discoteca SET tombo = '$tombo' WHERE idTemp = '$idDisco'";
+		$query_update = mysqli_query($con,$sql_update);
+		if($query_update){
+			echo "Tombo $tombo atualizado com sucesso.<br />";	
+		}else{
+			echo "Erro ao atualizar tombo $tombo.<br />";	
+		}
+		
+	}
+
+	$depois = strtotime(date('Y-m-d H:i:s'));
+	$tempo = $depois - $antes;
+	echo "<br /><br /> Importação executada em $tempo segundos";
+	
+	
+	break;
+
 	
 	
 	case "inicio":
@@ -355,6 +386,8 @@ break;
 <a href="?action=analitica">Criar relações Matriz / Analítica (UPDATE)</a><br />
 <br />
 
+<a href="?action=tombo_update">Atualizao tombo antigo na base nova (UPDATE)</a><br />
+<br />
 
 <?php 
 break;

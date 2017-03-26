@@ -29,12 +29,12 @@ include 'includes/menuPartitura.php';
 				  </div>	
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Tombo / Localização</strong><br/>
-					  <input type="text" class="form-control soNumero" id="duracao" name="tombo"  value="" >
+					  <input type="text" class="form-control" id="Tombo" name="tombo"  value="" >
                       </div>
 				  </div>	
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Tombo Antigo</strong><br/>
-					  <input type="text" class="form-control soNumero" id="duracao" name="tombo_antigo"  value="" >
+					  <input type="text" class="form-control" id="tombo_antigo" name="tombo_antigo"  value="" >
                       </div>
 				  </div>
 				  <div class="form-group">
@@ -80,7 +80,7 @@ include 'includes/menuPartitura.php';
 				  </div>
 				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Registro / Número de Chapa / Copyright:</strong><br/>
-					  <input type="text" class="form-control soNumero" id="Nome" name="registro"  value="" >
+					  <input type="text" class="form-control" id="Nome" name="registro"  value="" >
 					</div>
 				  </div>
 				  <div class="form-group">
