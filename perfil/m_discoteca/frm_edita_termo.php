@@ -43,9 +43,10 @@ if(isset($_POST['insere'])){
 	if($num > 0){
 		$mensagem = "O termo <strong>$termo</strong> já existe na base. Tente novamente.";
 		$termo = array();
-		$termo['termo'] = "";	
+		$termo['termo'] = $termo;	
+		
 		$termo['adotado'] = "";	
-		$termo['tipo'] = "";
+		$termo['tipo'] = $tipo;
 		$action = "insere";
 		$id = "";		
 	}else{

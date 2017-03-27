@@ -15,7 +15,7 @@ $pasta = "?perfil=discoteca&p=";
                       	<li><a href="#">Autoridades</a>	
 								<ul class="dl-submenu">
 									<li><a href="<?php echo $pasta."frm_busca_autoridades"; ?>">Buscar Autoridades</a></li>
-									<li><a href="<?php echo $pasta."frm_insere_autoridades"; ?>">Inserir Autoridades</a></li>
+									<li><a href="<?php echo $pasta."frm_insere_autoridade"; ?>">Inserir Autoridades</a></li>
 									</ul>
 						</li>
                        	<li><a href="#">Termos</a>	

@@ -7,13 +7,75 @@ require "../funcoes/funcoesGerais.php";
 
 $con = bancoMysqli();
 set_time_limit(0);
-//$teste = " LIMIT 0,100";
-$teste = "";
+$teste = " LIMIT 0,100";
+//$teste = "";
 
 if(isset($_GET['action'])){
 	$action = $_GET['action'];
 }else{
 	$action = "inicio";
+}
+
+function autoridade($idReg,$idTemp){
+	$con = bancoMysqli();
+	$sql = "SELECT autoridade01, categoria01,
+	autoridade02, categoria02,
+	autoridade03, categoria03, 
+	autoridade04, categoria04, 
+	autoridade05, categoria05, 
+	autoridade06, categoria06, 
+	autoridade07, categoria07, 
+	autoridade08, categoria08, 
+	autoridade09, categoria09, 
+	autoridade10, categoria10,
+	id
+	FROM temp_partituras WHERE id = $idTemp"; 
+	$query = mysqli_query($con,$sql);
+	while($x = mysqli_fetch_array($query)){
+		for($i = 1; $i <= 10; $i++){
+			
+			if($i == 10){
+				$termo = $x['autoridade10'];
+				$categoria = retiraParenteses($x['categoria10']);
+			}else{
+				$termo = $x['autoridade0'.$i.''];
+				$categoria = retiraParenteses($x['categoria0'.$i.'']);
+			}
+			if($termo != "" AND $termo != NULL AND $termo != "."){	
+				
+				
+						
+				$idTermo = recuperaIdTermo($termo,1);
+				$idCat = recuperaIdTermo($categoria,78);
+				
+
+				if($idTermo == NULL OR $idTermo == 0){
+					$sql_insere = "INSERT INTO acervo_termo (termo, tipo, id_usuario, data_update, publicado)
+					VALUES ('$termo','1','1','$hoje','1')";	
+					$query_insere = mysqli_query($con,$sql_insere);
+					if($query_insere){
+						$idTermo = mysqli_insert_id($con);
+						echo "$termo inserido na base termos<br />";	
+					}else{
+						echo "Erro ao inserir o $termo<br />";
+						}
+				}
+
+				$sql_insert = "INSERT INTO `acervo`.`acervo_relacao_termo` (`idRel`, `idReg`, `idTermo`, `idTipo`, `idCat`, `publicado`) 
+				VALUES ('', '$idReg', '$idTermo', '1', '$idCat', '1')";
+				$query_insert = mysqli_query($con,$sql_insert);
+				
+				if($query_insert){
+					echo "Termo $termo inserido em ID $idReg<br />";
+				}else{
+					echo "Erro.<br />";	
+				}
+
+				//echo var_dump($idTermo)."<br />";
+			}
+
+		}
+	}
 }
 
 
@@ -87,7 +149,7 @@ break;
 	$query = mysqli_query($con,$sql);
 	while($x = mysqli_fetch_array($query)){
 		$idDisco = $x['idDisco'];
-		$titulo = $x['titulo_disco'];
+		$titulo = addslashes($x['titulo_disco']);
 		$sql_update = "INSERT INTO `acervo`.`acervo_registro` 
 		(`titulo`, `id_acervo`, `id_tabela`, `publicado`, `tabela`, `data_catalogacao`, `idUsuario`) 
 		VALUES ('$titulo', '7', '$idDisco', '1', '97', '$hoje', '1');";
@@ -98,6 +160,38 @@ break;
 			echo "Erro ao inserir $titulo (2) <br />";
 			
 		}
+	}
+	$depois = strtotime(date('Y-m-d H:i:s'));
+	$tempo = $depois - $antes;
+	echo "<br /><br /> Importação executada em $tempo segundos";
+
+	break;
+	
+	case "registros_atualizar":
+	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+	echo "<h1>Criando os registros...</h1><br />";
+	$hoje = date('Y-m-d H:i:s');
+	$sql = "SELECT * FROM `acervo_partituras` WHERE idDisco NOT IN (SELECT id_tabela FROM acervo_registro WHERE tabela = 97)";
+	$query = mysqli_query($con,$sql);
+	while($x = mysqli_fetch_array($query)){
+		$idDisco = $x['idDisco'];
+		$titulo = addslashes($x['titulo_disco']);
+		$sql_update = "INSERT INTO`acervo_registro` 
+		(`titulo`, `id_acervo`, `id_tabela`, `publicado`, `tabela`, `data_catalogacao`, `idUsuario`) 
+		VALUES ('$titulo', '7', '$idDisco', '1', '97', '$hoje', '1');";
+		$query_update = mysqli_query($con,$sql_update);
+		if($query_update){
+			echo "Registro $titulo inserido. (1) <br />";
+			//$idReg = mysqli_insert_id($con);
+			//echo autoridade($idReg,$x['idTemp']);	
+		}else{
+			echo "Erro ao inserir $titulo (2) <br />";
+			echo $sql_update."<br />";
+			
+		}
+		
+		
+		
 	}
 	$depois = strtotime(date('Y-m-d H:i:s'));
 	$tempo = $depois - $antes;
@@ -174,9 +268,103 @@ break;
 	$tempo = $depois - $antes;
 	echo "<br /><br /> Importação executada em $tempo segundos";
 	break;
+	
+		case "tombo_update":
+	
+	//Sistema de controle de tempo
+	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+	echo "<h1>Atualizando tombos...</h1><br />";
+	$hoje = date('Y-m-d H:i:s');
+	$i = 0;	
+	$sql = "SELECT id, tombo_antigo, resumo_tombo FROM temp_partituras $teste"; //seleciona o idDisco e o tombo da tabela antiga
+	$query = mysqli_query($con,$sql); //roda  query
+	while($disco = mysqli_fetch_array($query)){
+		$idDisco = $disco['id'];
+		
+		$tombo = $disco['resumo_tombo'];
+		$tombo_antigo = $disco['tombo_antigo'];
+		$sql_update = "UPDATE acervo_partituras SET tombo = '$tombo', tombo_antigo = '$tombo_antigo' WHERE idTemp = '$idDisco'";
+		$query_update = mysqli_query($con,$sql_update);
+		if($query_update){
+			echo $i." Tombo $tombo atualizado com sucesso.<br />";	
+		}else{
+			echo $i." Erro ao atualizar tombo $tombo.<br />";	
+		}
+		$i++;
+	}
+
+	$depois = strtotime(date('Y-m-d H:i:s'));
+	$tempo = $depois - $antes;
+	echo "<br /><br /> Importação executada em $tempo segundos";
+	
+	
+	break;
+
+	case "instrumentacao":
+	
+	function verificaExistencia($termo){
+		$con = bancoMysqli();
+		$sql = "SELECT id_termo FROM acervo_termo WHERE termo LIKE '$termo' AND tipo = '121' LIMIT 0,1";
+		$query = mysqli_query($con,$sql);
+		$num = mysqli_num_rows($query);
+		if($num > 0){
+			$termo = mysqli_fetch_array($query);
+			return $termo['id_termo'];		
+		}else{
+			return NULL;	
+		}
+
+			
+	}
+
+	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+	echo "<h1>Atualizando tombos...</h1><br />";
+	$hoje = date('Y-m-d H:i:s');
+
+	//seleciona termos distintos adotados 
+	$sql_select = "SELECT DISTINCT adotar FROM temp_thesauros_instrumentacao";
+	$query_select = mysqli_query($con,$sql_select); 
+	while($termo = mysqli_fetch_array($query_select)){
+		$adotar = addslashes($termo['adotar']);	
+		$sql_insert = "INSERT INTO `acervo_termo` (`termo`, `tipo`, `id_usuario`, `data_update`, `publicado`) VALUES ('$adotar', '121',  '1', '$hoje', '1')";
+		$query_insert = mysqli_query($con,$sql_insert);
+		if($query_insert){
+			echo "O termo $adotar foi inserido como instrumentação.<br />";	
+		}else{
+			echo "Erro ao inserir o termo $adotar . <br />";
+		}
+	}
+
+	$sql_select = "SELECT DISTINCT termo FROM temp_thesauros_instrumentacao WHERE termo <> adotar";
+	$query_select = mysqli_query($con,$sql_select); 
+	while($termo = mysqli_fetch_array($query_select)){
+		$adotar = addslashes($termo['termo']);
+		$verifica = verificaExistencia($adotar);
+		if($verifica != NULL){
+			$sql_insert = "INSERT INTO `acervo_termo` (`termo`, `adotado`, `tipo`, `id_usuario`, `data_update`, `publicado`) VALUES ('$adotar', '$verifica', '121',  '1', '$hoje', '1')";
+			$query_insert = mysqli_query($con,$sql_insert);
+			if($query_insert){
+				echo "O termo $adotar foi inserido como instrumentação.<br />";	
+			}else{
+				echo "Erro ao inserir o termo $adotar . <br />";
+			}
+		}
+	}
+
+
+	$depois = strtotime(date('Y-m-d H:i:s'));
+	$tempo = $depois - $antes;
+	echo "<br /><br /> Importação executada em $tempo segundos";
+
+	break;
+
+
+
+	
 
 case "inicio":
 ?>
+
 <h1>Importação dos termos para a base</h1>
 <!--
 <a href="?action=titulos">Migrar titulos</a><br />
@@ -189,7 +377,12 @@ case "inicio":
 <a href="?action=relacao_autoridades">Relações de Autoridades</a><br />
 <br />
 
-
+<a href="?action=tombo_update">Atualiza os tombos novos e antigos.</a><br />
+<br />
+<a href="?action=instrumentacao">Insere atualização na tabela termos.</a><br />
+<br />
+<a href="?action=registros_atualizar">Atualizar registros com addslashes</a><br />
+<br />
 
 <?php 
 break;

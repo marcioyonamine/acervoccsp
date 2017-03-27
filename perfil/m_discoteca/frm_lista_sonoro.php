@@ -72,7 +72,7 @@ if(isset($_POST['apaga'])){
 						}else{
 							$filtro = "";
 						}
-						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela, acervo_discoteca.tombo, acervo_registro.id_acervo FROM acervo_registro,acervo_discoteca WHERE acervo_discoteca.planilha = '17' AND acervo_registro.id_tabela = acervo_discoteca.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '87' $filtro ORDER BY acervo_discoteca.tombo DESC";
+						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela, acervo_discoteca.tombo, acervo_registro.id_acervo FROM acervo_registro,acervo_discoteca WHERE acervo_discoteca.planilha = '17' AND acervo_registro.id_tabela = acervo_discoteca.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '87' $filtro ORDER BY acervo_registro.data_catalogacao DESC";
 						$query_lista = mysqli_query($con,$sql_lista);
 						$total_pagina = 50;	
 						if(isset($_GET['n_pag'])){

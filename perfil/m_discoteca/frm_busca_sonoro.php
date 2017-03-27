@@ -16,8 +16,17 @@ if(isset($_POST['pesquisar'])){
 	$titulo = trim($_POST['titulo']);
 	$tombo = trim($_POST['tombo']);
 	$tipo = $_POST['tipo'];
+	if($tipo == 0){
+		$filtro_tipo = "";	
+	}else{
+		$filtro_tipo = " AND acervo_discoteca.tipo_especifico = '".$tipo."'";
+	}
 	$colecao = $_POST['colecao'];	
-
+	if($colecao == 0){
+		$filtro_colecao = "";	
+	}else{
+		$filtro_colecao = "AND acervo_registro.id_acervo = '$colecao' ";	
+	}	
 	if($titulo == "" AND $tombo == "" AND $tipo == 0 AND $colecao == 0){ ?>
 		 <section id="services" class="home-section bg-white">
 			<div class="container">
@@ -72,14 +81,35 @@ if(isset($_POST['pesquisar'])){
 		</section>   
 <?php
 }else{
-$sql_busca = "SELECT DISTINCT idDisco FROM acervo_discoteca WHERE 
+	
+	if(strlen($tombo) == 0){
+	$sql_busca = "SELECT DISTINCT idDisco FROM acervo_discoteca,acervo_registro WHERE 
 	planilha = 17 AND (
 	titulo_disco LIKE '%$titulo%' OR
 	titulo_faixa LIKE '%$titulo%' OR
 	titulo_uniforme LIKE '%$titulo%'OR
-	conteudo LIKE '%$titulo%') 
+	conteudo LIKE '%$titulo%')
+	AND acervo_registro.tabela = 87 
+	AND	acervo_registro.id_tabela = acervo_discoteca.idDisco
+	$filtro_tipo
+	$filtro_colecao
+
 	ORDER BY idDisco DESC 
 	";
+	}else{
+		$sql_busca = "SELECT DISTINCT idDisco FROM acervo_discoteca,acervo_registro WHERE 
+		planilha = 17
+		AND (tombo LIKE '%$tombo%' OR
+		registro LIKE '%$tombo%')
+		AND acervo_registro.tabela = 87 
+		AND	acervo_registro.id_tabela = acervo_discoteca.idDisco
+		$filtro_tipo
+	$filtro_colecao
+
+		ORDER BY idDisco DESC 
+		";	
+		
+	}
 $query_busca = mysqli_query($con,$sql_busca);
 $num = mysqli_num_rows($query_busca);
 
@@ -106,7 +136,7 @@ $num = mysqli_num_rows($query_busca);
 					</thead>
 					<tbody>
 
-<?php 
+<?php //echo $sql_busca;
 
 						while($y = mysqli_fetch_array($query_busca)){
 							$x = recuperaDados("acervo_discoteca",$y['idDisco'],"idDisco");
@@ -116,7 +146,7 @@ $num = mysqli_num_rows($query_busca);
 							$colecao = recuperaDados("acervo_acervos",$reg['id_acervo'],"id_acervo");
 							if(trim($x['titulo_disco']) == ""){
 								if(trim($x['titulo_faixa']) == ""){
-									if(trim($x['titulo_unifrome']) == ""){
+									if(trim($x['titulo_uniforme']) == ""){
 										$titulo = $x['conteudo'];
 									}else{
 										$titulo = trim($x['titulo_uniforme']);
