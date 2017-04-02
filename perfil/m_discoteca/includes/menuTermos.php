@@ -24,7 +24,7 @@ $tab = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
 						
                         <?php 
                         if($tab['tabela'] == 87){
-							if(!isset($_SESSION['idFaixa'])){ ?>
+							if($_SESSION['idAnalitica'] == 0 OR $_SESSION['idAnalitica'] == ""){ ?>
 							<li><a href="<?php echo $pasta."frm_atualiza_sonoro"; ?>">Voltar</a></li>
 							
 							<?php 
@@ -39,7 +39,7 @@ $tab = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
                         
                         <?php 
                         if($tab['tabela'] == 97){
-							if(!isset($_SESSION['idFaixa'])){ ?>
+							if($_SESSION['idAnalitica'] == 0 OR $_SESSION['idAnalitica'] == ""){ ?>
 							<li><a href="<?php echo $pasta."frm_atualiza_partitura"; ?>">Voltar</a></li>
 							
 							<?php 

@@ -2,7 +2,7 @@
 $con = bancoMysqli();
 
 
-include 'includes/menu.php';
+include 'includes/menuTermos.php';
 
 if(isset($_GET['pag'])){
 	$pag = $_GET['pag'];
@@ -196,6 +196,15 @@ if($resultado['adotado'] == 0){//03
 					 </form>
 					</div>
 				  </div>
+                  <br />
+
+                    <div class="form-group">
+					<div class="col-md-offset-2 col-md-8">
+					<br />
+                    <a href="??perfil=discoteca&p=frm_insere_termo" class="btn btn-theme lg btn-block"  >Fazer outra busca</a>
+					
+					</div>
+				  </div>     
 <?php }else{ ?>
             <p>Gostaria de incluir <strong><?php echo $termo; // insere só na base ?></strong> na base comum de termos do sistema?</p>
 	  <div class="form-group">
@@ -208,6 +217,16 @@ if($resultado['adotado'] == 0){//03
 					 </form>
 					</div>
 				  </div>
+                  <br />
+                    <div class="form-group">
+					<div class="col-md-offset-2 col-md-8">
+					<br />
+                    <a href="?perfil=discoteca&p=frm_insere_termo" class="btn btn-theme lg btn-block"  >Fazer outra busca</a>
+					
+					</div>
+				  </div>                     
+                  
+                  
 <?php } ?>
             			
 <?php  }else{ ?>
@@ -226,6 +245,14 @@ if($resultado['adotado'] == 0){//03
 					 </form>
 					</div>
 				  </div>
+                                      <div class="form-group">
+					<div class="col-md-offset-2 col-md-8">
+					<br />
+                    <a href="?perfil=discoteca&p=frm_insere_termo" class="btn btn-theme lg btn-block"  >Fazer outra busca</a>
+					
+					</div>
+				  </div>    
+                  <br />
 <?php }else{ ?>
             <p>Gostaria de incluir <strong><?php echo $termo; // insere só na base ?></strong> na base comum de termos do sistema?</p>
 	  <div class="form-group">
@@ -238,6 +265,14 @@ if($resultado['adotado'] == 0){//03
 					 </form>
 					</div>
 				  </div>
+                    <div class="form-group">
+					<div class="col-md-offset-2 col-md-8">
+					<br />
+                    <a href="?perfil=discoteca&p=frm_insere_termo" class="btn btn-theme lg btn-block"  >Fazer outra busca</a>
+					
+					</div>
+				  </div>       
+                  <br />
 <?php } ?>
 
 

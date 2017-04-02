@@ -143,16 +143,18 @@ if(isset($_POST['atualizaRegistro'])){
 
 
 $disco = recuperaDados("acervo_partituras",$ultimo,"idDisco");
-$rec_reg = idReg($ultimo,$_SESSION['tabela']);
+$rec_reg = idReg($ultimo,$_SESSION['idTabela']);
 $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
-
+$_SESSION['idReg'] = $registro['id_registro'];
+$_SESSION['idDisco'] = $disco['idDisco'];
+$_SESSION['idAnalitica'] = 0;
 
 ?>
 
 	  <section id="contact" class="home-section bg-white">
 	  	<div class="container">
 			  <div class="form-group">
-					<h4>Partitura - MATRIZ</h4>
+              		<h4>Partitura - MATRIZ</h4>
 					<h3><?php echo $registro['titulo'];?></h3>
 					
                     <p><?php if(isset($mensagem)){ echo $mensagem; } ?></p>
@@ -176,12 +178,12 @@ $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 				  </div>	
                                     <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Tombo / Localização</strong><br/>
-					  <input type="text" class="form-control soNumero" id="duracao" name="tombo"  value="<?php echo $disco['tombo']; ?>" >
+					  <input type="text" class="form-control" id="" name="tombo"  value="<?php echo $disco['tombo']; ?>" >
                       </div>
 				  </div>
                                                       <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Tombo Antigo</strong><br/>
-					  <input type="text" class="form-control soNumero" id="duracao" name="tombo_antigo"  value="<?php echo $disco['tombo_antigo']; ?>" >
+					  <input type="text" class="form-control"  id="" name="tombo_antigo"  value="<?php echo $disco['tombo_antigo']; ?>" >
                       </div>
 				  </div>	
 				  <div class="form-group">
@@ -228,7 +230,7 @@ $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 				  </div>
 				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Registro:</strong><br/>
-					  <input type="text" class="form-control soNumero" id="Nome" name="registro"  value="<?php echo $disco['registro']; ?>" >
+					  <input type="text" class="form-control" id="Nome" name="registro"  value="<?php echo $disco['registro']; ?>" >
 					</div>
 				  </div>
 				  <div class="form-group">

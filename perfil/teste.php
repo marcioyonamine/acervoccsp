@@ -17,6 +17,7 @@ if(isset($_GET['registro'])){
 					<div class="section-heading">
 					 <h3>Teste</h3>
 					<?php
+					
 					/*
 					$con = bancoMysqli();
 					$sql = "SELECT * FROM igsis_pedido_contratacao WHERE publicado = '1'";
@@ -29,7 +30,7 @@ if(isset($_GET['registro'])){
 					}
 					*/
 					
-					$x = retornaAutoridades($_GET['registro']);
+					$x = reColecao($_GET['registro']);
 					echo $x;
 					var_dump($x);
 					?>

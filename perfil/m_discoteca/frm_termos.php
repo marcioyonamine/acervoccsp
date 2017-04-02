@@ -1,7 +1,7 @@
 <?php 
 
 //var_sistema();
-
+/*
 if(isset($_SESSION['idDisco'])){
 	$ultimo = $_SESSION['idDisco'];
 }
@@ -10,16 +10,32 @@ if(isset($_SESSION['idFaixa'])){
 	$ultimo = $_SESSION['idFaixa'];
 }
 
-include 'includes/menuTermos.php';
+
 
 if(isset($_POST['id_registro'])){
 	$rec_reg = $_POST['id_registro'];
 }else{
-	$rec_reg = $_SESSION['idReg'];
+	if(isset($_SESSION['idFaixa'])){
+		
+		$rec_reg = idReg($_SESSION['idFaixa'],$_SESSION['tabela']);
+	}else{
+		$rec_reg = $_SESSION['idReg'];
+	}
 }
 $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro"); 
+*/
 $con = bancoMysqli();
+// SESSIONS
 
+if(isset($_SESSION['idFaixa']) AND ($_SESSION['idFaixa'] != 0 AND $_SESSION['idFaixa'] != "" AND $_SESSION['idFaixa'] != NULL)){
+	$_SESSION['idReg'] = idReg($_SESSION['idFaixa'],$_SESSION['idTabela']);
+	$_SESSION['idAnalitica'] = $_SESSION['idFaixa'];	
+}else{
+	$_SESSION['idReg'] = idReg($_SESSION['idDisco'],$_SESSION['idTabela']);	
+}
+
+
+include 'includes/menuTermos.php';
 if(isset($_GET['pag'])){
 	$pag = $_GET['pag'];
 }else{
@@ -28,6 +44,8 @@ if(isset($_GET['pag'])){
 
 switch($pag){
 case "inicio":
+
+
 
 if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 	if(isset($_GET['tipo'])){
@@ -66,11 +84,12 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 	
 	
 	if(isset($_POST['insereTermo'])){
-		$idreg = $registro['id_registro'];
+		$idreg = $_SESSION['idReg'];
 		$idtermo = $_POST['termo'];
 		$idtipo = $_POST['tipo'];
 		$sql_insere = "INSERT INTO `acervo_relacao_termo` (`idRel`, `idReg`, `idTermo`, `idTipo`, `idCat`, `publicado`) 
 				VALUES (NULL, '$idreg', '$idtermo', '$idtipo', '', '1')";
+				echo $sql_insere;
 		$query_insere = mysqli_query($con,$sql_insere);
 		if($query_insere){
 			$mensagem = "Termo relacionado com sucesso.";
@@ -126,6 +145,7 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 
 
 
+$registro = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
 
 
 
@@ -142,9 +162,9 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 		</div>
         <?php 
 		if($tipo == 1){
-			$autoridade = listaTermos($registro['id_registro'],1);
+			$autoridade = listaTermos($_SESSION['idReg'],1);
 		}else{
-			$autoridade = listaTermos($registro['id_registro'],$GLOBALS['acervo_tipo']);
+			$autoridade = listaTermos($_SESSION['idReg'],$GLOBALS['acervo_tipo']);
 			//echo $autoridade['sql'];
 			
 		}
@@ -240,7 +260,9 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 	</div> <!-- container-->
 </section>
 
-<?php }else{ //se existe categoria selecionada ?>
+<?php }else{ //se existe categoria selecionada 
+$registro = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
+?>
 	  <section id="contact" class="home-section bg-white">
 	  	<div class="container">
 			  <div class="form-group">

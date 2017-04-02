@@ -2,6 +2,9 @@
 $con = bancoMysqli();
 include 'includes/menuSonoro.php';
 
+
+
+
 function dataAcervo($tipo,$data){
 	switch($tipo){
 	case 5: //ano
@@ -132,7 +135,7 @@ $registro = recuperaDados("acervo_registro",$ultimo,"id_tabela");
 
 $_SESSION['idReg'] = $registro['id_registro'];
 $_SESSION['idDisco'] = $disco['idDisco'];
-$_SESSION['idAnalitica'] = "";
+$_SESSION['idAnalitica'] = 0;
 
 // Define as sessions
 
@@ -166,7 +169,7 @@ $_SESSION['idAnalitica'] = "";
 				  </div>	
                                     <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Tombo / Localização</strong><br/>
-					  <input type="text" class="form-control soNumero" id="duracao" name="tombo"  value="<?php echo $disco['tombo']; ?>" >
+					  <input type="text" class="form-control " id="" name="tombo"  value="<?php echo $disco['tombo']; ?>" >
                       </div>
 				  </div>	
 				  <div class="form-group">
@@ -213,7 +216,7 @@ $_SESSION['idAnalitica'] = "";
 				  </div>
 				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Registro / Número de Chapa / Copyright:</strong><br/>
-					  <input type="text" class="form-control soNumero" id="Nome" name="registro"  value="<?php echo $disco['registro']; ?>" >
+					  <input type="text" class="form-control" id="Nome" name="registro"  value="<?php echo $disco['registro']; ?>" >
 					</div>
 				  </div>
 				  <div class="form-group">

@@ -1,6 +1,7 @@
 ﻿<?php 
 $con = bancoMysqli();
 $idDisco = $_SESSION['idDisco'];
+$_SESSION['idReg'] = idReg($_SESSION['idDisco'],$_SESSION['idTabela']);
 $disco = recuperaDados("acervo_discoteca",$idDisco,"idDisco");
 $registro = recuperaDados("acervo_registro",$idDisco,"id_tabela");
 
@@ -17,6 +18,9 @@ include 'includes/menuFaixa.php';
 
 switch($pag){
 case "inicio":
+
+
+$_SESSION['idAnalitica'] = 0;
 
 if(isset($_POST['apagar'])){
 	$idApagar = $_POST['apagar'];
@@ -197,6 +201,9 @@ if(isset($_POST['apagar'])){
     <?php
 	break;  
 	case "edita":
+	$_SESSION['idReg'] = idReg($_SESSION['idFaixa'],$_SESSION['idTabela']);
+	
+	
 	if(isset($_POST['cadastraRegistro']) OR isset($_POST['atualizaRegistro'])){
 	$planilha = 18;
 		$hoje = date("Y-m-d H:i:s");

@@ -14,6 +14,15 @@ if(isset($_SESSION['idDisco'])){
 	$dis = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
 	$disco = $dis['titulo'];
 	$mensagem = "Você está inserindo autoridades/termos para o registro <strong>$disco</strong>.<br />";	
+}
+elseif($_SESSION['idFaixa']){
+	$disc = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro"); //recupera os dados do disco
+	$_SESSION['tabela'] = $disc['tabela'];
+	$idReg = idReg($_SESSION['faixa'],$_SESSION['tabela']);	
+	$dis = recuperaDados("acervo_registro",$idReg,"id_registro");
+	$disco = $dis['titulo'];
+	$mensagem = "Você está inserindo autoridades/termos para o registro <strong>$disco</strong>.<br />";	
+
 }else{
 	$mensagem = "";	
 }

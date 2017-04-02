@@ -1,5 +1,4 @@
 <?php
-$_SESSION['tabela'] = 87;
 //geram o insert pro framework da igsis
 $pasta = "?perfil=discoteca&p=";
 ?>
@@ -12,7 +11,7 @@ $pasta = "?perfil=discoteca&p=";
 						<li><a href="<?php echo $pasta."frm_lista_sonoro"; ?>">Listar registros</a></li>
 						<li><a href="<?php echo $pasta."frm_insere_sonoro"; ?>">Inserir registro</a></li>
 						<li><a href="<?php echo $pasta."frm_busca_sonoro"; ?>">Busca registro</a></li>
-                      	<li><a href="#">Autoridades</a>	
+                      	<!--<li><a href="#">Autoridades</a>	
 								<ul class="dl-submenu">
 									<li><a href="<?php echo $pasta."frm_busca_autoridades"; ?>">Buscar Autoridades</a></li>
 									<li><a href="<?php echo $pasta."frm_insere_autoridade"; ?>">Inserir Autoridades</a></li>
@@ -23,7 +22,8 @@ $pasta = "?perfil=discoteca&p=";
 									<li><a href="<?php echo $pasta."frm_lista_av"; ?>">Buscar termo</a></li>
 									<li><a href="<?php echo $pasta."frm_insere_av"; ?>">Inserir termo</a></li>
 									</ul>
-						</li>
+						</li>-->
+                            <li><a href="?perfil=discoteca">Inicio</a></li>
  							<li><a href="#">Outras Opções</a> 
     
                                     <ul class="dl-submenu">

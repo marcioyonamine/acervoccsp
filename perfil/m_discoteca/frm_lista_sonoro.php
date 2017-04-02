@@ -2,20 +2,15 @@
 
 <?php
 $con = bancoMysqli();
-if(isset($_SESSION['idDisco'])){
-	unset($_SESSION['idDisco']);
-	
-}
+// zerar SESSIONS
+$_SESSION['idTabela'] = 87;
+$_SESSION['idDisco'] = 0;	
+$_SESSION['idFaixa'] = 0;	
+$_SESSION['idReg'] = 0;	
+$_SESSION['idAnalitica'] = 0;
 
-if(isset($_SESSION['idReg'])){
-	unset($_SESSION['idReg']);
-	
-}
 
-if(isset($_SESSION['idFaixa'])){
-	unset($_SESSION['idFaixa']);
-	
-}
+
 
 if(isset($_POST['apaga'])){
 	$id = $_POST['idDisco'];
@@ -49,7 +44,7 @@ if(isset($_POST['apaga'])){
 					}
 					else
 					{ ?>
-						<h5><a href="?perfil=discoteca&p=frm_lista_sonoro&user=<?php echo $_SESSION['idUsuario'] ?>">Filtrar por usuário</a></h5>
+						<h5><a href="?perfil=discoteca&p=frm_lista_sonoro&user=<?php echo $_SESSION['idUsuario'] ?>">Mostrar os registros editados por <?php echo $_SESSION['nomeCompleto']; ?></a></h5>
 			  <?php } ?>	
 					</div>
             </div>

@@ -853,6 +853,7 @@ function opcaoTermoCat($idTipo,$select = NULL){
 function listaTermos($idReg,$tipo){
 	$con = bancoMysqli();
 	$sql = "SELECT * FROM acervo_relacao_termo WHERE idReg = '$idReg' AND idTipo IN($tipo) AND publicado = '1'";
+	//echo $sql;
 	$query = mysqli_query($con,$sql);
 	$num = mysqli_num_rows($query);
 	if($num > 0){	
@@ -893,34 +894,40 @@ return $extensao;
 function retornaAutoridades($registro,$analitica = NULL){
 	$con = bancoMysqli(); //conecta no banco
 	// seleciona todos os termos autoridades ligados ao registro
-	$sql_autoridades = "SELECT idTermo,idCat FROM acervo_relacao_termo WHERE idTipo = '1' AND publicado = '1' AND idReg = '$registro'"; 
-	$query_autoridades = mysqli_query($con,$sql_autoridades);
-	$num = mysqli_num_rows($query_autoridades);
-	if($num > 0){
-		$i = 0;
-		while($termo = mysqli_fetch_array($query_autoridades)){
-			$y = recuperaDados("acervo_termo",$termo['idTermo'],"id_termo");
-			$w = recuperaDados("acervo_termo",$termo['idCat'],"id_termo");
-			$x[$i]['termo'] = $y['termo'];
-			$x[$i]['categoria'] = $w['termo'];
-			$i++;
-			
-		}
-
-		$str = ",";
-		$string = "";
-		for($a = 0; $a <= ($num - 1); $a++){
-			$str = ", ".$x[$a]['termo']." ( ".$x[$a]['categoria']. " ) ";
-			$string = $string.$str;
-		} 	
-
+	
+	if($registro == 0 OR $registro == NULL){
+		$x = array();
+		return $x;
 	}else{
-
-		$string = "";			
+		$sql_autoridades = "SELECT idTermo,idCat FROM acervo_relacao_termo WHERE idTipo = '1' AND publicado = '1' AND idReg = '$registro'"; 
+		$query_autoridades = mysqli_query($con,$sql_autoridades);
+		$num = mysqli_num_rows($query_autoridades);
+		if($num > 0){
+			$i = 0;
+			while($termo = mysqli_fetch_array($query_autoridades)){
+				$y = recuperaDados("acervo_termo",$termo['idTermo'],"id_termo");
+				$w = recuperaDados("acervo_termo",$termo['idCat'],"id_termo");
+				$x[$i]['termo'] = $y['termo'];
+				$x[$i]['categoria'] = $w['termo'];
+				$i++;
+				
+			}
+	
+			$str = ",";
+			$string = "";
+			for($a = 0; $a <= ($num - 1); $a++){
+				$str = ", ".$x[$a]['termo']." ( ".$x[$a]['categoria']. " ) ";
+				$string = $string.$str;
+			} 	
+	
+		}else{
+	
+			$string = "";			
+		}
+		$x['total'] = $num;
+		$x['string'] = substr($string, 1);
+		return $x;
 	}
-	$x['total'] = $num;
-	$x['string'] = substr($string, 1);
-	return $x;
 	
 }
 
@@ -1011,5 +1018,56 @@ function resumoAutoridades($string){
 	}
 	return $retorno;	
 }
+
+function reColecao($id){
+	$i= 1;
+	$col[$i] = recuperaDados("acervo_acervos",$id,"id_acervo");
+	$bread = array(1 => $col[$i]['acervo']);
+	while($col[$i]['pai'] != 0){
+		$i++;
+		$col[$i] = recuperaDados("acervo_acervos",$col[$i-1]['id_acervo'],"id_acervo");
+		echo $i;
+		echo $col[$i]['acervo'];
+	}
+	return $bread;	
+
+	
+}
+
+function breadCrumb(){
+	// tipo > coleção > partitura > analítica
+	$reg = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
+	$str = "";
+	$colecao = reColecao($reg['id_acervo']);
+
+		
+	switch($reg['tabela']){
+	
+	case 87:
+		$disco = recuperaDados("acervo_discoteca",$_SESSION['idDisco'],"idDisco");
+
+		if($_SESSION['idFaixa'] != 0){
+			$faixa = recuperaDados("acervo_discoteca",$_SESSION['idFaxia'],"idDisco");	
+			
+		}else{
+			
+		}
+		
+		
+	break;
+	
+	case 97:
+		$partitura = recuperaDados("acervo_discoteca",$_SESSION['idDisco'],"idDisco");
+
+	
+	break;	
+	
+	
+	}
+	
+	
+	
+}
+
 
 ?>

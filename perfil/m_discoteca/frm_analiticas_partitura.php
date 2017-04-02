@@ -16,6 +16,8 @@ include 'includes/menuFaixaPartitura.php';
 switch($pag){
 case "inicio":
 
+$_SESSION['idAnalitica'] = 0;
+
 if(isset($_POST['apagar'])){
 	$idApagar = $_POST['apagar'];
 	$idReg = idReg($_POST['apagar'],97);
@@ -212,6 +214,7 @@ $num_faixas = mysqli_num_rows($query_faixas);
     <?php
 	break;  
 	case "edita":
+		$_SESSION['idReg'] = idReg($_SESSION['idFaixa'],$_SESSION['idTabela']);
 	if(isset($_POST['cadastraRegistro']) OR isset($_POST['atualizaRegistro'])){
 	$planilha = 18;
 		$hoje = date("Y-m-d H:i:s");

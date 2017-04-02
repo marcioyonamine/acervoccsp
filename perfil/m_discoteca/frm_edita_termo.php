@@ -117,7 +117,7 @@ if($termo['tipo'] == 1){
                </div>
 			   				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
-					<p><a href="?perfil=discoteca&p=frm_termos">Voltar a lista de autoridades</a></p>
+				
                   </div>
 				  </div>
 
@@ -163,7 +163,7 @@ if($termo['tipo'] == 1){
 
 				 
                 </form>
-            <?php if(isset($_SESSION['idDisco']) AND $action == "atualiza"){ ?>    
+            <?php if($_SESSION['idReg'] != 0 AND $action == "atualiza"){ ?>    
             	<form class="form-horizontal" role="form" action="?perfil=discoteca&p=frm_termos" method="post">                
 
 				  <div class="form-group">

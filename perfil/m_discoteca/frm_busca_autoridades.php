@@ -1,5 +1,6 @@
 ﻿<?php  
-include 'includes/menuSonoro.php';
+include 'includes/menu.php';
+
 ?>
 
 <?php
@@ -107,7 +108,10 @@ $num = mysqli_num_rows($query_busca);
 			}
 			?>
 		</div>
-			
+        <?php if($num > 30){ ?>
+			 <h5><a href="?perfil=discoteca&p=frm_busca_autoridades">Fazer outra busca</a></h5>
+            <?php } ?>
+            </br ><br />
 		</div>
 	</section>
 

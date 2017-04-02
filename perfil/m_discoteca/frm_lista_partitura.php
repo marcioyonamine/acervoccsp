@@ -2,17 +2,12 @@
 
 <?php
 $con = bancoMysqli();
-if(isset($_SESSION['idDisco'])){
-	unset($_SESSION['idDisco']);
-}
-if(isset($_SESSION['idReg'])){
-	unset($_SESSION['idReg']);		
-}
-
-if(isset($_SESSION['idFaixa'])){
-	unset($_SESSION['idFaixa']);
-	
-}
+// zerar SESSIONS
+$_SESSION['idTabela'] = 97;
+$_SESSION['idDisco'] = 0;	
+$_SESSION['idFaixa'] = 0;	
+$_SESSION['idReg'] = 0;	
+$_SESSION['idAnalitica'] = 0;
 
 if(isset($_POST['apaga'])){
 	$id = $_POST['idDisco'];

@@ -71,6 +71,7 @@ if(isset($_POST['pesquisar'])){ // 0
 		";
 	$query_busca = mysqli_query($con,$sql_busca);
 	$num = mysqli_num_rows($query_busca);
+	echo $sql_busca;
 
 ?>
 <br />

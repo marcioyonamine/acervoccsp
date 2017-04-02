@@ -1,16 +1,12 @@
 <?php 
 // reseta todas as sessions
-if(isset($_SESSION['idDisco'])){
-	unset($_SESSION['idDisco']);	
-}
 
-if(isset($_SESSION['idFaixa'])){
-	unset($_SESSION['idFaixa']);	
-}
 
-if(isset($_SESSION['tabela'])){
-	unset($_SESSION['tabela']);	
-}
+	$_SESSION['idDisco'] = 0;	
+	$_SESSION['idFaixa'] = 0;	
+	$_SESSION['idTabela'] = 0;	
+	$_SESSION['idReg'] = 0;	
+	$_SESSION['idAnalitica'] = 0;
 
 
 ?>
