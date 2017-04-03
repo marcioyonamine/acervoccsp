@@ -1064,8 +1064,129 @@ function breadCrumb(){
 	
 	
 	}
+}
+
+
+function duplicarReg($id){
+	$con = bancoMysqli();
+		
+	$sql_duplicar = "INSERT INTO `acervo_registro` (`titulo`, `id_acervo`, `id_tabela`, `tabela`) SELECT titulo, id_acervo, id_tabela, tabela FROM `acervo_registro` WHERE id_registro = '$id'";
+	$query_duplicar = mysqli_query($con,$sql_duplicar);
 	
+	if($query_duplicar){ // se duplicar, atualiza com novos dados
 	
+		$ultimo = mysqli_insert_id($con);
+		$reg = recuperaDados("acervo_registro",$ultimo,"id_registro");
+		$publicado = 1;
+		$hoje = date("Y-m-d H:i:s");
+		$idUsuario = $_SESSION['idUsuario']; 
+		$titulo_duplicado = $reg['titulo']." (dup)";
+		$sql_atualiza = "UPDATE acervo_registro SET publicado = '1', data_catalogacao = '$hoje', idUsuario = '$idUsuario', titulo = '$titulo_duplicado' WHERE id_registro = '$ultimo'";
+		$query_atualiza = mysqli_query($con,$sql_atualiza);
+		
+		if($query_atualiza){ //se atualizar os dados, duplica na tabela
+		$reg = recuperaDados("acervo_registro",$ultimo,"id_registro");
+		
+			switch($reg['tabela']){	
+			
+				case 87:			
+				$sql_discoteca = "INSERT INTO `acervo_discoteca` (`editado`, `fim`, `planilha`, `matriz`, `catalogador`, `tipo_geral`, `tipo_especifico`, `tombo_tipo`, `lado`, `faixa`, `pag_inicial`, `pag_final`, `tombo`, `gravadora`, `registro`, `comp_registro`, `tipo_data`, `data_gravacao`, `local_gravacao`, `estereo`, `descricao_fisica`, `polegadas`, `faixas`, `duracao`, `exemplares`, `titulo_disco`, `titulo_faixa`, `titulo_uniforme`, `conteudo`, `titulo_resumo`, `serie`, `notas`, `obs`, `disponivel`, `idTemp`) SELECT `editado`, `fim`, `planilha`, `matriz`, `catalogador`, `tipo_geral`, `tipo_especifico`, `tombo_tipo`, `lado`, `faixa`, `pag_inicial`, `pag_final`, `tombo`, `gravadora`, `registro`, `comp_registro`, `tipo_data`, `data_gravacao`, `local_gravacao`, `estereo`, `descricao_fisica`, `polegadas`, `faixas`, `duracao`, `exemplares`, `titulo_disco`, `titulo_faixa`, `titulo_uniforme`, `conteudo`, `titulo_resumo`, `serie`, `notas`, `obs`, `disponivel`, `idTemp` FROM `acervo_discoteca` WHERE idDisco = '".$reg['id_tabela']."' ";
+				$query_discoteca = mysqli_query($con,$sql_discoteca);
+				if($query_discoteca){
+					$ultimo_tabela = mysqli_insert_id($con);
+						if($query_discoteca){ //se foi duplicado na tabela parittura ou discoteca, tem que atualizar no registro
+							$sql_atualiza_id = "UPDATE acervo_registro SET id_tabela = '$ultimo_tabela', publicado = '1' WHERE id_registro = '$ultimo'";
+							$query_atualiza_id = mysqli_query($con,$sql_atualiza_id);
+							if($query_atualiza_id){ //se atualizou, duplica os termos
+								$sql_termos = "SELECT * FROM acervo_relacao_termo WHERE idReg = '$id' and publicado = '1'";
+								$query_termos = mysqli_query($con,$sql_termos);
+								if($query_termos){
+									while($termos = mysqli_fetch_array($query_termos)){
+										$idReg = $ultimo;
+										$idTermo = $termos['idTermo'];
+										$idTipo = $termos['idTipo'];
+										$idCat = $termos['idCat'];
+										$sql_insert_rel = "INSERT INTO `acervo_relacao_termo` ( `idReg`, `idTermo`, `idTipo`, `idCat`, `publicado`) VALUES ('$idReg', '$idTermo', '$idTipo', '$idCat', '1')";
+										$query_insert_rel = mysqli_query($con,$sql_insert_rel);
+										if($query_insert_rel){
+											$mensagem = "Registro duplicado com sucesso.";	
+										}else{
+											$mensagem = "Erro ao duplicar (8)";	
+										}					
+									}
+									
+								}else{
+									$mensagem = "Erro ao duplicar (7)";	
+								}
+								
+							}else{
+								$mensagem = "Erro ao duplicar (6)";	
+							}	
+						}	
+				}else{
+					$mensagem = "Erro ao duplicar (4)";	
+				}
+					
+				break;
+				case 97:
+				
+				$sql_partituras = "INSERT INTO `acervo_partituras` (`editado`, `fim`, `planilha`, `matriz`, `catalogador`, `tipo_geral`, `tipo_especifico`, `tombo_tipo`, `lado`, `faixa`, `pag_inicial`, `pag_final`, `tombo`, `tombo_antigo`, `editora`, `registro`, `comp_registro`, `tipo_data`, `data_gravacao`, `local_gravacao`, `descricao_fisica`, `medidas`, `faixas`, `paginas`, `exemplares`, `titulo_disco`, `titulo_faixa`, `titulo_uniforme`, `titulo_geral`, `conteudo`, `titulo_obra`, `serie`, `notas`, `obs`, `disponivel`, `idTemp`) SELECT `editado`, `fim`, `planilha`, `matriz`, `catalogador`, `tipo_geral`, `tipo_especifico`, `tombo_tipo`, `lado`, `faixa`, `pag_inicial`, `pag_final`, `tombo`, `tombo_antigo`, `editora`, `registro`, `comp_registro`, `tipo_data`, `data_gravacao`, `local_gravacao`, `descricao_fisica`, `medidas`, `faixas`, `paginas`, `exemplares`, `titulo_disco`, `titulo_faixa`, `titulo_uniforme`, `titulo_geral`, `conteudo`, `titulo_obra`, `serie`, `notas`, `obs`, `disponivel`, `idTemp` FROM `acervo_partituras` WHERE idDisco = '".$reg['id_tabela']."' ";
+				$query_partituras = mysqli_query($con,$sql_partituras);
+				if($query_partituras){
+					$ultimo_tabela = mysqli_insert_id($con);
+					if($query_partituras){ //se foi duplicado na tabela parittura ou discoteca, tem que atualizar no registro
+						$sql_atualiza_id = "UPDATE acervo_registro SET id_tabela = '$ultimo_tabela', publicado = '1' WHERE id_registro = '$ultimo'";
+						$query_atualiza_id = mysqli_query($con,$sql_atualiza_id);
+						if($query_atualiza_id){ //se atualizou, duplica os termos
+							$sql_termos = "SELECT * FROM acervo_relacao_termo WHERE idReg = '$id' and publicado = '1'";
+							$query_termos = mysqli_query($con,$sql_termos);
+							if($query_termos){
+								while($termos = mysqli_fetch_array($query_termos)){
+									$idReg = $ultimo;
+									$idTermo = $termos['idTermo'];
+									$idTipo = $termos['idTipo'];
+									$idCat = $termos['idCat'];
+									$sql_insert_rel = "INSERT INTO `acervo_relacao_termo` ( `idReg`, `idTermo`, `idTipo`, `idCat`, `publicado`) VALUES ('$idReg', '$idTermo', '$idTipo', '$idCat', '1')";
+									$query_insert_rel = mysqli_query($con,$sql_insert_rel);
+									if($query_insert_rel){
+										$mensagem = "Registro duplicado com sucesso.";	
+									}else{
+										$mensagem = "Erro ao duplicar (9)";	
+									}					
+								}
+								
+							}else{
+								$mensagem = "Erro ao duplicar (10)";	
+							}
+							
+						}else{
+							$mensagem = "Erro ao duplicar (11)";	
+						}	
+					}
+					
+						
+				}else{
+					$mensagem = "Erro ao duplicar (5)";	
+				}
+				
+				break;
+				default:
+				$mensagem = "Erro ao duplicar (3)";			
+			}
+			
+
+			
+
+		}else{
+			$mensagem = "Erro ao duplicar (2) $sql_atualiza";	
+		}
+
+		
+	}else{ //se não duplicar
+		$mensagem = "Erro ao duplicar (1)";
+		
+	}
+	return $mensagem;
 	
 }
 

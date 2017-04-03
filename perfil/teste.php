@@ -29,10 +29,9 @@ if(isset($_GET['registro'])){
 						echo $txt."<br /><br />";
 					}
 					*/
-					
-					$x = reColecao($_GET['registro']);
-					echo $x;
-					var_dump($x);
+					$x = duplicarReg(1);
+					echo $x;					
+
 					?>
 
 
