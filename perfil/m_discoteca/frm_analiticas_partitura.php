@@ -5,6 +5,28 @@ $disco = recuperaDados("acervo_partituras",$idDisco,"idDisco");
 $rec_reg = idReg($idDisco,$_SESSION['tabela']);
 $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 
+if(isset($_POST['apagar'])){
+	$idApagar = $_POST['apagar'];
+	$sql_registro =	"UPDATE acervo_registro SET publicado = '0' WHERE id_tabela = '$idApagar' AND tabela = '97'";
+	$query_registro = mysqli_query($con,$sql_registro);
+	if($query_registro){
+		$mensagem = "Apagado com sucesso.";	
+	}else{
+		$mensagem = "Erro (1).";	
+	}
+}
+
+
+if(isset($_POST['duplicar'])){
+	$id = idReg($_POST['duplicar'],97);
+	$dup = duplicarReg($id);
+	$mensagem = $dup['mensagem'];	
+}
+
+$sql_faixas = "SELECT * FROM acervo_partituras WHERE matriz = $idDisco AND idDisco IN(SELECT id_tabela FROM acervo_registro WHERE tabela = 97 AND publicado = '1' ) ORDER BY pag_inicial";
+$query_faixas = mysqli_query($con,$sql_faixas);
+$num_faixas = mysqli_num_rows($query_faixas);
+	
 
 if(isset($_GET['pag'])){
 	$pag = $_GET['pag'];	
@@ -18,28 +40,13 @@ case "inicio":
 
 $_SESSION['idAnalitica'] = 0;
 
-if(isset($_POST['apagar'])){
-	$idApagar = $_POST['apagar'];
-	$idReg = idReg($_POST['apagar'],97);
-	echo $idReg;
-	$sql_registro =	"UPDATE acervo_registro SET publicado = '0' WHERE id_registro = '$idReg'";
-	$query_registro = mysqli_query($con,$sql_registro);
-	if($query_registro){
-		$mensagem = "Apagado com sucesso.";	
-		echo $sql_registro;
-	}else{
-		$mensagem = "Erro (1).";	
-	}
-}
+
 
 
 	if(isset($_SESSION['idFaixa'])){
 		unset($_SESSION['idFaixa']);
 	}
-$sql_faixas = "SELECT * FROM acervo_partituras WHERE matriz = $idDisco AND idDisco IN(SELECT id_tabela FROM acervo_registro WHERE tabela = 97 AND publicado = '1' ) ORDER BY pag_inicial";
-$query_faixas = mysqli_query($con,$sql_faixas);
-$num_faixas = mysqli_num_rows($query_faixas);
-	
+
 	
 ?>
 	 <section id="services" class="home-section bg-white">
@@ -92,7 +99,7 @@ $num_faixas = mysqli_num_rows($query_faixas);
 					} 
 					?>
                     </td>
-					<td class='list_description'></td>
+
 
 					<td class='list_description'>
 						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_partitura&pag=edita'>
@@ -102,6 +109,11 @@ $num_faixas = mysqli_num_rows($query_faixas);
 						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_partitura'>
 						<input type='hidden' name='apagar' value='<?php echo $fax['idDisco']; ?>'>
 						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='apagar'></form></td>
+                        <td class='list_description'>
+						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_partitura'>
+						<input type='hidden' name='duplicar' value='<?php echo $fax['idDisco']; ?>'>
+						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='Duplicar'></form></td>
+
 
 					</tr>
                    <?php } ?>

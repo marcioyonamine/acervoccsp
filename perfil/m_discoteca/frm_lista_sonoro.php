@@ -23,6 +23,33 @@ if(isset($_POST['apaga'])){
 	}
 }
 
+if(isset($_POST['duplica'])){
+	$dup = duplicarReg($_POST['idReg']);
+	$mensagem = $dup['mensagem'];
+	
+	$reg_ant = recuperaDados("acervo_registro",$_POST['idReg'],"id_registro");
+	var_dump($reg_ant);
+	$id_ana = reAnaliticas($_POST['idReg']);
+	if($id_ana['num'] > 0){
+		for($i = 0; $i < $id_ana['num'] ; $i++){
+			duplicarReg(idReg($id_ana['idDisco'][$i],$id_ana['idTabela']));
+				
+		}
+		echo "id_tabela ".$reg_ant['id_tabela'];
+		$sql_update = "UPDATE acervo_discoteca SET matriz = '".$dup['idDisco']."' WHERE matriz = '".$reg_ant['id_tabela']."' AND idDisco NOT IN(".$id_ana['string'].")";
+		echo $sql_update;
+		$query_update = mysqli_query($con,$sql_update);
+		if($query_update){
+			$mensagem .= "<br />Atualizado com sucesso";
+			echo  "<br />Atualizado com sucesso";
+				
+		}else{
+			$mensagem .= "<br />Erro";	
+			echo "<br />Erro";	
+		}	
+	}
+}
+
  include 'includes/menuSonoro.php';?>
 <br />
 <br />
@@ -58,6 +85,7 @@ if(isset($_POST['apaga'])){
 							<td width="10%">Coleção</td>
 							<td width="10%"></td>
 							<td width="10%"></td>
+   							<td width="10%"></td>
 
 						</tr>
 						<?php 
@@ -107,6 +135,12 @@ if(isset($_POST['apaga'])){
 <input type="hidden" name="idDisco" value="<?php echo $x['id_tabela']?>" />
 <input type="hidden" name="apaga" value="1">
 <input type="submit" class="btn btn-theme btn-block" value='apagar' name='apagar'></form></td>
+
+					<td class="list_description">
+                   	<form action="?perfil=discoteca&p=frm_lista_sonoro" method="post">
+<input type="hidden" name="idReg" value="<?php echo idReg($x['id_tabela'],$_SESSION['idTabela']); ?>" />
+<input type="hidden" name="duplica" value="1">
+<input type="submit" class="btn btn-theme btn-block" value='Duplicar' name='apagar'></form></td>
 
 					</tr>
 						<?php } ?>

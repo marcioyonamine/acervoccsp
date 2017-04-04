@@ -29,8 +29,10 @@ if(isset($_GET['registro'])){
 						echo $txt."<br /><br />";
 					}
 					*/
-					$x = duplicarReg(1);
-					echo $x;					
+					$x = reAnaliticas(1);
+					echo "<pre>";
+					var_dump($x);					
+					echo "</pre>";
 
 					?>
 

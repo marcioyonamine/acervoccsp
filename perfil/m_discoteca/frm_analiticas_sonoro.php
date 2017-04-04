@@ -1,9 +1,28 @@
-﻿<?php 
+﻿
+<?php 
 $con = bancoMysqli();
 $idDisco = $_SESSION['idDisco'];
 $_SESSION['idReg'] = idReg($_SESSION['idDisco'],$_SESSION['idTabela']);
 $disco = recuperaDados("acervo_discoteca",$idDisco,"idDisco");
 $registro = recuperaDados("acervo_registro",$idDisco,"id_tabela");
+
+if(isset($_POST['apagar'])){
+	$idApagar = $_POST['apagar'];
+	$sql_registro =	"UPDATE acervo_registro SET publicado = '0' WHERE id_tabela = '$idApagar' AND tabela = '87'";
+	$query_registro = mysqli_query($con,$sql_registro);
+	if($query_registro){
+		$mensagem = "Apagado com sucesso.";	
+	}else{
+		$mensagem = "Erro (1).";	
+	}
+}
+
+
+if(isset($_POST['duplicar'])){
+	$id = idReg($_POST['duplicar'],87);
+	$dup = duplicarReg($id);
+	$mensagem = $dup['mensagem'];	
+}
 
 $sql_faixas = "SELECT * FROM acervo_discoteca WHERE matriz = $idDisco AND idDisco IN(SELECT id_tabela FROM acervo_registro WHERE tabela = 87 AND publicado = '1' ) ORDER BY lado, faixa";
 $query_faixas = mysqli_query($con,$sql_faixas);
@@ -22,16 +41,8 @@ case "inicio":
 
 $_SESSION['idAnalitica'] = 0;
 
-if(isset($_POST['apagar'])){
-	$idApagar = $_POST['apagar'];
-	$sql_registro =	"UPDATE acervo_registro SET publicado = '0' WHERE id_tabela = '$idApagar' AND tabela = '87'";
-	$query_registro = mysqli_query($con,$sql_registro);
-	if($query_registro){
-		$mensagem = "Apagado com sucesso.";	
-	}else{
-		$mensagem = "Erro (1).";	
-	}
-}
+
+
 
 	if(isset($_SESSION['idFaixa'])){
 		unset($_SESSION['idFaixa']);
@@ -87,16 +98,21 @@ if(isset($_POST['apagar'])){
 					} 
 					?>
                     </td>
-					<td class='list_description'></td>
 
-					<td class='list_description'>
+
+						<td class='list_description'>
 						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_sonoro&pag=edita'>
 						<input type='hidden' name='idFaixa' value='<?php echo $fax['idDisco']; ?>'>
-						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='editar'></td></form>
-                        					<td class='list_description'>
+						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='editar'></form></td>
+       					<td class='list_description'>
 						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_sonoro'>
 						<input type='hidden' name='apagar' value='<?php echo $fax['idDisco']; ?>'>
-						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='apagar'></td></form>
+						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='apagar'></form></td>
+
+       					<td class='list_description'>
+						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_sonoro'>
+						<input type='hidden' name='duplicar' value='<?php echo $fax['idDisco']; ?>'>
+						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='Duplicar'></form></td>
 
 					</tr>
                    <?php } ?>
