@@ -724,6 +724,35 @@ function validaCPF($cpf = null) {
     }
 }
 
+function listaArquivosRegistro($id_registro){ //lista arquivos de determinado registro
+	$con = bancoMysqli();
+	$sql = "SELECT * FROM acervo_arquivos WHERE idReg = '$id_registro' AND publicado = '1'";
+	$query = mysqli_query($con,$sql);
+	echo "<table class='table table-condensed'>
+					<thead>
+						<tr class='list_menu'>
+							<td>Nome do arquivo</td>
+							<td width='10%'></td>
+						</tr>
+					</thead>
+					<tbody>";
+	while($campo = mysqli_fetch_array($query)){
+			echo "<tr>";
+			echo "<td class='list_description'><a href='../uploads/".$campo['nome']."' target='_blank'>".$campo['nome']."</a></td>";
+			echo "
+			<td class='list_description'>
+			<form method='POST' action='?perfil=discoteca&p=frm_arquivos'>
+			<input type='hidden' name='apagar' value='".$campo['idArquivo']."' />
+			<input type ='submit' class='btn btn-theme  btn-block' value='apagar'></td></form>"	;
+			echo "</tr>";		
+	}
+	echo "</tbody>
+		</table>
+	
+	";
+	
+}
+
 
 function enderecoCEP($cep){
 	$con = bancoMysqliCEP();
@@ -1072,13 +1101,6 @@ function duplicarReg($id){
 		
 	$sql_duplicar = "INSERT INTO `acervo_registro` (`titulo`, `id_acervo`, `id_tabela`, `tabela`) SELECT titulo, id_acervo, id_tabela, tabela FROM `acervo_registro` WHERE id_registro = '$id'";
 	$query_duplicar = mysqli_query($con,$sql_duplicar);
-	$x = array(
-		'idReg' => 0,
-		'idDisco' => 0,
-		'idTabela' => 0,
-		'mensagem' => ''
-	);
-	
 	
 	if($query_duplicar){ // se duplicar, atualiza com novos dados
 	
@@ -1090,7 +1112,6 @@ function duplicarReg($id){
 		$titulo_duplicado = $reg['titulo']." (dup)";
 		$sql_atualiza = "UPDATE acervo_registro SET publicado = '1', data_catalogacao = '$hoje', idUsuario = '$idUsuario', titulo = '$titulo_duplicado' WHERE id_registro = '$ultimo'";
 		$query_atualiza = mysqli_query($con,$sql_atualiza);
-		$x['idReg'] = $ultimo;
 		
 		if($query_atualiza){ //se atualizar os dados, duplica na tabela
 		$reg = recuperaDados("acervo_registro",$ultimo,"id_registro");
@@ -1117,25 +1138,22 @@ function duplicarReg($id){
 										$sql_insert_rel = "INSERT INTO `acervo_relacao_termo` ( `idReg`, `idTermo`, `idTipo`, `idCat`, `publicado`) VALUES ('$idReg', '$idTermo', '$idTipo', '$idCat', '1')";
 										$query_insert_rel = mysqli_query($con,$sql_insert_rel);
 										if($query_insert_rel){
-											$x['mensagem'] = "Registro duplicado com sucesso.";
-											$x['idTabela'] = 87;
-											$x['idDisco'] = $ultimo_tabela;
-											 	
+											$mensagem = "Registro duplicado com sucesso.";	
 										}else{
-											$x['mensagem'] = "Erro ao duplicar (8)";	
+											$mensagem = "Erro ao duplicar (8)";	
 										}					
 									}
 									
 								}else{
-									$x['mensagem'] = "Erro ao duplicar (7)";	
+									$mensagem = "Erro ao duplicar (7)";	
 								}
 								
 							}else{
-								$x['mensagem'] = "Erro ao duplicar (6)";	
+								$mensagem = "Erro ao duplicar (6)";	
 							}	
 						}	
 				}else{
-					$x['mensagem'] = "Erro ao duplicar (4)";	
+					$mensagem = "Erro ao duplicar (4)";	
 				}
 					
 				break;
@@ -1160,89 +1178,44 @@ function duplicarReg($id){
 									$sql_insert_rel = "INSERT INTO `acervo_relacao_termo` ( `idReg`, `idTermo`, `idTipo`, `idCat`, `publicado`) VALUES ('$idReg', '$idTermo', '$idTipo', '$idCat', '1')";
 									$query_insert_rel = mysqli_query($con,$sql_insert_rel);
 									if($query_insert_rel){
-										$x['mensagem'] = "Registro duplicado com sucesso.";	
-										$x['idTabela'] = 97;
-										$x['idDisco'] = $ultimo_tabela;
+										$mensagem = "Registro duplicado com sucesso.";	
 									}else{
-										$x['mensagem'] = "Erro ao duplicar (9)";	
+										$mensagem = "Erro ao duplicar (9)";	
 									}					
 								}
 								
 							}else{
-								$x['mensagem'] = "Erro ao duplicar (10)";	
+								$mensagem = "Erro ao duplicar (10)";	
 							}
 							
 						}else{
-							$x['mensagem'] = "Erro ao duplicar (11)";	
+							$mensagem = "Erro ao duplicar (11)";	
 						}	
 					}
 					
 						
 				}else{
-					$x['mensagem'] = "Erro ao duplicar (5)";	
+					$mensagem = "Erro ao duplicar (5)";	
 				}
 				
 				break;
 				default:
-				$x['mensagem'] = "Erro ao duplicar (3).<br />$sql_discoteca";			
+				$mensagem = "Erro ao duplicar (3)";			
 			}
 			
 
 			
 
 		}else{
-			$x['mensagem'] = "Erro ao duplicar (2) $sql_atualiza";	
+			$mensagem = "Erro ao duplicar (2) $sql_atualiza";	
 		}
 
 		
 	}else{ //se não duplicar
-		$x['mensagem'] = "Erro ao duplicar (1)";
+		$mensagem = "Erro ao duplicar (1)";
 		
 	}
-	return $x;
-	
-}
-
-function reAnaliticas($idReg){
-	$con = bancoMysqli();
-	$analiticas = array('num' => 0, 'string' => '');
-	$reg = recuperaDados("acervo_registro",$idReg,"id_registro");
-	if($reg['tabela'] == 87){
-		$disc = recuperaDados("acervo_discoteca",$reg['id_tabela'],"idDisco");
-		$sel_ana = "SELECT idDisco FROM acervo_discoteca WHERE matriz = '".$reg['id_tabela']."' ";
-		$query_ana = mysqli_query($con,$sel_ana);
-		$num = mysqli_num_rows($query_ana);
-		if($num > 0){
-			$i = 0;
-			while($x = mysqli_fetch_array($query_ana)){
-				$analiticas['idDisco'][$i] = $x['idDisco'];
-				$analiticas['string'] .= ",".$x['idDisco'];
-				$i++;	
-			}	
-			$analiticas['num'] = $num;	
-		}
-	}
-	elseif($reg['tabela'] == 97){
-		$disc = recuperaDados("acervo_partituras",$reg['id_tabela'],"idDisco");
-		$sel_ana = "SELECT idDisco FROM acervo_partituras WHERE matriz = '".$reg['id_tabela']."' ";
-		$query_ana = mysqli_query($con,$sel_ana);
-		$num = mysqli_num_rows($query_ana);
-		if($num > 0){
-			$i = 0;
-			while($x = mysqli_fetch_array($query_ana)){
-				$analiticas['idDisco'][$i] = $x['idDisco'];
-				$analiticas['string'] .= ",".$x['idDisco'];
-				$i++;	
-			}	
-			$analiticas['num'] = $num;	
-		}
-	}
-
-	if($analiticas['string'] != ""){
-		$analiticas['string'] =	substr( $analiticas['string'], 1 );
-	}
-	$analiticas['idTabela'] = $reg['tabela'];
-	return $analiticas;	
+	return $mensagem;
 	
 }
 

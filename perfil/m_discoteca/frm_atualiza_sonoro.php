@@ -29,6 +29,11 @@ function dataAcervo($tipo,$data){
 
 
 if(isset($_POST['cadastraRegistro']) OR isset($_POST['atualizaRegistro'])){
+	if(isset($_POST['fim'])){
+		$fim = 1;	
+	}else{
+		$fim = 0;	
+	}
 	$planilha = 17;
 	$hoje = date("Y-m-d H:i:s");
 	$colecao = $_POST['colecao'];
@@ -98,6 +103,7 @@ if(isset($_POST['atualizaRegistro'])){
 	`conteudo` = '$conteudo', 
 	`notas` = '$notas', 
 	`obs` = '$obs', 
+		`fim` = '$fim', 
 	`exemplares` = '$exemplares'
 	 WHERE idDisco = '$ultimo'";
 	$query_atualiza = mysqli_query($con,$sql_atualiza);
@@ -308,7 +314,12 @@ $_SESSION['idAnalitica'] = 0;
 					 <textarea name="obs" class="form-control" rows="10" placeholder=""><?php echo $disco['obs']; ?></textarea>
 					</div>
 				  </div>
-
+                  <div class="form-group">
+					<div class="col-md-offset-2 col-md-8"><strong>Finalizado:</strong><br/>
+		        <input type="checkbox" class ="checkbox-circle" name="fim" <?php checar($disco['fim']) ?> >
+                	
+                  </div>
+					</div>
 
 				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">

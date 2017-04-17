@@ -19,29 +19,31 @@ if(isset($_SESSION['idFaixa'])){
 	$idDisco = $_SESSION['idDisco'];
 }
 
-if($_SESSION['tabela'] == 87){
+if($_SESSION['idTabela'] == 87){
 $disco = recuperaDados("acervo_discoteca",$idDisco,"idDisco");
-}elseif($_SESSION['tabela'] == 97){
+}elseif($_SESSION['idTabela'] == 97){
 $disco = recuperaDados("acervo_partituras",$idDisco,"idDisco");
 	
 }
 
-$rec_reg = idReg($idDisco,$_SESSION['tabela']);
+$rec_reg = idReg($idDisco,$_SESSION['idTabela']);
+$_SESSION['idReg'] = $rec_reg;
 $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 
 ?>
 <?php include "includes/menuArquivo.php" ?>
 
-    
-    	 <section id="enviar" class="home-section bg-white">
-		<div class="container">
-			  <div class="row">
-				  <div class="col-md-offset-2 col-md-8">
-					<div class="section-heading">
+
+<section id="enviar" class="home-section bg-white">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-8">
+				<div class="section-heading">
                                         <h1><?php echo $registro["titulo"] ?>  </h1>
 <p><?php if(isset($mensagem)){echo $mensagem;} ?></p>
 					 <h3>Envio de Arquivos</h3>
 <p>Nesta página, você envia os arquivos como o rider, mapas de cenas e luz, logos de parceiros, programação de filmes de mostras de cinema, etc. O tamanho máximo do arquivo deve ser 60MB.</p>
+				</div>
 
 
 <?php
@@ -92,9 +94,10 @@ if( isset( $_POST['enviar'] ) ) {
 			}else{
 				//$idEvento = $_SESSION['idEvento'];
 			//include "../include/conecta_mysql.php";
-			$idReg = $registro['id_registro'];
+			$idReg = $_SESSION['idReg'];
 			$sql = "INSERT INTO `acervo_arquivos` (`idArquivo`, `idReg`, `nome`, `tipo`, `publicado`, `destaque`) 
 											VALUES (NULL, '$idReg', '$arquivo_base', '$tipo', '1', '0')";
+											
 			//$sql = "INSERT INTO ig_arquivo (idArquivo , arquivo , ig_evento_idEvento, publicado) VALUES( NULL , '$arquivo_base' , '$idEvento', '1' );";
 			if(mysqli_query($con,$sql)){
 				$men = "Bd ok";
@@ -140,32 +143,28 @@ if( isset( $_POST['enviar'] ) ) {
     <br>
     <input type="submit" class="btn btn-theme btn-lg btn-block" value='Enviar' name='enviar'>
 </form>
-</div>
 
 
-					</div>
-				  </div>
-                  
+
+                 </div> 
 			  </div>
 			  
 		</div>
-	</section>
-
-	<section id="list_items" class="home-section bg-white">
-		<div class="container">
-      			  <div class="row">
-				  <div class="col-md-offset-2 col-md-8">
-					<div class="section-heading">
- <h2>Arquivos anexados</h2>
-<h5>Se na lista abaixo, o seu arquivo começar com "http://", por favor, clique, grave em seu computador, faça o upload novamente e apague a ocorrência citada.</h5>
-					</div>
-			<div class="table-responsive list_info">
-                         <?php listaArquivosRegistro($registro['id_registro']); ?>
-			</div>
-				  </div>
-			  </div>  
-
-
 		</div>
 	</section>
 
+<section id="list_items" class="home-section bg-white">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-8">
+				<div class="section-heading">
+ <h2>Arquivos anexados</h2>
+<h5>Se na lista abaixo, o seu arquivo começar com "http://", por favor, clique, grave em seu computador, faça o upload novamente e apague a ocorrência citada.</h5>
+				</div>
+					<div class="table-responsive list_info">
+                         <?php listaArquivosRegistro($_SESSION['idReg']); ?>
+					</div>
+		  </div>
+	</div>  
+	</div>
+</section>

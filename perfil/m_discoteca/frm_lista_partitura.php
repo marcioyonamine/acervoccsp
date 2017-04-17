@@ -75,6 +75,7 @@ if(isset($_POST['duplica'])){
 				<table class="table table-condensed"><script type=text/javascript language=JavaScript src=../js/find2.js> </script>
 					<thead>
 						<tr class="list_menu">
+							<td width="3%"></td>
 							<td width="5%">Tombo/Antigo</td>
 							<td width="20%">Título</td>
 							<td width="30%">Autoridades</td>
@@ -90,7 +91,7 @@ if(isset($_POST['duplica'])){
 						}else{
 							$filtro = "";
 						}
-						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela,acervo_registro.id_registro, acervo_partituras.tombo, acervo_partituras.tombo_antigo  FROM acervo_registro,acervo_partituras WHERE acervo_partituras.planilha = '17' AND acervo_registro.id_tabela = acervo_partituras.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '97' $filtro ORDER BY acervo_registro.data_catalogacao DESC";
+						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela,acervo_registro.id_registro, acervo_partituras.tombo, acervo_partituras.tombo_antigo, acervo_partituras.fim  FROM acervo_registro,acervo_partituras WHERE acervo_partituras.planilha = '17' AND acervo_registro.id_tabela = acervo_partituras.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '97' $filtro ORDER BY acervo_registro.data_catalogacao DESC";
 						$query_lista = mysqli_query($con,$sql_lista);
 													//paginacao
 	$num01 = mysqli_num_rows($query_lista);
@@ -110,6 +111,7 @@ if(isset($_POST['duplica'])){
 							$autoridades = retornaAutoridades($x['id_registro']);
 						?>
 					<tr>
+					<td class="list_description"><?php if($x['fim'] == 1){echo "OK"; }?></td>
 					<td class="list_description"><?php echo $x['tombo'];?> / <?php echo $x['tombo_antigo'];?> </td>
 					<td class="list_description"><?php echo $x['titulo'];?></td>
 					<td class="list_description">

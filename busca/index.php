@@ -24,16 +24,8 @@ ccsplab.org - centro cultural são paulo
    @ini_set('display_errors', '1');
 	error_reporting(E_ALL); 
 
-include "funcoes/funcoesGerais.php";
-function bancoMysqli(){ 
-	$servidor = '200.237.5.34';
-	$usuario = 'root';
-	$senha = 'lic54eca';
-	$banco = 'acervo';
-	$con = mysqli_connect($servidor,$usuario,$senha,$banco); 
-	mysqli_set_charset($con,"utf8");
-	return $con;
-}
+include "../funcoes/funcoesGerais.php";
+include "../funcoes/funcoesConecta.php";
 
 
 
@@ -47,14 +39,33 @@ if(isset($_GET['pesquisa'])){
 	
 	//$sql_busca_registro = "SELECT DISTINCT id_registro FROM acervo_registro WHERE titulo LIKE '%$pesquisa%'";
 	
-	$sql_busca_registro = "SELECT DISTINCT id_registro FROM acervo_registro,acervo_relacao_termo  WHERE acervo_relacao_termo.idReg = acervo_registro.id_registro AND (acervo_registro.titulo LIKE '%$pesquisa%' OR acervo_registro.id_registro IN (SELECT DISTINCT idRel FROM acervo_termo WHERE termo LIKE '%$pesquisa%')) ";
+//	$sql_busca_registro = "SELECT DISTINCT id_registro FROM acervo_registro,acervo_relacao_termo  WHERE acervo_relacao_termo.idReg = acervo_registro.id_registro AND (acervo_registro.titulo LIKE '%$pesquisa%' OR acervo_registro.id_registro IN (SELECT DISTINCT idRel FROM acervo_termo WHERE termo LIKE '%$pesquisa%' AND publicado = '1')) AND acervo_registro.publicado = '1' ";
 	
-	
-	$query_registro = mysqli_query($con,$sql_busca_registro);
+	$sql_busca_registro = "SELECT DISTINCT acervo_registro.id_registro 
+							FROM acervo_registro
+							INNER JOIN acervo_relacao_termo ON (acervo_registro.id_registro = acervo_relacao_termo.idReg)
+							INNER JOIN acervo_termo ON (acervo_relacao_termo.idTermo = acervo_termo.id_termo)
+							WHERE (acervo_registro.titulo LIKE '%$pesquisa%' OR acervo_termo.termo LIKE '%$pesquisa%') 
+							AND acervo_registro.publicado = 1 
+							AND acervo_relacao_termo.publicado = 1
+							AND acervo_termo.publicado = 1";
 
+	/*SELECT tabela1.campos, tabela2.campos 
+FROM tabela1 
+INNER JOIN tabela2 ON (tabela1.id=tabela2.id_tabela1) 
+INNER JOIN tabela3 ON (tabela2.id=tabela3.id_tabela2) // pode ser tabela1 ao invés de tabela2 
+WHERE tabela1.campo=valor 
+*/
+	
+	
+	$qStart = microtime(true);
+	$query_registro = mysqli_query($con,$sql_busca_registro);
+	$qEnd = microtime(true);
+	$tempo = $qEnd-$qStart;
+	
 	//paginacao
 	$num01 = mysqli_num_rows($query_registro);
-	$total_pagina = 100;	
+	$total_pagina = 50;	
 	if(isset($_GET['n_pag'])){
 		$pc = $_GET['n_pag'];	
 	}else{
@@ -67,7 +78,7 @@ if(isset($_GET['pesquisa'])){
 	
 	$tp = $total/$total_pagina;
 	 
-	
+	$mensagem = "Foram encontrados $num01 registros para '$pesquisa' em $tempo s.";
 	
 	
 
@@ -90,6 +101,7 @@ if(isset($_GET['pesquisa'])){
             <div class="form-group">
             	<div class="col-md-offset-2 col-md-8">
             <h5><?php if(isset($mensagem)){ echo $mensagem; } ?></h5>
+            <h5><?php //echo $sql_busca_registro; ?></h5>
                          
 
             	</div>
@@ -98,16 +110,50 @@ if(isset($_GET['pesquisa'])){
 				<?php 
 				while($res = mysqli_fetch_array($limite)){
 					$reg = recuperaDados("acervo_registro",$res['id_registro'],"id_registro");
-				
+					$colecao = recuperaDados("acervo_acervos",$reg['id_acervo'],"id_acervo");
+					$autoridades = retornaAutoridades($res['id_registro']);
+
+					$termos = retornaTermos($res['id_registro']);
+					switch($reg['tabela']){
+						case 87:
+							$dados = recuperaDados("acervo_discoteca",$reg['id_tabela'],"idDisco");
+							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
+								$idReg = idReg($dados['matriz'],87);
+								$aut = retornaAutoridades($idReg);
+								$autoridades['string'] = $aut['string'];
+								$matriz = recuperaDados("acervo_discoteca",$idReg,"idDisco");
+							}											
+						break;
+						
+						case 97:
+							$dados = recuperaDados("acervo_partituras",$reg['id_tabela'],"idDisco");						
+							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
+								$idReg = idReg($dados['matriz'],97);
+								$aut = retornaAutoridades($idReg);
+								$autoridades['string'] = $aut['string'];
+								$matriz = recuperaDados("acervo_discoteca",$idReg,"idDisco");
+
+							}											
+
+						break;
+											
+					}
+
 				?>
 	            <div class="form-group">
 		            <div class="col-md-offset-2 col-md-8">
                <div class="left">
 
-				<h6><?php echo $reg['titulo']; ?></h6>
+				<h6><?php echo $reg['titulo']; ?> <?php if($dados['planilha'] == 17){echo " (Matriz)"; }else{ echo " (Analítica)"; } ?></h6>
                 <p><?php 
-				var_dump(retornaAutoridades($reg['id_registro']));
+									
+				//var_dump(retornaAutoridades($reg['id_registro']));
 				?></p>
+               
+                <p>Tombo: <?php echo $dados['tombo']; ?>  <?php if($reg['tabela'] == 97){ echo " / ".$dados['tombo_antigo']; }?> </p>
+                <p>Autoridades: <?php echo $autoridades['string']; ?> </p>
+                <p>Assuntos:<?php echo $termos['string']; ?> </p>
+				 <p>Coleção: <?php echo $colecao['acervo']; ?></p>
                 			    </div>
 				</div>		            
         	    </div>

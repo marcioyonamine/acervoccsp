@@ -97,12 +97,13 @@ if(isset($_POST['pesquisar'])){
 	ORDER BY idDisco DESC 
 	";
 	}else{
-		$sql_busca = "SELECT DISTINCT idDisco FROM acervo_discoteca,acervo_registro WHERE 
-		planilha = 17
+		$sql_busca = "SELECT DISTINCT acervo_discoteca.idDisco FROM acervo_discoteca,acervo_registro WHERE 
+		acervo_discoteca.planilha = 17
 		AND (tombo LIKE '%$tombo%' OR
 		registro LIKE '%$tombo%')
 		AND acervo_registro.tabela = 87 
 		AND	acervo_registro.id_tabela = acervo_discoteca.idDisco
+		AND acervo_registro.publicado = 1
 		$filtro_tipo
 	$filtro_colecao
 
@@ -112,6 +113,7 @@ if(isset($_POST['pesquisar'])){
 	}
 $query_busca = mysqli_query($con,$sql_busca);
 $num = mysqli_num_rows($query_busca);
+//echo $sql_busca;
 
 ?>
 <br />

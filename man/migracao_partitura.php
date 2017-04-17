@@ -7,8 +7,8 @@ require "../funcoes/funcoesGerais.php";
 
 $con = bancoMysqli();
 set_time_limit(0);
-$teste = " LIMIT 0,100";
-//$teste = "";
+//$teste = " LIMIT 0,100";
+$teste = "";
 
 if(isset($_GET['action'])){
 	$action = $_GET['action'];
@@ -102,11 +102,19 @@ switch($action){
 		$titulo_partitura = addslashes(retiraTitulo($x['titulo_partitura']));
 		$titulo_uniforme = addslashes(retiraTitulo($x['titulo_uniforme']));//tratar
 		$titulo_analitica = addslashes(retiraTitulo($x['titulo_analitica']));//tratar
+		if($planilha == 17){
+			$titulo = $titulo_partitura;	
+		}else{
+			$titulo = $titulo_analitica;	
+		}
+		
+		
+		
 		$conteudo = addslashes($x['conteudo']);
-		$resumo_titulo = $x['resumo_titulo'];
+		$resumo_titulo = addslashes($x['resumo_titulo']);
 		$resumo_notas = addslashes($x['resumo_notas']);
 		$obs = addslashes($x['obs']);
-		$sql_atualiza = "UPDATE acervo_partituras SET 
+/*		$sql_atualiza = "UPDATE acervo_partituras SET 
 		planilha = '$planilha',
 		tipo_geral = '$tipo_geral',
 		tombo_antigo = '$tombo_antigo', 
@@ -114,7 +122,7 @@ switch($action){
 		descricao_fisica = '$fisica',
 		paginas = '$paginas',
 		medidas = '$medida',
-		titulo_disco = '$titulo_partitura', 
+		titulo_disco = '$titulo', 
 		titulo_uniforme = '$titulo_uniforme',
 		titulo_faixa = '$titulo_analitica',
 		conteudo = '$conteudo',
@@ -122,8 +130,18 @@ switch($action){
 		obs = '$obs'
 		WHERE idTemp = '$id'";
 		$query_atualiza = mysqli_query($con,$sql_atualiza);
+*/
+		$sql_atualiza = "UPDATE acervo_partituras 
+		SET titulo_disco = '$titulo'
+		WHERE idTemp = '$id'"; 
+		$query_atualiza = mysqli_query($con,$sql_atualiza);
 		if($query_atualiza){
-			echo "$id atualizado com sucesso<br />";
+			echo "$id (tabela partituras) atualizado com sucesso<br />";
+			$sql_atualiza_registro = "UPDATE acervo_registro SET titulo = '$titulo' WHERE id_tabela = '$id' AND tabela = '97'";
+			$query_atualiza_registro = mysqli_query($con,$sql_atualiza_registro);
+			if($query_atualiza_registro){
+				echo "$id (tabela registros) atualizado com sucesso<br />";
+			}
 		}else{
 			echo "Erro ao atualizar $id<br />";
 			echo $sql_atualiza."<br />";
