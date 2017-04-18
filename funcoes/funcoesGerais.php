@@ -960,6 +960,46 @@ function retornaAutoridades($registro,$analitica = NULL){
 	
 }
 
+function retornaTermos($registro,$analitica = NULL){
+	$con = bancoMysqli(); //conecta no banco
+	// seleciona todos os termos autoridades ligados ao registro
+	
+	if($registro == 0 OR $registro == NULL){
+		$x = array();
+		return $x;
+	}else{
+		$sql_autoridades = "SELECT idTermo,idTipo FROM acervo_relacao_termo WHERE idTipo IN(".$GLOBALS['acervo_tipo'].") AND publicado = '1' AND idReg = '$registro'"; 
+		$query_autoridades = mysqli_query($con,$sql_autoridades);
+		$num = mysqli_num_rows($query_autoridades);
+		if($num > 0){
+			$i = 0;
+			while($termo = mysqli_fetch_array($query_autoridades)){
+				$y = recuperaDados("acervo_termo",$termo['idTermo'],"id_termo");
+				$w = recuperaDados("acervo_tipo",$termo['idTipo'],"id_tipo");
+				$x[$i]['termo'] = $y['termo'];
+				$x[$i]['categoria'] = $w['tipo'];
+				$i++;
+				
+			}
+	
+			$str = ",";
+			$string = "";
+			for($a = 0; $a <= ($num - 1); $a++){
+				$str = ", ".$x[$a]['termo']." ( ".$x[$a]['categoria']. " ) ";
+				$string = $string.$str;
+			} 	
+	
+		}else{
+	
+			$string = "";			
+		}
+		$x['total'] = $num;
+		$x['string'] = substr($string, 1);
+		return $x;
+	}
+	
+}
+
 function idMatriz($id){
 	$mat = recuperaDados("acervo_discoteca",$id,"idDisco");
 	return $mat['matriz']; 	
