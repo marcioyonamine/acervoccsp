@@ -954,7 +954,11 @@ function retornaAutoridades($registro,$analitica = NULL){
 			$string = "";			
 		}
 		$x['total'] = $num;
-		$x['string'] = substr($string, 1);
+		$x['string'] = trim(substr($string, 1));
+		if($num == 0){
+			$x['string'] = "";
+			
+		}
 		return $x;
 	}
 	
