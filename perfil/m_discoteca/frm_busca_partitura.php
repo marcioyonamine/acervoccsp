@@ -83,23 +83,28 @@ if(isset($_POST['pesquisar'])){
 <?php
 }else{
 	if(strlen($tombo) == 0){
-		$sql_busca = "SELECT DISTINCT idDisco FROM acervo_partituras WHERE 
+		$sql_busca = "SELECT DISTINCT idDisco FROM acervo_partituras,acervo_registro WHERE 
 		planilha = 17 AND (
 		titulo_disco LIKE '%$titulo%' OR
 		titulo_faixa LIKE '%$titulo%' OR
 		titulo_uniforme LIKE '%$titulo%'OR
 		conteudo LIKE '%$titulo%') 
+		AND acervo_registro.tabela = 97 
+		AND	acervo_registro.id_tabela = acervo_partituras.idDisco
+				AND acervo_registro.publicado = 1
 		$filtro_ipo
-		$filtro_colecao
+		$filtro_colecao 
 		ORDER BY idDisco DESC 
 	";
 	}else{
-		$sql_busca = "SELECT DISTINCT idDisco FROM acervo_partituras WHERE 
+		$sql_busca = "SELECT DISTINCT idDisco FROM acervo_partituras,acervo_registro WHERE 
 		planilha = 17
 		AND (tombo LIKE '%$tombo%' OR
 		tombo_antigo LIKE '%$tombo%' OR
-		
 		registro LIKE '%$tombo%' )		
+		AND acervo_registro.tabela = 97 
+		AND	acervo_registro.id_tabela = acervo_partituras.idDisco
+				AND acervo_registro.publicado = 1
 		$filtro_tipo
 		$filtro_colecao
 				ORDER BY idDisco DESC 

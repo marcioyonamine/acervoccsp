@@ -93,6 +93,7 @@ if(isset($_POST['pesquisar'])){
 	AND	acervo_registro.id_tabela = acervo_discoteca.idDisco
 	$filtro_tipo
 	$filtro_colecao
+	AND acervo_registro.publicado = 1
 
 	ORDER BY idDisco DESC 
 	";
