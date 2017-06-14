@@ -118,11 +118,15 @@ WHERE tabela1.campo=valor
 						case 87:
 							$dados = recuperaDados("acervo_discoteca",$reg['id_tabela'],"idDisco");
 							$lista_autoridade = $autoridades['string'];
+							$tombo = $dados['tombo'];
 							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
 								$idReg = idReg($dados['matriz'],87);
 								$aut = retornaAutoridades($idReg);
 								$lista_autoridade = $aut['string'];
 								$matriz = recuperaDados("acervo_discoteca",$idReg,"idDisco");
+								if($dados['tombo'] == NULL){
+									$tombo = $matriz['tombo'];
+								}
 							
 							}										
 						break;
@@ -130,12 +134,15 @@ WHERE tabela1.campo=valor
 						case 97:
 							$dados = recuperaDados("acervo_partituras",$reg['id_tabela'],"idDisco");						
 								$lista_autoridade = $autoridades['string'];
-							
+							$tombo = $dados['tombo'];
 							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
 								$idReg = idReg($dados['matriz'],97);
 								$aut = retornaAutoridades($idReg);
 								$lista_autoridade = $aut['string'];
-								$matriz = recuperaDados("acervo_discoteca",$idReg,"idDisco");
+								$matriz = recuperaDados("acervo_partituras",$idReg,"idDisco");
+								if($dados['tombo'] == NULL){
+									$tombo = $matriz['tombo'];
+								}
 
 							}
 							
@@ -154,7 +161,12 @@ WHERE tabela1.campo=valor
 				//var_dump(retornaAutoridades($reg['id_registro']));
 				?></p>
                
-                <p>Tombo: <?php echo $dados['tombo']; ?>  <?php if($reg['tabela'] == 97){ echo " / ".$dados['tombo_antigo']; }?> </p>
+                <p>Tombo: <?php 
+				
+					echo $tombo; 
+
+				
+				?>  <?php if($reg['tabela'] == 97){ echo " / ".$dados['tombo_antigo']; }?> </p>
                 <p>Autoridades: <?php echo $lista_autoridade; ?> </p>
                 <p>Assuntos:<?php echo $termos['string']; ?> </p>
 				 <p>Coleção: <?php echo $colecao['acervo']; ?></p>

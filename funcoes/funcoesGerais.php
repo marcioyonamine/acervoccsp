@@ -928,7 +928,7 @@ function retornaAutoridades($registro,$analitica = NULL){
 		$x = array();
 		return $x;
 	}else{
-		$sql_autoridades = "SELECT idTermo,idCat FROM acervo_relacao_termo WHERE idTipo = '1' AND publicado = '1' AND idReg = '$registro'"; 
+		$sql_autoridades = "SELECT idTermo,idCat FROM acervo_relacao_termo WHERE idTipo = '1' AND publicado = '1' AND idReg = '$registro' GROUP BY idCat"; 
 		$query_autoridades = mysqli_query($con,$sql_autoridades);
 		$num = mysqli_num_rows($query_autoridades);
 		if($num > 0){
