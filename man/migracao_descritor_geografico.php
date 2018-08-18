@@ -46,7 +46,7 @@ switch($action){
 			
 		
 	}
-
+	
 	$depois = strtotime(date('Y-m-d H:i:s'));
 	$tempo = $depois - $antes;
 	echo "<br /><br /> Importação executada em $tempo segundos";

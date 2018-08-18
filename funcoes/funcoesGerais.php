@@ -1259,9 +1259,50 @@ function duplicarReg($id){
 		$mensagem = "Erro ao duplicar (1)";
 		
 	}
-	return $mensagem;
+	
+	$x['mensagem'] = $mensagem;
+	$x['id'] =  $ultimo_tabela;
+	return $x;
 	
 }
 
+function reAnaliticas($id){
+	$con = bancoMysqli();
+	$r = recuperaDados("acervo_registro",$id,"id_registro");
+	$i = 0;
+	switch($r['tabela']){
+		case 87:
+			$id_tabela = $r['id_tabela'];
+			$sql = "SELECT idDisco FROM acervo_discoteca WHERE matriz = '$id_tabela'";
+				$query = mysqli_query($con,$sql);
+				
+	while($x = mysqli_fetch_array($query)){
+		$y[$i]['idDisco'] = $x['idDisco'];
+		$y[$i]['idTabela'] = 87;
+
+
+		$i++;
+	}
+	return $y;
+
+		break;
+		case 97:
+			$id_tabela = $r['id_tabela'];
+			$sql = "SELECT idDisco FROM acervo_partituras WHERE matriz = '$id_tabela'";
+	$query = mysqli_query($con,$sql);
+	while($x = mysqli_fetch_array($query)){
+		$y[$i]['idDisco'] = $x['idDisco'];
+		$y[$i]['idTabela'] = 97;
+		
+		$i++;
+	}
+	return $y;
+			break;
+	
+
+	
+	}
+	
+}
 
 ?>

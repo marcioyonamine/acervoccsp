@@ -1,5 +1,4 @@
-﻿
-<script type="text/javascript" src="js/autocomplete.js"></script>
+﻿<script type="text/javascript" src="js/autocomplete.js"></script>
 <script src="js/modernizr.custom.js"></script>
 <script src="js/jquery-1.9.1.js"></script>
 <script src="js/jquery-ui.js"></script>

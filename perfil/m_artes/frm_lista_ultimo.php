@@ -33,44 +33,6 @@ if(isset($_POST['apaga'])){
 <br />
 <br />
 <br />
-<?php
-if($_SESSION['idUsuario'] == 1 OR
-$_SESSION['idUsuario'] == 632 OR
-$_SESSION['idUsuario'] == 633 OR
-$_SESSION['idUsuario'] == 637 OR
-$_SESSION['idUsuario'] == 634 ){
-
-?>
-	<div class="col-md-offset-1 col-md-10">
-
-				<form class="form-horizontal" role="form" action="?perfil=discoteca&p=frm_lista_ultimo" method="post">
-                  <div class="form-group">
-					<div class="col-md-offset-2 col-md-8"><strong>Usuário</strong><br/>
-                	  <select class="form-control" id="tipoDocumento" name="user" >
-					   <?php
-$con = bancoMysqli();
-$sql_lista_usuario = "SELECT idUsuario, nomeCompleto FROM ig_usuario ORDER BY nomeCompleto ASC";
-$query_lista_usuario = mysqli_query($con,$sql_lista_usuario);
-while($usuario = mysqli_fetch_array($query_lista_usuario)){
-	?>
-	<option value="<?php echo $usuario['idUsuario']?>"><?php echo $usuario['nomeCompleto']?></option>
-	<?php
-	
-}
-
-?>
-						
-					  </select>
-					  <input type="submit" value="Filtrar">
-                      </div>
-				  </div>	
-				  </form>
-
-</div>
-<?php
-}
-?>
-
 
 	<section id="list_items">
 		<div class="container">
@@ -98,12 +60,12 @@ while($usuario = mysqli_fetch_array($query_lista_usuario)){
 						</tr>
 						<?php 
 						$idUsuario = $_SESSION['idUsuario'];
-						if(isset($_POST['user'])){
-							$filtro = " AND acervo_registro.idUsuario = '".$_POST['user']."' ";
+						if(isset($_GET['user'])){
+							$filtro = " AND acervo_registro.idUsuario = '$idUsuario' ";
 						}else{
 							$filtro = "";
 						}
-						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela, acervo_discoteca.tombo, acervo_registro.id_acervo,acervo_registro.idUsuario FROM acervo_registro,acervo_discoteca WHERE acervo_discoteca.planilha = '17' AND acervo_registro.id_tabela = acervo_discoteca.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '87' $filtro ORDER BY data_catalogacao DESC LIMIT 0,100";
+						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela, acervo_discoteca.tombo, acervo_registro.id_acervo,acervo_registro.idUsuario FROM acervo_registro,acervo_discoteca WHERE acervo_discoteca.planilha = '17' AND acervo_registro.id_tabela = acervo_discoteca.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '87' $filtro ORDER BY data_catalogacao DESC LIMIT 0,20";
 						$query_lista = mysqli_query($con,$sql_lista);
 						
 						while($x = mysqli_fetch_array($query_lista)){
@@ -163,12 +125,12 @@ while($usuario = mysqli_fetch_array($query_lista_usuario)){
 						
 						<?php 
 						$idUsuario = $_SESSION['idUsuario'];
-						if(isset($_POST['user'])){
-							$filtro = " AND acervo_registro.idUsuario = '".$_POST['user']."' ";
+						if(isset($_GET['user'])){
+							$filtro = " AND acervo_registro.idUsuario = '$idUsuario' ";
 						}else{
 							$filtro = "";
 						}
-						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela,acervo_registro.id_registro, acervo_partituras.tombo, acervo_partituras.tombo_antigo, acervo_registro.idUsuario  FROM acervo_registro,acervo_partituras WHERE acervo_partituras.planilha = '17' AND acervo_registro.id_tabela = acervo_partituras.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '97' $filtro ORDER BY data_catalogacao DESC LIMIT 0,100";
+						$sql_lista = "SELECT acervo_registro.titulo,acervo_registro.id_tabela,acervo_registro.id_registro, acervo_partituras.tombo, acervo_partituras.tombo_antigo, acervo_registro.idUsuario  FROM acervo_registro,acervo_partituras WHERE acervo_partituras.planilha = '17' AND acervo_registro.id_tabela = acervo_partituras.idDisco and acervo_registro.publicado = '1' AND acervo_registro.tabela = '97' $filtro ORDER BY data_catalogacao DESC LIMIT 0,20";
 						$query_lista = mysqli_query($con,$sql_lista);
 													//paginacao
 
@@ -232,14 +194,7 @@ while($usuario = mysqli_fetch_array($query_lista_usuario)){
 						</tr>
 						
 						<?php 
-						$idUsuario = $_SESSION['idUsuario'];
-						if(isset($_POST['user'])){
-							$filtro = " AND id_usuario = '".$_POST['user']."' ";
-						}else{
-							$filtro = "";
-						}
-						
-						$sql_lista = "SELECT * FROM acervo_termo WHERE tipo = '1' $filtro ORDER BY data_update DESC LIMIT 0,100";
+						$sql_lista = "SELECT * FROM acervo_termo WHERE tipo = '1' ORDER BY data_update DESC LIMIT 0,20";
 						$query_lista = mysqli_query($con,$sql_lista);
 
 						while($x = mysqli_fetch_array($query_lista)){
@@ -300,14 +255,7 @@ while($usuario = mysqli_fetch_array($query_lista_usuario)){
 						</tr>
 						
 						<?php 
-						$idUsuario = $_SESSION['idUsuario'];
-						if(isset($_POST['user'])){
-							$filtro = " AND id_usuario = '".$_POST['user']."' ";
-						}else{
-							$filtro = "";
-						}
-						
-						$sql_lista = "SELECT * FROM acervo_termo WHERE tipo IN(".$GLOBALS['acervo_tipo'].") $filtro ORDER BY data_update DESC LIMIT 0,100";
+						$sql_lista = "SELECT * FROM acervo_termo WHERE tipo IN(".$GLOBALS['acervo_tipo'].") ORDER BY data_update DESC LIMIT 0,20";
 						$query_lista = mysqli_query($con,$sql_lista);
 
 						while($x = mysqli_fetch_array($query_lista)){

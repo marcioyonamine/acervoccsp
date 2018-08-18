@@ -57,8 +57,7 @@ if(isset($_GET['pesquisa'])){
 							WHERE (acervo_registro.titulo LIKE '%$pesquisa%' OR acervo_termo.termo LIKE '%$pesquisa%') 
 							AND acervo_registro.publicado = 1 
 							AND acervo_relacao_termo.publicado = 1
-							AND acervo_termo.publicado = 1 
-							";
+							AND acervo_termo.publicado = 1 $filtro";
 
 	/*SELECT tabela1.campos, tabela2.campos 
 FROM tabela1 
@@ -111,7 +110,7 @@ WHERE tabela1.campo=valor
             <div class="form-group">
             	<div class="col-md-offset-2 col-md-8">
             <h5><?php if(isset($mensagem)){ echo $mensagem; } ?></h5>
-            <h5><?php if(isset($_GET['query'])){echo $sql_busca_registro;} ?></h5>
+            <h5><?php if($_GET['query']){echo $sql_busca_registro;} ?></h5>
                          
 
             	</div>
@@ -134,17 +133,12 @@ WHERE tabela1.campo=valor
 								$aut = retornaAutoridades($idReg);
 								$lista_autoridade = $aut['string'];
 								$matriz = recuperaDados("acervo_discoteca",$idReg,"idDisco");
-
-						
-							}										
-							
-								if($dados['planilha'] == 18){
-								$matriz = recuperaDados("acervo_discoteca",$dados['matriz'],"idDisco");
-
-								$tombo = $matriz['tombo'];
+								if($dados['tombo'] == NULL){
+									$tombo = $matriz['tombo'];
 								}
 							
-							break;
+							}										
+						break;
 						
 						case 97:
 							$dados = recuperaDados("acervo_partituras",$reg['id_tabela'],"idDisco");						
@@ -155,16 +149,11 @@ WHERE tabela1.campo=valor
 								$aut = retornaAutoridades($idReg);
 								$lista_autoridade = $aut['string'];
 								$matriz = recuperaDados("acervo_partituras",$idReg,"idDisco");
-								
-
-
-							}
-								if($dados['planilha'] == 18){
-								$matriz = recuperaDados("acervo_partituras",$dados['matriz'],"idDisco");
-
-								$tombo = $matriz['tombo']." / ".$matriz['tombo_antigo'];
+								if($dados['tombo'] == NULL){
+									$tombo = $matriz['tombo'];
 								}
 
+							}
 							
 						break;
 											
@@ -182,7 +171,7 @@ WHERE tabela1.campo=valor
 				?></p>
                
                 <p>Tombo: <?php 
-
+				
 					echo $tombo; 
 
 				

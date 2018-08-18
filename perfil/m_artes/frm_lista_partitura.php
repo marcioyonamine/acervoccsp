@@ -25,24 +25,15 @@ if(isset($_POST['duplica'])){
 	$mensagem = $dup['mensagem'];
 	
 	$reg_ant = recuperaDados("acervo_registro",$_POST['idReg'],"id_registro");
-	//var_dump($reg_ant);
-	
-	
+	var_dump($reg_ant);
 	$id_ana = reAnaliticas($_POST['idReg']);
-	
-	echo "<pre>";
-	var_dump($dup);
-	echo "</pre>";
-	
-	$string = "";
-	if(count($id_ana) > 0){
-		for($i = 0; $i < count($id_ana); $i++){
-			duplicarReg(idReg($id_ana[$i]['idDisco'],$id_ana[$i]['idTabela']));
-			$string .= $id_ana[$i]['idDisco'].",";
-					
+	if($id_ana['num'] > 0){
+		for($i = 0; $i < $id_ana['num'] ; $i++){
+			duplicarReg(idReg($id_ana['idDisco'][$i],$id_ana['idTabela']));
+				
 		}
-		$string = substr($string,0,-1);
-		$sql_update = "UPDATE acervo_partituras SET matriz = '".$dup['id']."' WHERE matriz = '".$reg_ant['id_tabela']."' AND idDisco NOT IN(".$string.")";
+		echo "id_tabela ".$reg_ant['id_tabela'];
+		$sql_update = "UPDATE acervo_partituras SET matriz = '".$dup['idDisco']."' WHERE matriz = '".$reg_ant['id_tabela']."' AND idDisco NOT IN(".$id_ana['string'].")";
 		echo $sql_update;
 		$query_update = mysqli_query($con,$sql_update);
 		if($query_update){
@@ -54,7 +45,6 @@ if(isset($_POST['duplica'])){
 			//echo "<br />Erro";	
 		}	
 	}
-
 }
 
  include 'includes/menuPartitura.php';?>

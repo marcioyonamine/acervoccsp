@@ -133,17 +133,8 @@ case "busca":
 break;
 case "resultado":
 $termo = $_POST['busca'];
-
-if($termo == ""){
-	$mensagem = "É preciso definir um termo para busca.";
-	$busca = "SELECT * FROM acervo_termo WHERE termo = '1'";
-
-}else{
-	$busca = "SELECT * FROM acervo_termo WHERE termo LIKE '%$termo%' AND tipo = '1' ORDER BY termo ASC";
-	
-}
-
 $con = bancoMysqli();
+$busca = "SELECT * FROM acervo_termo WHERE termo LIKE '%$termo%' AND tipo = '1' ORDER BY termo ASC";
 $query = mysqli_query($con,$busca);
 $num = mysqli_num_rows($query);
 
@@ -157,8 +148,7 @@ $num = mysqli_num_rows($query);
 	        	<div class="form-group">
 			<div class="col-md-offset-2 col-md-8">
 					<h2>Autoridade</h2>
-					<?php echo $mensagem; ?></p>
-                    <p>[ <a href="index.php?perfil=discoteca&p=frm_insere_autoridade" >realizar nova busca</a> ]</p>
+                    <p><?php echo $mensagem; ?></p>
 			</div>             
 			 </div>
         <div class="row">
@@ -229,7 +219,7 @@ if($resultado['adotado'] == 0){//03
 <?php  }else{ ?>
 
 
-<?php if(isset($_SESSION['idDisco']) AND $termo != ''){ // insere na base e no registro?>
+<?php if(isset($_SESSION['idDisco'])){ // insere na base e no registro?>
            
 	  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">

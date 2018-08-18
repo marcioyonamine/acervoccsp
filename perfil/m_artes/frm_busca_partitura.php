@@ -1,5 +1,5 @@
 ﻿<?php  
-include 'includes/menuSonoro.php';
+include 'includes/menuPartitura.php';
 ?>
 
 <?php
@@ -19,14 +19,15 @@ if(isset($_POST['pesquisar'])){
 	if($tipo == 0){
 		$filtro_tipo = "";	
 	}else{
-		$filtro_tipo = " AND acervo_discoteca.tipo_especifico = '".$tipo."'";
+		$filtro_tipo = " AND acervo_partituras.tipo_especifico = '".$tipo."'";
 	}
-	$colecao = $_POST['colecao'];	
+	$colecao = $_POST['colecao'];
 	if($colecao == 0){
 		$filtro_colecao = "";	
 	}else{
 		$filtro_colecao = "AND acervo_registro.id_acervo = '$colecao' ";	
 	}	
+
 	if($titulo == "" AND $tombo == "" AND $tipo == 0 AND $colecao == 0){ ?>
 		 <section id="services" class="home-section bg-white">
 			<div class="container">
@@ -44,8 +45,8 @@ if(isset($_POST['pesquisar'])){
 				<div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
 				<h5>É preciso que o título ou o número de tombo seja inserido.</h5>
-							<form method="POST" action="?perfil=discoteca&p=frm_busca_sonoro" class="form-horizontal" role="form">
-						<label>Título / Registro</label>
+							<form method="POST" action="?perfil=discoteca&p=frm_busca_partitura" class="form-horizontal" role="form">
+						<label>Título</label>
 						<input type="text" name="titulo" class="form-control" id="titulo" placeholder="Insira o titulo por parte dele" ><br />
 						<label>Tombo</label>
 						<input type="text" name="tombo" class="form-control" id="tombo" placeholder="Insira o número de tombo ou parte dele" ><br />
@@ -81,41 +82,36 @@ if(isset($_POST['pesquisar'])){
 		</section>   
 <?php
 }else{
-	
 	if(strlen($tombo) == 0){
-	$sql_busca = "SELECT DISTINCT idDisco FROM acervo_discoteca,acervo_registro WHERE 
-	planilha = 17 AND (
-	titulo_disco LIKE '%$titulo%' OR
-	titulo_faixa LIKE '%$titulo%' OR
-	titulo_uniforme LIKE '%$titulo%'OR
-	conteudo LIKE '%$titulo%' OR
-	registro LIKE '%$titulo%')
-	AND acervo_registro.tabela = 87 
-	AND	acervo_registro.id_tabela = acervo_discoteca.idDisco
-	$filtro_tipo
-	$filtro_colecao
-	AND acervo_registro.publicado = 1
-
-	ORDER BY idDisco DESC 
+		$sql_busca = "SELECT DISTINCT idDisco FROM acervo_partituras,acervo_registro WHERE 
+		planilha = 17 AND (
+		titulo_disco LIKE '%$titulo%' OR
+		titulo_faixa LIKE '%$titulo%' OR
+		titulo_uniforme LIKE '%$titulo%'OR
+		conteudo LIKE '%$titulo%') 
+		AND acervo_registro.tabela = 97 
+		AND	acervo_registro.id_tabela = acervo_partituras.idDisco
+				AND acervo_registro.publicado = 1
+		$filtro_ipo
+		$filtro_colecao 
+		ORDER BY idDisco DESC 
 	";
 	}else{
-		$sql_busca = "SELECT DISTINCT acervo_discoteca.idDisco FROM acervo_discoteca,acervo_registro WHERE 
-		acervo_discoteca.planilha = 17
+		$sql_busca = "SELECT DISTINCT idDisco FROM acervo_partituras,acervo_registro WHERE 
+		planilha = 17
 		AND (tombo LIKE '%$tombo%' OR
-		registro LIKE '%$tombo%')
-		AND acervo_registro.tabela = 87 
-		AND	acervo_registro.id_tabela = acervo_discoteca.idDisco
-		AND acervo_registro.publicado = 1
+		tombo_antigo LIKE '%$tombo%' OR
+		registro LIKE '%$tombo%' )		
+		AND acervo_registro.tabela = 97 
+		AND	acervo_registro.id_tabela = acervo_partituras.idDisco
+				AND acervo_registro.publicado = 1
 		$filtro_tipo
-	$filtro_colecao
-
-		ORDER BY idDisco DESC 
-		";	
-		
+		$filtro_colecao
+				ORDER BY idDisco DESC 
+	";
 	}
 $query_busca = mysqli_query($con,$sql_busca);
 $num = mysqli_num_rows($query_busca);
-//echo $sql_busca;
 
 ?>
 <br />
@@ -124,15 +120,14 @@ $num = mysqli_num_rows($query_busca);
 		<div class="container">
 			 <h3>Resultado da busca</3>
              <h5>Foram encontrados <?php echo $num; ?> registros.</h5>
-               <h5><a href="?perfil=discoteca&p=frm_busca_sonoro">Fazer outra busca</a></h5>
+               <h5><a href="?perfil=discoteca&p=frm_busca_partitura">Fazer outra busca</a></h5>
 			<div class="table-responsive list_info">
 				<table class="table table-condensed">
 					<thead>
 						<tr class="list_menu">
-							<td width="5%">Tombo</td>
+							<td width="5%">Tombo/Antigo</td>
 							<td width="20%">Título</td>
 							<td width="30%">Autoridades</td>
-							<td width="10%">Coleção</td>
 							<td width="10%"></td>
 							<td width="10%"></td>
 						</tr>
@@ -143,11 +138,9 @@ $num = mysqli_num_rows($query_busca);
 <?php //echo $sql_busca;
 
 						while($y = mysqli_fetch_array($query_busca)){
-							$x = recuperaDados("acervo_discoteca",$y['idDisco'],"idDisco");
-							$idReg = idReg($y['idDisco'],87);
-							$reg = recuperaDados("acervo_registro",$idReg,"id_registro");
+							$x = recuperaDados("acervo_partituras",$y['idDisco'],"idDisco");
+							$idReg = idReg($y['idDisco'],97);
 							$autoridades = retornaAutoridades($idReg);
-							$colecao = recuperaDados("acervo_acervos",$reg['id_acervo'],"id_acervo");
 							if(trim($x['titulo_disco']) == ""){
 								if(trim($x['titulo_faixa']) == ""){
 									if(trim($x['titulo_uniforme']) == ""){
@@ -155,6 +148,8 @@ $num = mysqli_num_rows($query_busca);
 									}else{
 										$titulo = trim($x['titulo_uniforme']);
 									}	
+							
+									
 								}else{
 									$titulo = trim($x['titulo_faixa']);	
 								}
@@ -164,7 +159,7 @@ $num = mysqli_num_rows($query_busca);
 							}
 						?>
 					<tr>
-					<td class="list_description"><?php echo $x['tombo'];?> </td>
+					<td class="list_description"><?php echo $x['tombo'];?> / <?php echo $x['tombo_antigo'];?> </td>
 					<td class="list_description"><?php echo $titulo;?></td>
 					<td class="list_description">
                     <?php 
@@ -174,14 +169,14 @@ $num = mysqli_num_rows($query_busca);
 					?>
                     
                     </td>
-					<td class="list_description"><?php echo $colecao['acervo'];?></td>
+
 					<td class="list_description">
-					<form action="?perfil=discoteca&p=frm_atualiza_sonoro" method="post">
+					<form action="?perfil=discoteca&p=frm_atualiza_partitura" method="post">
 <input type="hidden" name="idDisco" value="<?php echo $y['idDisco']?>" />
 <input type="hidden" name="valor" value="1">
 <input type="submit" class="btn btn-theme btn-block" value='Editar' name='enviar'></form></td>
 					<td class="list_description">
-					<form action="?perfil=discoteca&p=frm_lista_sonoro" method="post">
+					<form action="?perfil=discoteca&p=frm_lista_partitura" method="post">
 <input type="hidden" name="idDisco" value="<?php echo $y['idDisco']?>" />
 <input type="hidden" name="apaga" value="1">
 <input type="submit" class="btn btn-theme btn-block" value='Apagar' name='Apagar'></form></td>
@@ -200,8 +195,8 @@ $num = mysqli_num_rows($query_busca);
 			}
 			?>
 		</div>
-					<?php if($num > 30){?>
-               <h5><a href="?perfil=discoteca&p=frm_busca_sonoro">Fazer outra busca</a></h5>
+		<?php if($num > 30){?>
+               <h5><a href="?perfil=discoteca&p=frm_busca_partitura">Fazer outra busca</a></h5>
 			<?php } ?>
 		</div>
 	</section>
@@ -227,7 +222,7 @@ $num = mysqli_num_rows($query_busca);
             <div class="form-group">
             	<div class="col-md-offset-2 col-md-8">
             <h5><?php if(isset($mensagem)){ echo $mensagem; } ?>
-                        <form method="POST" action="?perfil=discoteca&p=frm_busca_sonoro" class="form-horizontal" role="form">
+                        <form method="POST" action="?perfil=discoteca&p=frm_busca_partitura" class="form-horizontal" role="form">
             		<label>Título</label>
             		<input type="text" name="titulo" class="form-control" id="titulo" placeholder="Insira o titulo por parte dele" ><br />
             		<label>Tombo</label>
@@ -267,10 +262,8 @@ $num = mysqli_num_rows($query_busca);
 <?php } ?>
 
 <?php
+
 break;
-
-
-
 
 } // fim da switch
 

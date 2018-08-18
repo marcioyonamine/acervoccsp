@@ -45,7 +45,7 @@ if(isset($_POST['pesquisar'])){
 					<div class="col-md-offset-2 col-md-8">
 				<h5>É preciso que o título ou o número de tombo seja inserido.</h5>
 							<form method="POST" action="?perfil=discoteca&p=frm_busca_sonoro" class="form-horizontal" role="form">
-						<label>Título / Registro</label>
+						<label>Título</label>
 						<input type="text" name="titulo" class="form-control" id="titulo" placeholder="Insira o titulo por parte dele" ><br />
 						<label>Tombo</label>
 						<input type="text" name="tombo" class="form-control" id="tombo" placeholder="Insira o número de tombo ou parte dele" ><br />
@@ -88,8 +88,7 @@ if(isset($_POST['pesquisar'])){
 	titulo_disco LIKE '%$titulo%' OR
 	titulo_faixa LIKE '%$titulo%' OR
 	titulo_uniforme LIKE '%$titulo%'OR
-	conteudo LIKE '%$titulo%' OR
-	registro LIKE '%$titulo%')
+	conteudo LIKE '%$titulo%')
 	AND acervo_registro.tabela = 87 
 	AND	acervo_registro.id_tabela = acervo_discoteca.idDisco
 	$filtro_tipo

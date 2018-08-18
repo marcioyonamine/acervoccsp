@@ -1,14 +1,13 @@
-﻿
-<?php 
+﻿<?php 
 $con = bancoMysqli();
 $idDisco = $_SESSION['idDisco'];
-$_SESSION['idReg'] = idReg($_SESSION['idDisco'],$_SESSION['idTabela']);
-$disco = recuperaDados("acervo_discoteca",$idDisco,"idDisco");
-$registro = recuperaDados("acervo_registro",$idDisco,"id_tabela");
+$disco = recuperaDados("acervo_partituras",$idDisco,"idDisco");
+$rec_reg = idReg($idDisco,$_SESSION['tabela']);
+$registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 
 if(isset($_POST['apagar'])){
 	$idApagar = $_POST['apagar'];
-	$sql_registro =	"UPDATE acervo_registro SET publicado = '0' WHERE id_tabela = '$idApagar' AND tabela = '87'";
+	$sql_registro =	"UPDATE acervo_registro SET publicado = '0' WHERE id_tabela = '$idApagar' AND tabela = '97'";
 	$query_registro = mysqli_query($con,$sql_registro);
 	if($query_registro){
 		$mensagem = "Apagado com sucesso.";	
@@ -19,25 +18,25 @@ if(isset($_POST['apagar'])){
 
 
 if(isset($_POST['duplicar'])){
-	$id = idReg($_POST['duplicar'],87);
+	$id = idReg($_POST['duplicar'],97);
 	$dup = duplicarReg($id);
 	$mensagem = $dup['mensagem'];	
 }
 
-$sql_faixas = "SELECT * FROM acervo_discoteca WHERE matriz = $idDisco AND idDisco IN(SELECT id_tabela FROM acervo_registro WHERE tabela = 87 AND publicado = '1' ) ORDER BY lado, faixa";
+$sql_faixas = "SELECT * FROM acervo_partituras WHERE matriz = $idDisco AND idDisco IN(SELECT id_tabela FROM acervo_registro WHERE tabela = 97 AND publicado = '1' ) ORDER BY pag_inicial";
 $query_faixas = mysqli_query($con,$sql_faixas);
 $num_faixas = mysqli_num_rows($query_faixas);
+	
 
 if(isset($_GET['pag'])){
 	$pag = $_GET['pag'];	
 }else{
 	$pag = "inicio";
 }
-include 'includes/menuFaixa.php';
+include 'includes/menuFaixaPartitura.php';
 
 switch($pag){
 case "inicio":
-
 
 $_SESSION['idAnalitica'] = 0;
 
@@ -47,6 +46,7 @@ $_SESSION['idAnalitica'] = 0;
 	if(isset($_SESSION['idFaixa'])){
 		unset($_SESSION['idFaixa']);
 	}
+
 	
 ?>
 	 <section id="services" class="home-section bg-white">
@@ -54,10 +54,11 @@ $_SESSION['idAnalitica'] = 0;
 			  <div class="row">
 				  <div class="col-md-offset-2 col-md-8">
 					<div class="section-heading">
-					<h3>REGISTRO SONORO - ANALÍTICA</h3>
+					<h3>PARTITURA - ANALÍTICA</h3>
                      <p>Você está inserindo faixas para a Matriz <strong><?php  echo $registro['titulo']; ?></strong></p>
                     
                      <p><?php if(isset($mensagem)){ echo $mensagem; } ?></p>
+                     <p><?php //echo $sql_registro; ?></p>
 <p></p>
 
 					</div>
@@ -71,7 +72,7 @@ $_SESSION['idAnalitica'] = 0;
 				<table class="table table-condensed">
 					<thead>
 						<tr class='list_menu'>
-						<td>Faixa</td>
+						<td>Página</td>
 						<td>Título</td>
    						<td>Autoridades</td>
 							<td width="10%"></td>
@@ -82,37 +83,37 @@ $_SESSION['idAnalitica'] = 0;
                     					<tbody>
 				<?php while($fax = mysqli_fetch_array($query_faixas)){ ?>
 					<tr>
-					<td class='list_description'><?php echo $fax['lado']." - ".$fax['faixa'] ?></td>
+					<td class='list_description'><?php echo $fax['pag_inicial']." - ".$fax['pag_final'] ?></td>
 					<td class='list_description'><?php echo $fax['titulo_disco'] ?></td>
 					<td class='list_description'>
 					<?php 
-					$autoridades = retornaAutoridades(idReg($fax['idDisco'],87));
+					$autoridades = retornaAutoridades(idReg($fax['idDisco'],97));
 					
 					
 					if($autoridades['total'] > 0){
 						echo $autoridades['string'];	
 					}else{
 						
-						$autoridades_matriz = retornaAutoridades(idReg($disco['idDisco'],87));
+						$autoridades_matriz = retornaAutoridades(idReg($disco['idDisco'],97));
 						echo "Matriz: ".$autoridades_matriz['string'];
 					} 
 					?>
                     </td>
 
 
-						<td class='list_description'>
-						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_sonoro&pag=edita'>
+					<td class='list_description'>
+						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_partitura&pag=edita'>
 						<input type='hidden' name='idFaixa' value='<?php echo $fax['idDisco']; ?>'>
 						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='editar'></form></td>
-       					<td class='list_description'>
-						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_sonoro'>
+                        					<td class='list_description'>
+						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_partitura'>
 						<input type='hidden' name='apagar' value='<?php echo $fax['idDisco']; ?>'>
 						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='apagar'></form></td>
-
-       					<td class='list_description'>
-						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_sonoro'>
+                        <td class='list_description'>
+						<form method='POST' action='?perfil=discoteca&p=frm_analiticas_partitura'>
 						<input type='hidden' name='duplicar' value='<?php echo $fax['idDisco']; ?>'>
 						<input type ='submit' class='btn btn-theme btn-sm btn-block' value='Duplicar'></form></td>
+
 
 					</tr>
                    <?php } ?>
@@ -120,12 +121,12 @@ $_SESSION['idAnalitica'] = 0;
 				</table>
                 
                 <?php }else{  ?>
-                <h5> Não há faixa cadastrada. </h5>
+                <h5> Não há partitura cadastrada. </h5>
 
                 <?php } ?>
    <div class="form-group">
             <div class="col-md-offset-2 col-md-8"><br /><br />
-	            <a href="?perfil=discoteca&p=frm_analiticas_sonoro&pag=insere" class="btn btn-theme btn-lg btn-block">Inserir faixa</a>
+	            <a href="?perfil=discoteca&p=frm_analiticas_partitura&pag=insere" class="btn btn-theme btn-lg btn-block">Inserir partitura</a>
             </div>
           </div>
              	  <div class="form-group">
@@ -135,7 +136,7 @@ $_SESSION['idAnalitica'] = 0;
 				  </div>
    				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
- <a href="?perfil=discoteca&p=frm_atualiza_sonoro" class="btn btn-theme btn-block" >Voltar a Matriz</a>
+ <a href="?perfil=discoteca&p=frm_atualiza_partitura" class="btn btn-theme btn-block" >Voltar a Matriz</a>
 					</div>
 				  </div>	
 
@@ -150,12 +151,13 @@ $_SESSION['idAnalitica'] = 0;
 	if(isset($_SESSION['idFaixa'])){
 		unset($_SESSION['idFaixa']);
 	}
+	
 	?>
     	  <section id="contact" class="home-section bg-white">
 	  	<div class="container">
 			  <div class="form-group">
-					<h3>REGISTRO SONORO - ANALÍTICA</h3>
-                    <p>Você está inserindo faixas para a Matriz <strong><?php  echo $registro['titulo']; ?></strong></p>
+					<h3>PARTITURA - ANALÍTICA</h3>
+                    <p>Você está inserindo parituras para a Matriz <strong><?php  echo $registro['titulo']; ?></strong></p>
                     <br />
                     <br />
                </div>
@@ -163,18 +165,18 @@ $_SESSION['idAnalitica'] = 0;
 	  		<div class="row">
 	  			<div class="col-md-offset-1 col-md-10">
 
-				<form class="form-horizontal" role="form" action="?perfil=discoteca&p=frm_analiticas_sonoro&pag=edita" method="post">
+				<form class="form-horizontal" role="form" action="?perfil=discoteca&p=frm_analiticas_partitura&pag=edita" method="post">
 				  <div class="form-group">
-					<div class="col-md-offset-2 col-md-6"><strong>Lado:</strong><br/>
-					    <input type="text" class="form-control" id="Nome" name="lado"  value="" >
+					<div class="col-md-offset-2 col-md-6"><strong>Página inicial</strong><br/>
+					    <input type="text" class="form-control" id="Nome" name="pag_inicial"  value="" >
 
 					</div>				  
-					<div class=" col-md-6"><strong>Número da Faixa:</strong><br/>
-                	    <input type="text" class="form-control" id="Nome" name="faixa"  value="" >
+					<div class=" col-md-6"><strong>Página final</strong><br/>
+                	    <input type="text" class="form-control" id="Nome" name="pag_final"  value="" >
 					</div>
 				  </div>
                   <div class="form-group">
-					<div class="col-md-offset-2 col-md-8"><strong>Título da faixa*:</strong><br/>
+					<div class="col-md-offset-2 col-md-8"><strong>Título da partitura / analítica *:</strong><br/>
 					  <input type="text" class="form-control" id="Nome" name="titulo"  value="" >
 					</div>
 				  </div>
@@ -183,6 +185,13 @@ $_SESSION['idAnalitica'] = 0;
 					  <input type="text" class="form-control" id="Nome" name="titulo_uniforme" value="" >
 					</div>
 				  </div>
+                  <!--
+                  <div class="form-group">
+					<div class="col-md-offset-2 col-md-8"><strong>Título Geral *:</strong><br/>
+					  <input type="text" class="form-control" id="Nome" name="titulo_geral" value="" >
+					</div>
+				  </div>
+                  -->
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Notas:</strong><br/>
 					 <textarea name="notas" class="form-control" rows="10" placeholder=""></textarea>
@@ -217,17 +226,17 @@ $_SESSION['idAnalitica'] = 0;
     <?php
 	break;  
 	case "edita":
-	$_SESSION['idReg'] = idReg($_SESSION['idFaixa'],$_SESSION['idTabela']);
 	
-	
+		$_SESSION['idReg'] = idReg($_SESSION['idFaixa'],$_SESSION['idTabela']);
 	if(isset($_POST['cadastraRegistro']) OR isset($_POST['atualizaRegistro'])){
 	$planilha = 18;
 		$hoje = date("Y-m-d H:i:s");
-$lado = $_POST['lado'];
-$faixa = $_POST['faixa'];
+$pag_inicial = $_POST['pag_inicial'];
+$pag_final = $_POST['pag_final'];
 $titulo = addslashes($_POST['titulo']);
 $titulo_uniforme = addslashes($_POST['titulo_uniforme']);
-$conteudo = ""; //addslashes($_POST['conteudo']);
+//$titulo_geral = $_POST['titulo_geral'];
+$conteudo = addslashes($_POST['conteudo']);
 $notas = addslashes($_POST['notas']);
 $obs = addslashes($_POST['obs']);
 $publicado = 1;
@@ -237,14 +246,14 @@ $matriz = $_SESSION['idDisco'];
 }
 if(isset($_POST['cadastraRegistro'])){
 
-	$sql_insere = "INSERT INTO `acervo_discoteca` 
-	(`planilha`, `catalogador`, `lado`, `faixa`, `matriz`,  `titulo_disco`, `titulo_uniforme`, `conteudo`, `notas`, `obs`) 
-	VALUES ('$planilha', '$catalogador', '$lado', '$faixa', '$matriz',   '$titulo', '$titulo_uniforme', '$conteudo', '$notas', '$obs');";
+	$sql_insere = "INSERT INTO `acervo_partituras` 
+	(`planilha`, `catalogador`, `pag_inicial`, `pag_final`, `matriz`,  `titulo_disco`, `titulo_uniforme`,  `conteudo`, `notas`, `obs`) 
+	VALUES ('$planilha', '$catalogador', '$pag_inicial', '$pag_final', '$matriz',   '$titulo', '$titulo_uniforme',  '$conteudo', '$notas', '$obs');";
 	$query_insere = mysqli_query($con,$sql_insere);
 	if($query_insere){
 		$ultimo = mysqli_insert_id($con);
 		$sql_insert_registro = "INSERT INTO `acervo`.`acervo_registro` (`id_registro`, `titulo`, `id_autoridade`, `id_acervo`, `id_tabela`, `publicado`, `tabela`, `data_catalogacao`,`idUsuario`) 
-		VALUES (NULL, '$titulo', '', '$colecao', '$ultimo', '1','87','$hoje','$catalogador')";
+		VALUES (NULL, '$titulo', '', '$colecao', '$ultimo', '1','97','$hoje','$catalogador')";
 		$query_insert_registro = mysqli_query($con,$sql_insert_registro);
 		if($query_insert_registro){
 			$mensagem = "Inserido com sucesso(1)";
@@ -259,9 +268,9 @@ $_SESSION['idFaixa'] = $ultimo;
 
 if(isset($_POST['atualizaRegistro'])){
 	$ultimo = $_POST['idFaixa'];
-	$sql_atualiza = "UPDATE `acervo_discoteca` SET 
-	`lado` = '$lado', 
-	`faixa` = '$faixa', 
+	$sql_atualiza = "UPDATE `acervo_partituras` SET 
+	`pag_inicial` = '$pag_inicial', 
+	`pag_final` = '$pag_final', 
 	`titulo_disco` = '$titulo', 
 	`titulo_uniforme` =  '$titulo_uniforme', 
 	`conteudo` = '$conteudo', 
@@ -274,7 +283,7 @@ if(isset($_POST['atualizaRegistro'])){
 		`titulo` = '$titulo',
 		`idUsuario` = '$catalogador',
 		`data_catalogacao` = '$hoje'
-		WHERE `id_tabela` = '$ultimo' AND `tabela` = '87'";
+		WHERE `id_tabela` = '$ultimo' AND `tabela` = '97'";
 		$query_update_registro = mysqli_query($con,$sql_update_registro);
 		if($query_update_registro){
 			$mensagem = "Atualizado com sucesso(1)";
@@ -294,15 +303,16 @@ if(!isset($ultimo)){
 	}
 	$_SESSION['idFaixa'] = $ultimo;
 }
-$faixa = recuperaDados("acervo_discoteca",$ultimo,"idDisco");
-$regfaixa = recuperaDados("acervo_registro",$ultimo,"id_tabela");
+$faixa = recuperaDados("acervo_partituras",$ultimo,"idDisco");
+$rec_reg = idReg($ultimo,$_SESSION['idTabela']);
+$regfaixa = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 
 	
 	?>
         	  <section id="contact" class="home-section bg-white">
 	  	<div class="container">
 			  <div class="form-group">
-					<h3>REGISTRO SONORO - ANALÍTICA</h3>
+					<h3>PARTITURA - ANALÍTICA</h3>
                     <p>Você está inserindo faixas para a Matriz <strong><?php  echo $registro['titulo']; ?></strong></p>
                     <p>Faixa <?php  echo $regfaixa['titulo']; ?>
 					<p><?php if(isset($mensagem)){echo $mensagem;}?></p>
@@ -313,14 +323,14 @@ $regfaixa = recuperaDados("acervo_registro",$ultimo,"id_tabela");
 	  		<div class="row">
 	  			<div class="col-md-offset-1 col-md-10">
 
-				<form class="form-horizontal" role="form" action="?perfil=discoteca&p=frm_analiticas_sonoro&pag=edita" method="post">
+				<form class="form-horizontal" role="form" action="?perfil=discoteca&p=frm_analiticas_partitura&pag=edita" method="post">
 				  <div class="form-group">
-					<div class="col-md-offset-2 col-md-6"><strong>Lado:</strong><br/>
-					    <input type="text" class="form-control" id="Nome" name="lado"  value="<?php  echo $faixa['lado']; ?>" >
+					<div class="col-md-offset-2 col-md-6"><strong>Página inicial</strong><br/>
+					    <input type="text" class="form-control" id="Nome" name="pag_inicial"  value="<?php  echo $faixa['pag_inicial']; ?>" >
 
 					</div>				  
-					<div class=" col-md-6"><strong>Número da Faixa:</strong><br/>
-                	    <input type="text" class="form-control" id="Nome" name="faixa"  value="<?php  echo $faixa['faixa']; ?>" >
+					<div class=" col-md-6"><strong>Página final</strong><br/>
+                	    <input type="text" class="form-control" id="Nome" name="pag_final"  value="<?php  echo $faixa['pag_final']; ?>" >
 					</div>
 				  </div>
                   <div class="form-group">
@@ -331,6 +341,11 @@ $regfaixa = recuperaDados("acervo_registro",$ultimo,"id_tabela");
                   <div class="form-group">
 					<div class="col-md-offset-2 col-md-8"><strong>Título Uniforme *:</strong><br/>
 					  <input type="text" class="form-control" id="Nome" name="titulo_uniforme" value="<?php  echo $faixa['titulo_uniforme']; ?>" >
+					</div>
+				  </div>
+                  <div class="form-group">
+					<div class="col-md-offset-2 col-md-8"><strong>Título Geral *:</strong><br/>
+					  <input type="text" class="form-control" id="Nome" name="titulo_geral" value="<?php  echo $faixa['titulo_geral']; ?>" >
 					</div>
 				  </div>
                   <div class="form-group">
@@ -347,7 +362,7 @@ $regfaixa = recuperaDados("acervo_registro",$ultimo,"id_tabela");
 				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
                     <input type="hidden" name="atualizaRegistro" value="1" />
-                    <input type="hidden" name="idFaixa" value="<?php echo $_POST['idFaixa']?>" />
+                    <input type="hidden" name="idFaixa" value="<?php echo $_SESSION['idFaixa']?>" />
  					 <input type="submit" value="Atualizar" class="btn btn-theme btn-lg btn-block">
 					</div>
 				  </div>
@@ -369,7 +384,7 @@ $regfaixa = recuperaDados("acervo_registro",$ultimo,"id_tabela");
 				  </div>
    				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
- <a href="?perfil=discoteca&p=frm_analiticas_sonoro" class="btn btn-theme btn-block"  >Voltar para lista</a>
+ <a href="?perfil=discoteca&p=frm_analiticas_partitura" class="btn btn-theme btn-block"  >Voltar para lista</a>
 					</div>
 				  </div>	
              	  <div class="form-group">
@@ -379,7 +394,7 @@ $regfaixa = recuperaDados("acervo_registro",$ultimo,"id_tabela");
 				  </div>
    				  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
- <a href="?perfil=discoteca&p=frm_analiticas_sonoro&pag=insere" class="btn btn-theme btn-block" >Inserir outra faixa</a>
+ <a href="?perfil=discoteca&p=frm_analiticas_partitura&pag=insere" class="btn btn-theme btn-block" >Inserir outra partitura</a>
 					</div>
 				  </div>	
              	  <div class="form-group">
@@ -403,7 +418,7 @@ $regfaixa = recuperaDados("acervo_registro",$ultimo,"id_tabela");
 
 	  	</div>
 	  </section>  
-    
+
     <?php 
 	break;
 	} 

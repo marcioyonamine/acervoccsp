@@ -9,13 +9,10 @@
 				</div>
 				<div class="col-md-12">
 					<?php
-if($_SESSION['perfil'] == 1){ //mostra as variáveis do sistema para o desenvolvedor
+if($_SESSION['perfil'] == 1){
 	var_sistema();
 }
 
-if(isset($con)){ //garantir o fechamento do socket
-	mysqli_close($con);	
-}
 ?>
 				</div>
 			</div>		

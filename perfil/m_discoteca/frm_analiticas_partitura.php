@@ -303,7 +303,7 @@ if(!isset($ultimo)){
 	$_SESSION['idFaixa'] = $ultimo;
 }
 $faixa = recuperaDados("acervo_partituras",$ultimo,"idDisco");
-$rec_reg = idReg($ultimo,$_SESSION['tabela']);
+$rec_reg = idReg($ultimo,$_SESSION['idTabela']);
 $regfaixa = recuperaDados("acervo_registro",$rec_reg,"id_registro");
 
 	
