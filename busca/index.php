@@ -58,6 +58,7 @@ if(isset($_GET['pesquisa'])){
 							AND acervo_registro.publicado = 1 
 							AND acervo_relacao_termo.publicado = 1
 							AND acervo_termo.publicado = 1 
+							$filtro
 							";
 
 	/*SELECT tabela1.campos, tabela2.campos 
