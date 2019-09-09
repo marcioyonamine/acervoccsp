@@ -122,6 +122,7 @@ WHERE tabela1.campo=valor
 					$reg = recuperaDados("acervo_registro",$res['id_registro'],"id_registro");
 					$colecao = recuperaDados("acervo_acervos",$reg['id_acervo'],"id_acervo");
 					$autoridades = retornaAutoridades($res['id_registro']);
+					$registro = reDados($res['id_registro']);
 
 					$termos = retornaTermos($res['id_registro']);
 					switch($reg['tabela']){
@@ -175,7 +176,15 @@ WHERE tabela1.campo=valor
 		            <div class="col-md-offset-2 col-md-8">
                <div class="left">
 
-				<h6><?php echo $reg['titulo']; ?> <?php if($dados['planilha'] == 17){echo " (Matriz)"; }else{ echo " (Analítica)"; } ?></h6>
+				<h6><?php echo $reg['titulo']; ?> 
+				<?php if($dados['planilha'] == 17){
+						echo " (Matriz)"; 
+					}else{
+						//var_dump($registro);
+						echo " (Analítica)"; 
+							
+					
+					} ?></h6>
                 <p><?php 
 									
 				//var_dump(retornaAutoridades($reg['id_registro']));

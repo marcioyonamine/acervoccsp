@@ -136,6 +136,8 @@ if(isset($_POST['duplica'])){
                     </td>
 
 					<td class="list_description">
+					
+					
 					<form action="?perfil=discoteca&p=frm_atualiza_sonoro" method="post">
 <input type="hidden" name="idDisco" value="<?php echo $x['id_tabela']?>" />
 <input type="hidden" name="valor" value="1">
@@ -158,15 +160,24 @@ if(isset($_POST['duplica'])){
 					</table>
 					                                <div class="form-group">
             <div class="col-md-offset-2 col-md-8">
+						<?php
+							if(isset($_GET['user'])){
+								$user = '&user='.$_GET['user'];
+							}else{
+								$user = '';
+							}
+					
+					?>
+			
 	            <?php 
 				$anterior = $pc - 1;
 				$proximo = $pc + 1;
 				if($pc > 1){
-					echo "<a href='?perfil=discoteca&p=frm_lista_sonoro&n_pag=$anterior'><- Anterior</a>";
+					echo "<a href='?perfil=discoteca&p=frm_lista_sonoro&n_pag=$anterior$user'><- Anterior</a>";
 				}
 				echo " | ";
 				if($pc < $tp) {
- 				 echo " <a href='?perfil=discoteca&p=frm_lista_sonoro&n_pag=$proximo'>Próxima -></a>";
+ 				 echo " <a href='?perfil=discoteca&p=frm_lista_sonoro&n_pag=$proximo$user'>Próxima -></a>";
  				 }
 				?>            
             </div>
