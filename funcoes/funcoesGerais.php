@@ -1305,4 +1305,61 @@ function reAnaliticas($id){
 	
 }
 
+function reDados($id){ // Recupera Dados do Registro
+	$con = bancoMysqli();
+	$r = recuperaDados("acervo_registro",$id,"id_registro");	
+
+	switch($r['tabela']){
+		case 87:
+			$rec = "SELECT * FROM acervo_discoteca WHERE idDisco = '".$r['id_tabela']."'";
+
+			$query = mysqli_query($con,$rec);
+			$s = mysqli_fetch_array($query);
+
+			if($s['planilha'] == 18){
+				$query = "SELECT * FROM acervo_registro WHERE tabela = '87' AND id_tabela = '".$s['matriz']."'";
+
+				$t = mysqli_query($con,$query);
+				$m = mysqli_fetch_array($t);
+				var_dump($m);	
+			}else{
+				$m = NULL;
+			}
+			
+		break;
+		
+		case 97;
+			$rec = "SELECT * FROM acervo_partituras WHERE idDisco = '".$r['id_tabela']."'";
+			$query = mysqli_query($con,$rec);
+			$s = mysqli_fetch_array($query);
+			if($s['planilha'] == 18){
+				$query = "SELECT * FROM acervo_registro WHERE tabela = '97' AND id_tabela = '".$s['matriz']."'";
+				echo $query;
+				$t = mysqli_query($con,$query);
+				$m = mysqli_fetch_array($t);
+					
+			}else{
+				$m = NULL;
+			}
+		
+		
+		break;
+		
+		
+		
+	}
+
+
+	$x['titulo'] = $r['titulo'];
+	$x['colecao'] = "";
+	$x['id_colecao'] = $r['id_acervo'];
+	$x['tabela'] = "";
+	$x['id_tabela'] = $r['id_tabela'];
+	$x['matriz'] = $m;
+	$x['s'] = $s;
+	return $x;
+	
+}
+
+
 ?>
