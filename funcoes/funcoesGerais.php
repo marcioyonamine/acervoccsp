@@ -1321,7 +1321,7 @@ function reDados($id){ // Recupera Dados do Registro
 
 				$t = mysqli_query($con,$query);
 				$m = mysqli_fetch_array($t);
-				var_dump($m);	
+				//var_dump($m);	
 			}else{
 				$m = NULL;
 			}
@@ -1334,7 +1334,7 @@ function reDados($id){ // Recupera Dados do Registro
 			$s = mysqli_fetch_array($query);
 			if($s['planilha'] == 18){
 				$query = "SELECT * FROM acervo_registro WHERE tabela = '97' AND id_tabela = '".$s['matriz']."'";
-				echo $query;
+				//echo $query;
 				$t = mysqli_query($con,$query);
 				$m = mysqli_fetch_array($t);
 					

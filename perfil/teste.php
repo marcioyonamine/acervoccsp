@@ -1,12 +1,9 @@
 ﻿<?php
+   @ini_set('display_errors', '1');
+	error_reporting(E_ALL); 
 
-if(isset($_GET['evento'])){
-	$idEvento = $_GET['evento'];	
-}
-
-if(isset($_GET['registro'])){
-	
-}
+include "../funcoes/funcoesGerais.php";
+include "../funcoes/funcoesConecta.php";
 
 ?>
 
@@ -17,21 +14,40 @@ if(isset($_GET['registro'])){
 					<div class="section-heading">
 					 <h3>Teste</h3>
 					<?php
-					/*
 					$con = bancoMysqli();
-					$sql = "SELECT * FROM igsis_pedido_contratacao WHERE publicado = '1'";
+					$sql = "SELECT * FROM acervo_discoteca WHERE planilha = '18' AND matriz = '0'";
 					$query = mysqli_query($con,$sql);
-					while($pedido = mysqli_fetch_array($query)){
-						$idPedido = $pedido['idPedidoContratacao'];
-						echo "O pedido $idPedido tem o estado ".$pedido['estado'].".<br />";
-						$txt = atualizaStatus($idPedido);
-						echo $txt."<br /><br />";
+					while($reg = mysqli_fetch_array($query)){
+						echo $reg['titulo_disco']." - ". $reg['tombo'];
+						switch($reg['tipo_especifico']){
+							case 37:
+								$c = 7;
+							break;
+
+							case 38:
+								$c = 9;							
+							break;
+
+							case 39:
+								$c = 8;							
+							break;
+							
+						}
+						$tombo = substr($reg['tombo'],0,$c);
+						
+						$sql_atua = "SELECT idDisco FROM acervo_discoteca WHERE tombo = '$tombo' AND planilha = '17'";
+						$query2 = mysqli_query($con,$sql_atua);
+						$reg2 = mysqli_fetch_array($query2);
+						$sql_update = "UPDATE acervo_discoteca SET matriz = '".$reg2['idDisco']."' WHERE idDisco ='".$reg['idDisco']."'"; 
+						$update = mysqli_query($con,$sql_update);
+						if($update == TRUE){
+							echo "Atualizado<br />";
+						}else{
+							echo "Erro<br />";
+						}
 					}
-					*/
 					
-					$x = retornaAutoridades($_GET['registro']);
-					echo $x;
-					var_dump($x);
+
 					?>
 
 

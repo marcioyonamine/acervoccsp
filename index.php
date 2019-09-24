@@ -74,11 +74,10 @@ if(isset($_POST['usuario'])){
                 
 
 				  <div class="form-group">
-					<div class="col-md-offset-2 col-md-8">
-					<p>Dúvidas? Envie e-mail para: <strong>marcioyonamine@gmail.com</strong></p>
-                    <br />
-                                      
+					<div class="col-md-offset-2 col-md-6">
+					 <a href="busca/index.php" class="btn btn-theme btn-lg btn-block">Busca</a>
 					</div>
+				  </div>
 				  </div>
 
 

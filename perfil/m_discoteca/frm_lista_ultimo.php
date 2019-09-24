@@ -84,7 +84,7 @@ while($usuario = mysqli_fetch_array($query_lista_usuario)){
             <div></div>
 			<div class="table-responsive list_info">
            			 
-				<table class="table table-condensed"><script type=text/javascript language=JavaScript src=../js/find2.js> </script>
+				<table class="table table-condensed">
 
             		<thead>
 						<tr class="list_menu">
@@ -151,7 +151,7 @@ while($usuario = mysqli_fetch_array($query_lista_usuario)){
 	              
             </div>
  			<div class="table-responsive list_info">
-				<table class="table table-condensed"><script type=text/javascript language=JavaScript src=../js/find2.js> </script>
+				<table class="table table-condensed">
 					<thead>
 						<tr class="list_menu">
 							<td width="5%">Tombo/Antigo</td>
@@ -222,7 +222,7 @@ while($usuario = mysqli_fetch_array($query_lista_usuario)){
 	              
             </div>
  			<div class="table-responsive list_info">
-				<table class="table table-condensed"><script type=text/javascript language=JavaScript src=../js/find2.js> </script>
+				<table class="table table-condensed">
 					<thead>
 						<tr class="list_menu">
 							<td width="30%">Autoridade</td>
@@ -288,7 +288,7 @@ while($usuario = mysqli_fetch_array($query_lista_usuario)){
 	              
             </div>
  			<div class="table-responsive list_info">
-				<table class="table table-condensed"><script type=text/javascript language=JavaScript src=../js/find2.js> </script>
+				<table class="table table-condensed">
 					<thead>
 						<tr class="list_menu">
 							<td width="30%">Termo</td>

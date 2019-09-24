@@ -123,14 +123,55 @@ WHERE tabela1.campo=valor
 					$reg = recuperaDados("acervo_registro",$res['id_registro'],"id_registro");
 					$colecao = recuperaDados("acervo_acervos",$reg['id_acervo'],"id_acervo");
 					$autoridades = retornaAutoridades($res['id_registro']);
-					$registro = reDados($res['id_registro']);
 
 					$termos = retornaTermos($res['id_registro']);
 					switch($reg['tabela']){
 						case 87:
+							$dados = recuperaDados("acervo_discoteca",$reg['id_tabela'],"idDisco");						
+								$lista_autoridade = $autoridades['string'];
+							$tombo = $dados['tombo'];
+
+							if($dados['planilha'] == 18){
+								$matriz = recuperaDados("acervo_discoteca",$dados['matriz'],"matriz");
+
+							}
+
+							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
+								$idReg = idReg($dados['matriz'],87);
+								$aut = retornaAutoridades($idReg);
+								$lista_autoridade = $aut['string'];
+								$matriz = recuperaDados("acervo_discoteca",$idReg,"idDisco");
+								
+
+
+							}
+								if($dados['planilha'] == 18){
+								$matriz = recuperaDados("acervo_discoteca",$dados['matriz'],"idDisco");
+								$tombo = $matriz['tombo']." / ".$matriz['tombo_antigo'];
+								
+								}else{
+									$sql_busca_analitica = "SELECT titulo_disco FROM acervo_discoteca WHERE matriz = '".$dados['idDisco']."'";
+									$query_analitica = mysqli_query($con,$sql_busca_analitica);
+									$analiticas = "";
+									while($x = mysqli_fetch_array($query_analitica)){
+										$analiticas .= ", ".$x['titulo_disco'];
+									}
+								}
+
+
+
+
+/*
 							$dados = recuperaDados("acervo_discoteca",$reg['id_tabela'],"idDisco");
 							$lista_autoridade = $autoridades['string'];
 							$tombo = $dados['tombo'];
+
+							if($dados['planilha'] == 18){
+								$matriz = recuperaDados("acervo_discoteca",$dados['matriz'],"matriz");
+
+							}							
+							
+							
 							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
 								$idReg = idReg($dados['matriz'],87);
 								$aut = retornaAutoridades($idReg);
@@ -145,13 +186,19 @@ WHERE tabela1.campo=valor
 
 								$tombo = $matriz['tombo'];
 								}
-							
+*/							
 							break;
 						
 						case 97:
 							$dados = recuperaDados("acervo_partituras",$reg['id_tabela'],"idDisco");						
 								$lista_autoridade = $autoridades['string'];
 							$tombo = $dados['tombo'];
+
+							if($dados['planilha'] == 18){
+								$matriz = recuperaDados("acervo_partituras",$dados['matriz'],"matriz");
+
+							}
+
 							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
 								$idReg = idReg($dados['matriz'],97);
 								$aut = retornaAutoridades($idReg);
@@ -163,8 +210,15 @@ WHERE tabela1.campo=valor
 							}
 								if($dados['planilha'] == 18){
 								$matriz = recuperaDados("acervo_partituras",$dados['matriz'],"idDisco");
-
 								$tombo = $matriz['tombo']." / ".$matriz['tombo_antigo'];
+								
+								}else{
+									$sql_busca_analitica = "SELECT titulo_disco FROM acervo_partituras WHERE matriz = '".$dados['idDisco']."'";
+									$query_analitica = mysqli_query($con,$sql_busca_analitica);
+									$analiticas = "";
+									while($x = mysqli_fetch_array($query_analitica)){
+										$analiticas .= ", ".$x['titulo_disco'];
+									}
 								}
 
 							
@@ -178,17 +232,14 @@ WHERE tabela1.campo=valor
                <div class="left">
 
 				<h6><?php echo $reg['titulo']; ?> 
-				<?php if($dados['planilha'] == 17){
+				<?php
+					if($dados['planilha'] == 17){
 						echo " (Matriz)"; 
 					}else{
-						//var_dump($registro);
-						echo " (Analítica)"; 
-							
-					
-					} ?></h6>
+						echo " (Analítica) / ".$matriz['titulo_disco']." (Matriz)"; 
+						} ?></h6>
                 <p><?php 
 									
-				//var_dump(retornaAutoridades($reg['id_registro']));
 				?></p>
                
                 <p>Tombo: <?php 
@@ -196,10 +247,14 @@ WHERE tabela1.campo=valor
 					echo $tombo; 
 
 				
-				?>  <?php if($reg['tabela'] == 97){ echo " / ".$dados['tombo_antigo']; }?> </p>
+				?>  <?php if($reg['tabela'] == 97){ echo " / ".$dados['tombo_antigo']; }?> 
+				<?php if($dados['planilha'] == 18 AND $dados['matriz'] == 0 ){ echo " / ".$dados['tombo']; }?> </p>
                 <p>Autoridades: <?php echo $lista_autoridade; ?> </p>
                 <p>Assuntos:<?php echo $termos['string']; ?> </p>
 				 <p>Coleção: <?php echo $colecao['acervo']; ?></p>
+				 <?php if(isset($analiticas) AND $analiticas != ""){?>
+				 <p>Conteúdo: <?php echo $analiticas; $analiticas = "";?></p>
+				 <?php } ?>
                 			    </div>
 				</div>		            
         	    </div>

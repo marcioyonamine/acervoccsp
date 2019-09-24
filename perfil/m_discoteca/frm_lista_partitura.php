@@ -82,7 +82,7 @@ if(isset($_POST['duplica'])){
 					</div>
             </div>
 			<div class="table-responsive list_info">
-				<table class="table table-condensed"><script type=text/javascript language=JavaScript src=../js/find2.js> </script>
+				<table class="table table-condensed">
 					<thead>
 						<tr class="list_menu">
 							<td width="3%"></td>
