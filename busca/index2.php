@@ -21,8 +21,8 @@ ccsplab.org - centro cultural são paulo
 // Esta é a página de login do usuário ou de contato com administrador do sistema.
 
 //Imprime erros com o banco
-   @ini_set('display_errors', '1');
-	error_reporting(E_ALL); 
+@ini_set('display_errors', '1');
+error_reporting(E_ALL); 
 
 include "../funcoes/funcoesGerais.php";
 include "../funcoes/funcoesConecta.php";
@@ -127,9 +127,51 @@ WHERE tabela1.campo=valor
 					$termos = retornaTermos($res['id_registro']);
 					switch($reg['tabela']){
 						case 87:
+							$dados = recuperaDados("acervo_discoteca",$reg['id_tabela'],"idDisco");						
+								$lista_autoridade = $autoridades['string'];
+							$tombo = $dados['tombo'];
+
+							if($dados['planilha'] == 18){
+								$matriz = recuperaDados("acervo_discoteca",$dados['matriz'],"matriz");
+
+							}
+
+							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
+								$idReg = idReg($dados['matriz'],87);
+								$aut = retornaAutoridades($idReg);
+								$lista_autoridade = $aut['string'];
+								$matriz = recuperaDados("acervo_discoteca",$idReg,"idDisco");
+								
+
+
+							}
+								if($dados['planilha'] == 18){
+								$matriz = recuperaDados("acervo_discoteca",$dados['matriz'],"idDisco");
+								$tombo = $matriz['tombo']." / ".$matriz['tombo_antigo'];
+								
+								}else{
+									$sql_busca_analitica = "SELECT titulo_disco FROM acervo_discoteca WHERE matriz = '".$dados['idDisco']."'";
+									$query_analitica = mysqli_query($con,$sql_busca_analitica);
+									$analiticas = "";
+									while($x = mysqli_fetch_array($query_analitica)){
+										$analiticas .= ", ".$x['titulo_disco'];
+									}
+								}
+
+
+
+
+/*
 							$dados = recuperaDados("acervo_discoteca",$reg['id_tabela'],"idDisco");
 							$lista_autoridade = $autoridades['string'];
 							$tombo = $dados['tombo'];
+
+							if($dados['planilha'] == 18){
+								$matriz = recuperaDados("acervo_discoteca",$dados['matriz'],"matriz");
+
+							}							
+							
+							
 							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
 								$idReg = idReg($dados['matriz'],87);
 								$aut = retornaAutoridades($idReg);
@@ -144,7 +186,7 @@ WHERE tabela1.campo=valor
 
 								$tombo = $matriz['tombo'];
 								}
-							
+*/							
 							break;
 						
 						case 97:
