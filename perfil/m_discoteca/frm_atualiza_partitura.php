@@ -149,19 +149,18 @@ if(isset($_POST['atualizaRegistro'])){
 
 
 $disco = recuperaDados("acervo_partituras",$ultimo,"idDisco");
-$rec_reg = idReg($ultimo,$_SESSION['idTabela']);
+$rec_reg = idReg($_SESSION['idDisco'],$_SESSION['tabela']);
 $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro");
-$_SESSION['idReg'] = $registro['id_registro'];
+$_SESSION['idReg'] = $rec_reg;
 $_SESSION['idDisco'] = $disco['idDisco'];
 $_SESSION['idAnalitica'] = 0;
-
 ?>
 
 	  <section id="contact" class="home-section bg-white">
 	  	<div class="container">
 			  <div class="form-group">
               		<h4>Partitura - MATRIZ</h4>
-					<h3><?php echo $registro['titulo'];?></h3>
+					<h3><?php echo $registro['titulo']; var_dump ($rec_reg);?></h3>
 					
                     <p><?php if(isset($mensagem)){ echo $mensagem; } ?></p>
 
