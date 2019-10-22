@@ -1,7 +1,8 @@
 <?php
 $con = bancoMysqli();
 include 'includes/menuPartitura.php';
-
+$_SESSION['idReg'] = NULL;
+$_SESSION['idDisco'] = NULL;
 
 ?>
 

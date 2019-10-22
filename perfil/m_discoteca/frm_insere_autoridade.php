@@ -4,6 +4,8 @@ $con = bancoMysqli();
 
 include 'includes/menu.php';
 
+$_SESSION['idReg'] = idRegistro($_SESSION['idDisco'],$_SESSION['idTabela']);
+
 if(isset($_GET['pag'])){
 	$pag = $_GET['pag'];
 }else{
