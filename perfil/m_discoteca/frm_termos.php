@@ -31,7 +31,7 @@ if(isset($_SESSION['idFaixa']) AND ($_SESSION['idFaixa'] != 0 AND $_SESSION['idF
 	$_SESSION['idReg'] = idReg($_SESSION['idFaixa'],$_SESSION['idTabela']);
 	$_SESSION['idAnalitica'] = $_SESSION['idFaixa'];	
 }else{
-	$_SESSION['idReg'] = idRegistro($_SESSION['idDisco'],$_SESSION['tabela']);	
+	$_SESSION['idReg'] = idRegistro($_SESSION['idDisco'],$_SESSION['idTabela']);	
 }
 
 
