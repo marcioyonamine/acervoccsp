@@ -1367,7 +1367,6 @@ function idRegistro($idDisco,$idTabela){
 	$query = mysqli_query($con,$sql);
 	$idReg = mysqli_fetch_array($query);
 	return $idReg['id_regristro'];
-	
 }
 
 ?>

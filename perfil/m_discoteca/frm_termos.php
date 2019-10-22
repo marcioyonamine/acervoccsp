@@ -35,6 +35,7 @@ if(isset($_SESSION['idFaixa']) AND ($_SESSION['idFaixa'] != 0 AND $_SESSION['idF
 }
 
 
+
 include 'includes/menuTermos.php';
 if(isset($_GET['pag'])){
 	$pag = $_GET['pag'];
@@ -84,7 +85,7 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 	
 	
 	if(isset($_POST['insereTermo'])){
-		$idreg = $_SESSION['idReg'];
+
 		$idtermo = $_POST['termo'];
 		$idtipo = $_POST['tipo'];
 		$sql_insere = "INSERT INTO `acervo_relacao_termo` (`idRel`, `idReg`, `idTermo`, `idTipo`, `idCat`, `publicado`) 
