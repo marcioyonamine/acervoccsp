@@ -155,7 +155,7 @@ $registro = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
 	<div class="container">
 		<div class="form-group">
 					<h4><?php echo $tipo_str; ?></h4>
-					<h3>teste<?php echo $registro['titulo'];  ?></h3>
+					<h3><?php echo $registro['titulo'];  ?></h3>
 
                     <p><?php if(isset($mensagem)){echo $mensagem;} ?></p>
                     <br />
