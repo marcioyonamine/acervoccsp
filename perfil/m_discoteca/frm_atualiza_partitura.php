@@ -160,7 +160,7 @@ $_SESSION['idAnalitica'] = 0;
 	  	<div class="container">
 			  <div class="form-group">
               		<h4>Partitura - MATRIZ</h4>
-					<h3><?php echo $registro['titulo']; var_dump ($rec_reg);?></h3>
+					<h3><?php echo $registro['titulo']; ?></h3>
 					
                     <p><?php if(isset($mensagem)){ echo $mensagem; } ?></p>
 
