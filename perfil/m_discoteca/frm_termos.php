@@ -25,10 +25,11 @@ if(isset($_POST['id_registro'])){
 $registro = recuperaDados("acervo_registro",$rec_reg,"id_registro"); 
 */
 $con = bancoMysqli();
+
 // SESSIONS
 
 if(isset($_SESSION['idFaixa']) AND ($_SESSION['idFaixa'] != 0 AND $_SESSION['idFaixa'] != "" AND $_SESSION['idFaixa'] != NULL)){
-	$_SESSION['idReg'] = idReg($_SESSION['idFaixa'],$_SESSION['idTabela']);
+	$_SESSION['idReg'] = idRegistro($_SESSION['idFaixa'],$_SESSION['idTabela']);
 	$_SESSION['idAnalitica'] = $_SESSION['idFaixa'];	
 }else{
 	$_SESSION['idReg'] = idRegistro($_SESSION['idDisco'],$_SESSION['idTabela']);	
