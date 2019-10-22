@@ -1363,10 +1363,10 @@ function reDados($id){ // Recupera Dados do Registro
 
 function idRegistro($idDisco,$idTabela){
 	$con = bancoMysqli();
-	$sql = "SELECT id_registro FROM acervo_registro WHERE tabela= '$idTabela' AND id_acervo = '$idDisco'";
+	$sql = "SELECT id_registro FROM acervo_registro WHERE tabela = '$idTabela' AND id_acervo = '$idDisco'";
 	$query = mysqli_query($con,$sql);
 	$idReg = mysqli_fetch_array($query);
-	return $idReg['id_regristro'];
+	return $idReg['id_registro'];
 }
 
 ?>

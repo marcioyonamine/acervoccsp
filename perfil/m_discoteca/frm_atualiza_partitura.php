@@ -65,7 +65,7 @@ if(isset($_POST['cadastraRegistro'])){
 	$query_insere = mysqli_query($con,$sql_insere);
 	if($query_insere){
 		$ultimo = mysqli_insert_id($con);
-		$sql_insert_registro = "INSERT INTO `acervo`.`acervo_registro` (`id_registro`, `titulo`, `id_autoridade`, `id_acervo`, `id_tabela`, `publicado`, `tabela`, `data_catalogacao`, `idUsuario`) 
+		$sql_insert_registro = "INSERT INTO `acervo_registro` (`id_registro`, `titulo`, `id_autoridade`, `id_acervo`, `id_tabela`, `publicado`, `tabela`, `data_catalogacao`, `idUsuario`) 
 		VALUES (NULL, '$titulo', '', '$colecao', '$ultimo', '1','97','$hoje','$catalogador')";
 		$query_insert_registro = mysqli_query($con,$sql_insert_registro);
 		
@@ -73,7 +73,7 @@ if(isset($_POST['cadastraRegistro'])){
 			$mensagem = "Inserido com sucesso(1)";
 			$ultimo_registro = mysqli_insert_id($con);
 		}else{
-			$mensagem = "Erro ao inserir(2)";	
+			$mensagem = "Erro ao inserir(2)".$sql_insert_registro;	
 		}
 	}else{
 		$mensagem = "Erro ao inserir(3)";	

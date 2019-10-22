@@ -29,10 +29,10 @@ $con = bancoMysqli();
 // SESSIONS
 
 if(isset($_SESSION['idFaixa']) AND ($_SESSION['idFaixa'] != 0 AND $_SESSION['idFaixa'] != "" AND $_SESSION['idFaixa'] != NULL)){
-	$_SESSION['idReg'] = idRegistro($_SESSION['idFaixa'],$_SESSION['idTabela']);
+	$_SESSION['idReg'] = idReg($_SESSION['idFaixa'],$_SESSION['idTabela']);
 	$_SESSION['idAnalitica'] = $_SESSION['idFaixa'];	
 }else{
-	$_SESSION['idReg'] = idRegistro($_SESSION['idDisco'],$_SESSION['idTabela']);	
+	$_SESSION['idReg'] = idReg($_SESSION['idDisco'],$_SESSION['idTabela']);	
 }
 
 include 'includes/menuTermos.php';
@@ -84,7 +84,7 @@ if(isset($_GET['tipo']) || isset($_POST['tipo'])){
 	
 	
 	if(isset($_POST['insereTermo'])){
-
+		$idreg = $_SESSION['idReg'];
 		$idtermo = $_POST['termo'];
 		$idtipo = $_POST['tipo'];
 		$sql_insere = "INSERT INTO `acervo_relacao_termo` (`idRel`, `idReg`, `idTermo`, `idTipo`, `idCat`, `publicado`) 
@@ -155,7 +155,7 @@ $registro = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
 	<div class="container">
 		<div class="form-group">
 					<h4><?php echo $tipo_str; ?></h4>
-					<h3><?php echo $registro['titulo']; var_sistema(); ?></h3>
+					<h3>teste<?php echo $registro['titulo'];  ?></h3>
 
                     <p><?php if(isset($mensagem)){echo $mensagem;} ?></p>
                     <br />
