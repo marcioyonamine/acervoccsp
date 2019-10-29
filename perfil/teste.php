@@ -15,8 +15,20 @@ include "../funcoes/funcoesConecta.php";
 					 <h3>Teste</h3>
 					<?php
 					$con = bancoMysqli();
-					var_dump(idReg($_GET['disco'],$_GET['tabela']));
+					$string = "INSTRUMENTAÇÃO: Voz Solista ; Piano ; . ; . ; . ; . ; . ; . ; . ; .";
+					$string = str_replace("INSTRUMENTAÇÃO:", "", $string); 
+					$string = str_replace(" e ", " ; ", $string); 
+					$pieces = explode(";", $string);
 					
+					
+					echo $string."<br />";
+					
+					for($i = 0; $i < sizeof($pieces); $i++){
+						echo trim($pieces[$i])."<br />";
+						
+					}					
+
+
 
 					?>
 
