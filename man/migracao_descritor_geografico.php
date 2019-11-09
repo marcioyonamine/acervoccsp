@@ -7,6 +7,8 @@ require "../funcoes/funcoesGerais.php";
 
 $con = bancoMysqli();
 set_time_limit(0);
+//$teste = " LIMIT 0,100";
+
 $teste = "";
 
 if(isset($_GET['action'])){
@@ -79,6 +81,37 @@ switch($action){
 	break;
 
 
+case "partitura": //Descritor Geografico
+
+	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+	echo "<h1>Criando os registros...</h1><br />";
+	$hoje = date('Y-m-d H:i:s');
+	$sql = "SELECT id, desc_geo FROM temp_partituras $teste";
+	echo $sql;
+	$query = mysqli_query($con,$sql);
+	while($x = mysqli_fetch_array($query)){
+		$idDisco = $x['id'];
+		$desc_geo = $x['desc_geo'];
+		$idReg = idReg($x['id'],97);
+		$idTermo = recuperaIdTermo($x['desc_geo'],119);
+		if(trim($desc_geo) != "" AND $desc_geo != NULL AND trim($desc_geo) != "."){
+			$sql_insert = "INSERT INTO acervo_relacao_termo (idReg,idTermo,idTipo,publicado) 
+			VALUES ( '$idReg','$idTermo','119','1')";
+			$query_insert = mysqli_query($con,$sql_insert);
+			if($query_insert){
+				echo "<p>Termo $desc_geo associado ao registro $idReg;</p>";
+			}else{
+				echo "<p>Erro ao associar termo $desc_geo ao registro $idReg </p>";
+				
+			}
+		}
+	}
+	
+	$depois = strtotime(date('Y-m-d H:i:s'));
+	$tempo = $depois - $antes;
+	echo "<br /><br /> Importação executada em $tempo segundos";
+
+break;
 
 
 
@@ -93,7 +126,8 @@ case "inicio":
 <br />
 <a href="?action=insere_fora">Insere Descritor Geográfico da tabela temp_acervo_discoteca</a><br />
 <br />
-
+<a href="?action=partitura">Insere Descritor Geográfico da tabela temp_partitura</a><br />
+<br />
 
 
 <?php 
