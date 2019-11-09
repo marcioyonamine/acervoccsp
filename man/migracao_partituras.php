@@ -7,7 +7,13 @@ require "../funcoes/funcoesGerais.php";
 
 $con = bancoMysqli();
 set_time_limit(0);
-$teste = " LIMIT 0,100";
+if(isset($_GET['teste'])){
+	$teste = " LIMIT 0,100";
+	
+}else{
+	$teste = "";
+}
+
 
 //$teste = "";
 
@@ -60,6 +66,7 @@ switch($action){
 		}		
 	}
 
+	break;
 
 	/////////// Forma Genero
 	case "forma_genero":
