@@ -139,6 +139,7 @@ switch($action){
 
 	/////////// Arruma analíticas
 	case "fix_analiticas":
+	
 	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
 	echo "<h1>Criando os registros...</h1><br />";
 	$hoje = date('Y-m-d H:i:s');
@@ -148,7 +149,7 @@ switch($action){
 		$id = $x['idDisco'];
 		$sql_update = "UPDATE acervo_registro SET publicado = 0
 					WHERE tabela = 97 AND
-					id_acervo = '$id'";
+					id_tabela = '$id'";
 		
 		$query_update = mysqli_query($con,$sql_update);
 			if($query_update){
@@ -160,14 +161,14 @@ switch($action){
 		
 		
 	}
-	
+
 	$sql = "SELECT idDisco  FROM acervo_partituras WHERE `planilha` = 18 AND `tombo` LIKE '%copia%'";
 	$query = mysqli_query($con,$sql);
 	while($x = mysqli_fetch_array($query)){
 		$id = $x['idDisco'];
 		$sql_update = "UPDATE acervo_registro SET publicado = 0
 					WHERE tabela = 97 AND
-					id_acervo = '$id'";
+					id_tabela = '$id'";
 		
 		$query_update = mysqli_query($con,$sql_update);
 			if($query_update){
