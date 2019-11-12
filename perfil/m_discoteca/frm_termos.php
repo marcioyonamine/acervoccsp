@@ -31,8 +31,6 @@ $con = bancoMysqli();
 if(isset($_SESSION['idFaixa']) AND ($_SESSION['idFaixa'] != 0 AND $_SESSION['idFaixa'] != "" AND $_SESSION['idFaixa'] != NULL)){
 	$_SESSION['idReg'] = idReg($_SESSION['idFaixa'],$_SESSION['idTabela']);
 	$_SESSION['idAnalitica'] = $_SESSION['idFaixa'];	
-}else{
-	$_SESSION['idReg'] = idReg($_SESSION['idDisco'],$_SESSION['idTabela']);	
 }
 
 include 'includes/menuTermos.php';

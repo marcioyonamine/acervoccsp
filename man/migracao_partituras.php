@@ -137,7 +137,54 @@ switch($action){
 	
 	break;
 
-
+	/////////// Arruma analíticas
+	case "fix_analiticas":
+	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+	echo "<h1>Criando os registros...</h1><br />";
+	$hoje = date('Y-m-d H:i:s');
+	$sql = "SELECT idDisco  FROM acervo_partituras WHERE `planilha` = 18 AND `tombo` LIKE '%Ex%'";
+	$query = mysqli_query($con,$sql);
+	while($x = mysqli_fetch_array($query)){
+		$id = $x['idDisco'];
+		$sql_update = "UPDATE acervo_registro SET publicado = 0
+					WHERE tabela = 97 AND
+					id_acervo = '$id'";
+		
+		$query_update = mysqli_query($con,$sql_update);
+			if($query_update){
+				echo "Registro $id atualizado.<br />";
+			}else{
+				echo "Erro ao atualizar $id.<br />";
+			}		
+		
+		
+		
+	}
+	
+	$sql = "SELECT idDisco  FROM acervo_partituras WHERE `planilha` = 18 AND `tombo` LIKE '%copia%'";
+	$query = mysqli_query($con,$sql);
+	while($x = mysqli_fetch_array($query)){
+		$id = $x['idDisco'];
+		$sql_update = "UPDATE acervo_registro SET publicado = 0
+					WHERE tabela = 97 AND
+					id_acervo = '$id'";
+		
+		$query_update = mysqli_query($con,$sql_update);
+			if($query_update){
+				echo "Registro $id atualizado.<br />";
+			}else{
+				echo "Erro ao atualizar $id.<br />";
+			}		
+		
+		
+		
+	}
+	
+	$depois = strtotime(date('Y-m-d H:i:s'));
+	$tempo = $depois - $antes;
+	echo "<br /><br /> Importação executada em $tempo segundos";
+	
+	break;
 
 case "inicio":
 ?>
@@ -148,6 +195,8 @@ case "inicio":
 <a href="?action=forma_genero">Insere Forma/Gênero (não esqueça de mudar o nome do campo para forma_genero)</a><br />
 <br />
 <a href="?action=registro">Insere Registro, Local e Data (não esqueça de mudar o nome do campo para local, data)</a><br />
+<br />
+<a href="?action=fix_analiticas">Despublica as analíticas das cópias/exemplares</a><br />
 <br />
 
 <?php 
