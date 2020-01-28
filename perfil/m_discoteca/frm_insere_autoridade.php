@@ -202,6 +202,7 @@ if($resultado['adotado'] == 0){//03
 </div>
 
 <?php if(isset($_SESSION['idDisco'])){ // insere na base e no registro?>
+	<?php if($_SESSION['perfil'] != '3'){ ?>
             <p>Gostaria de incluir <strong><?php echo $termo; ?></strong> ao registro <strong> <?php echo $disco ?></strong>?</p>
             <p> Lembre-se que essa ação insere o termo na base comum de termos do sistema.</p>
 	  <div class="form-group">
@@ -214,7 +215,9 @@ if($resultado['adotado'] == 0){//03
 					 </form>
 					</div>
 				  </div>
+	<?php } ?>
 <?php }else{ ?>
+	<?php if($_SESSION['perfil'] != '3'){ ?>
             <p>Gostaria de incluir <strong><?php echo $termo; // insere só na base ?></strong> na base comum de termos do sistema?</p>
 	  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
@@ -226,6 +229,7 @@ if($resultado['adotado'] == 0){//03
 					 </form>
 					</div>
 				  </div>
+	<?php } ?>
 <?php } ?>
             			
 <?php  }else{ ?>
@@ -247,6 +251,7 @@ if($resultado['adotado'] == 0){//03
 					</div>
 				  </div>
 <?php }else{ ?>
+	<?php if($_SESSION['perfil'] != '3'){ ?>
 	  <div class="form-group">
 					<div class="col-md-offset-2 col-md-8">
             <p>Gostaria de incluir <strong><?php echo $termo; // insere só na base ?></strong> na base comum de termos do sistema?</p>
@@ -259,6 +264,9 @@ if($resultado['adotado'] == 0){//03
 					 </form>
 					</div>
 				  </div>
+	<?php } ?>
+
+
 <?php } ?>
 
 

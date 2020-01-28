@@ -9,7 +9,7 @@
 				</div>
 				<div class="col-md-12">
 					<?php
-if($_SESSION['perfil'] == 1){
+if($_SESSION['perfil'] == 1 OR $_SESSION['perfil'] == 3 ){
 	var_sistema();
 }
 

@@ -199,9 +199,9 @@ case "inicio":
 ?>
 <h1>Importação dos termos para a base</h1>
 
-<a href="?action=insere">Insere Instrumentação (não esqueça de mudar o nome do campo para res_instr)</a><br />
+<a href="?action=insere">Insere Instrumentação (não esqueça de mudar o nome do campo para res_instr / se for preciso refazer a migração, o script apaga as instrumentações anteriores )</a><br />
 <br />
-<a href="?action=forma_genero">Insere Forma/Gênero (não esqueça de mudar o nome do campo para forma_genero)</a><br />
+<a href="?action=forma_genero">Insere Forma/Gênero (não esqueça de mudar o nome do campo para forma_genero / arrumar o script  para apagar os registros anteriores )</a><br />
 <br />
 <a href="?action=registro">Insere Registro, Local e Data (não esqueça de mudar o nome do campo para local, data)</a><br />
 <br />
