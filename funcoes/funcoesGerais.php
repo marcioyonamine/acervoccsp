@@ -881,12 +881,24 @@ function opcaoTermoCat($idTipo,$select = NULL){
 
 function listaTermos($idReg,$tipo){
 	$con = bancoMysqli();
-	$sql = "SELECT * FROM acervo_relacao_termo WHERE idReg = '$idReg' AND idTipo IN($tipo) AND publicado = '1'";
-	//echo $sql;
+	
+	if($tipo == 1){
+		$str_arr =[0][1]; 
+	}else{
+		$str_arr = explode (",", $tipo);  
+	}	
+	
+
+			$y = 0;
+	
+	for ($i = 0; $i < sizeof($str_arr); $i++){
+		$t = $str_arr[$i];
+	$sql = "SELECT * FROM acervo_relacao_termo WHERE idReg = '$idReg' AND idTipo = '$t' AND publicado = '1'";
+
 	$query = mysqli_query($con,$sql);
 	$num = mysqli_num_rows($query);
 	if($num > 0){	
-		$y = 0;
+
 		while($x = mysqli_fetch_array($query)){
 			
 			$termo = recuperaDados("acervo_termo",$x['idTermo'],"id_termo");
@@ -899,12 +911,15 @@ function listaTermos($idReg,$tipo){
 			$w[$y]['categoria'] = "";
 			$w[$y]['idCat'] = $x['idCat'];
 			$y++;
-			$w['total'] = $y;
+
 		}
 	}else{
 		$w['total'] = 0;
 	}
+	}
+				$w['total'] = $y;
 	$w['sql'] = $sql;
+	
 	return $w;
 }
 
@@ -972,11 +987,24 @@ function retornaTermos($registro,$analitica = NULL){
 		$x = array();
 		return $x;
 	}else{
-		$sql_autoridades = "SELECT idTermo,idTipo FROM acervo_relacao_termo WHERE idTipo IN(".$GLOBALS['acervo_tipo'].") AND publicado = '1' AND idReg = '$registro'"; 
+		
+		//Gerar ordenação segundo json 
+		
+		$str_array = explode(",",$GLOBALS['acervo_tipo']);
+		$string = "";			
+		$i = 0;	
+	
+		for($k = 0;$k < sizeof($str_array); $k++){
+		
+		$o = $str_array[$k];
+		
+		
+		
+		$sql_autoridades = "SELECT idTermo,idTipo FROM acervo_relacao_termo WHERE idTipo = '$o' AND publicado = '1' AND idReg = '$registro'"; 
 		$query_autoridades = mysqli_query($con,$sql_autoridades);
 		$num = mysqli_num_rows($query_autoridades);
 		if($num > 0){
-			$i = 0;
+
 			while($termo = mysqli_fetch_array($query_autoridades)){
 				$y = recuperaDados("acervo_termo",$termo['idTermo'],"id_termo");
 				$w = recuperaDados("acervo_tipo",$termo['idTipo'],"id_tipo");
@@ -986,22 +1014,22 @@ function retornaTermos($registro,$analitica = NULL){
 				
 			}
 	
-			$str = ",";
-			$string = "";
-			for($a = 0; $a <= ($num - 1); $a++){
+	
+	
+		}
+
+
+	}
+				$str = ",";
+			for($a = 0; $a < sizeof($x); $a++){
 				$str = ", ".$x[$a]['termo']." ( ".$x[$a]['categoria']. " ) ";
 				$string = $string.$str;
-			} 	
+			} 
+			$x['total'] = $num;
+			$x['string'] = substr($string, 1);
+			return $x;
 	
-		}else{
-	
-			$string = "";			
-		}
-		$x['total'] = $num;
-		$x['string'] = substr($string, 1);
-		return $x;
-	}
-	
+}
 }
 
 function idMatriz($id){
@@ -1153,7 +1181,7 @@ function duplicarReg($id){
 		$publicado = 1;
 		$hoje = date("Y-m-d H:i:s");
 		$idUsuario = $_SESSION['idUsuario']; 
-		$titulo_duplicado = $reg['titulo']." (dup)";
+		$titulo_duplicado = addslashes($reg['titulo'])." (dup)";
 		$sql_atualiza = "UPDATE acervo_registro SET publicado = '1', data_catalogacao = '$hoje', idUsuario = '$idUsuario', titulo = '$titulo_duplicado' WHERE id_registro = '$ultimo'";
 		$query_atualiza = mysqli_query($con,$sql_atualiza);
 		
@@ -1270,6 +1298,7 @@ function reAnaliticas($id){
 	$con = bancoMysqli();
 	$r = recuperaDados("acervo_registro",$id,"id_registro");
 	$i = 0;
+	$y = [];
 	switch($r['tabela']){
 		case 87:
 			$id_tabela = $r['id_tabela'];

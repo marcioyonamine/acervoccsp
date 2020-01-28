@@ -28,56 +28,51 @@ if(isset($_GET['action'])){
 
 switch($action){
 
-	/////////// Instrumentação e Meio de expressão
-	case "insere":
+	/////////// partitura
+	case "partitura":
 	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
-	echo "<h1>Criando os registros...</h1><br />";
+	echo "<h1>Criando index...</h1><br />";
 	$hoje = date('Y-m-d H:i:s');
-	$sql = "SELECT id, res_instr FROM temp_partituras $teste";
+	$sql_delete = "DELETE FROM `acervo_busca` WHERE colecao = 'Partitura' ";
+	$query = mysqli_query($con,$sql_delete);
+	
+	
+	$sql = "SELECT id_registro, titulo, id_tabela FROM acervo_registro WHERE tabela = '97' AND publicado = '1' $teste";
 	$query = mysqli_query($con,$sql);
+	
+	
+	
 	while($x = mysqli_fetch_array($query)){
-		$idDisco = $x['id'];
-		$string = $x['res_instr'];
-		$string = str_replace("INSTRUMENTAÇÃO:", "", $string); 
-		$string = str_replace(" e ", " ; ", $string); 
-		$pieces = explode(";", $string);
-		$idReg = idReg($x['id'],97);
+		$id_registro = $x['id_registro'];
+		$titulo = $x['titulo'];
+		$autoridades = retornaAutoridades($x['id_registro']);
+		$autores = $autoridades['string'];
+		$as = retornaTermos($id_registro);
+		$assunto = $as['string'];
+		$id_tabela = $x['id_tabela'];
 		
-		//limpa os ids idreg e os idcat
-		$sql_limpa = "DELETE FROM acervo_relacao_termo WHERE idReg = '$idReg' AND (idCat = 13 OR idCat = 121)";
-		if(mysqli_query($con,$sql_limpa)){
-			echo "Lista de termos limpa <br />";	
+		$sql_conteudo = "SELECT conteudo FROM acervo_partituras WHERE idDisco = '$id_tabela'";
+		$query_conteudo = mysqli_query($con,$sql_conteudo);
+		$c = mysqli_fetch_array($query_conteudo);
+		$conteudo = $c['conteudo'];
+		$conteudo = str_replace("CONTEÚDO:", "", $string); 
+		$conteudo = str_replace("--", "", $string); 		
+		
+		
+		$indexado = $titulo." ".$autores." ".$assunto." ".$conteudo;
+		$sql_insert = "INSERT INTO `acervo_busca` (`id`, `id_registro`, `titulo`, `autor`, `assunto`, `colecao`, `indexado`, `matriz_analitica`) VALUES (NULL, '$id_registro', '$titulo', '$autores', '$assunto','Partitura' , '$indexado',  '')";
+		$insere = mysqli_query($con,$sql_insert);
+		if($insere){
+			echo "$titulo inserido.<br />";
 		}else{
-			echo "Erro ao limpar termos";
+			echo "Erro ao inserir $titulo. <br />";
 		}
-		
-
-		for($i = 0; $i < sizeof($pieces); $i++){
-		$idTermo = recuperaIdTermo(trim($pieces[$i]),121);
-		$idCat = 121;
-		if($idTermo == NULL){
-			$idTermo = recuperaIdTermo(trim($pieces[$i]),13);
-			$idCat = 13;
-		}
-		if(trim($pieces[$i]) != "" AND trim($pieces[$i]) != NULL AND trim($pieces[$i]) != "." AND $idTermo != NULL){
-			$sql_insert = "INSERT INTO acervo_relacao_termo (idReg,idTermo,idTipo,publicado) 
-			VALUES ( '$idReg','$idTermo','$idCat','1')";
-			$query_insert = mysqli_query($con,$sql_insert);
-			if($query_insert){
-				echo "<p>Termo ".trim($pieces[$i])." associado ao registro $idReg;</p>";
-			}else{
-				echo "<p>Erro ao associar termo ".trim($pieces[$i])." ao registro $idReg</p>";
-				
-			}
-		}
-						
-		}		
 	}
 
 	break;
 
 	/////////// Forma Genero
-	case "forma_genero":
+	case "registro_sonoro":
 	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
 	echo "<h1>Criando os registros...</h1><br />";
 	$hoje = date('Y-m-d H:i:s');
@@ -197,16 +192,15 @@ switch($action){
 
 case "inicio":
 ?>
-<h1>Importação dos termos para a base</h1>
+<h1>Gera Index</h1>
 
-<a href="?action=insere">Insere Instrumentação (não esqueça de mudar o nome do campo para res_instr)</a><br />
+<a href="?action=partitura">Partitura</a><br />
 <br />
-<a href="?action=forma_genero">Insere Forma/Gênero (não esqueça de mudar o nome do campo para forma_genero)</a><br />
+<a href="?action=partitura&teste">Partitura Teste</a><br />
 <br />
-<a href="?action=registro">Insere Registro, Local e Data (não esqueça de mudar o nome do campo para local, data)</a><br />
+<a href="?action=registro_sonoro">Registro Sonoro</a><br />
 <br />
-<a href="?action=fix_analiticas">Despublica as analíticas das cópias/exemplares</a><br />
-<br />
+
 
 <?php 
 break;

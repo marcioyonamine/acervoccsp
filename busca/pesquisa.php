@@ -31,42 +31,11 @@ include "../funcoes/funcoesConecta.php";
 
 if(isset($_GET['pesquisa'])){
 	$con = bancoMysqli();
-	$pesquisa = addslashes($_GET['pesquisa']);	
+	$pesquisa = $_GET['pesquisa'];	
 	
-	// roda a tabela registro pela palavra
+	$sql_busca_registro = "SELECT * FROM acervo_busca WHERE indexado LIKE '%$pesquisa%'";
 	
-	//$sql_busca_registro = "SELECT DISTINCT id_registro FROM acervo_registro WHERE titulo LIKE '%$pesquisa%' OR id_registro IN (SELECT DISTINCT idReg FROM acervo_relacao_termo, acervo_termo WHERE acervo_termo.termo LIKE '%$pesquisa%' AND acervo_relacao_termo.idTermo = acervo_termo.id_termo)";
 	
-	//$sql_busca_registro = "SELECT DISTINCT id_registro FROM acervo_registro WHERE titulo LIKE '%$pesquisa%'";
-	
-//	$sql_busca_registro = "SELECT DISTINCT id_registro FROM acervo_registro,acervo_relacao_termo  WHERE acervo_relacao_termo.idReg = acervo_registro.id_registro AND (acervo_registro.titulo LIKE '%$pesquisa%' OR acervo_registro.id_registro IN (SELECT DISTINCT idRel FROM acervo_termo WHERE termo LIKE '%$pesquisa%' AND publicado = '1')) AND acervo_registro.publicado = '1' ";
-
-	if($_GET['tipo'] == 'todo'){
-		$filtro = "";
-	}else if($_GET['tipo'] == 'disco'){
-		$filtro = " AND acervo_registro.tabela = '87'";	
-	}else if($_GET['tipo'] == 'partitura'){
-		$filtro = " AND acervo_registro.tabela = '97'";	
-		
-	}
-	
-	$sql_busca_registro = "SELECT DISTINCT acervo_registro.id_registro 
-							FROM acervo_registro
-							INNER JOIN acervo_relacao_termo ON (acervo_registro.id_registro = acervo_relacao_termo.idReg)
-							INNER JOIN acervo_termo ON (acervo_relacao_termo.idTermo = acervo_termo.id_termo)
-							WHERE (acervo_registro.titulo LIKE '%$pesquisa%' OR acervo_termo.termo LIKE '%$pesquisa%' ) 
-							AND acervo_registro.publicado = 1 
-							AND acervo_relacao_termo.publicado = 1
-							AND acervo_termo.publicado = 1 
-							$filtro
-							";
-
-	/*SELECT tabela1.campos, tabela2.campos 
-FROM tabela1 
-INNER JOIN tabela2 ON (tabela1.id=tabela2.id_tabela1) 
-INNER JOIN tabela3 ON (tabela2.id=tabela3.id_tabela2) // pode ser tabela1 ao invés de tabela2 
-WHERE tabela1.campo=valor 
-*/
 	
 	
 	$qStart = microtime(true);
@@ -120,99 +89,17 @@ WHERE tabela1.campo=valor
 				<br />             
 				<?php 
 				while($res = mysqli_fetch_array($limite)){
-					$reg = recuperaDados("acervo_registro",$res['id_registro'],"id_registro");
-					$colecao = recuperaDados("acervo_acervos",$reg['id_acervo'],"id_acervo");
-					$autoridades = retornaAutoridades($res['id_registro']);
-
-					$termos = retornaTermos($res['id_registro']);
-					switch($reg['tabela']){
-						case 87:
-							$dados = recuperaDados("acervo_discoteca",$reg['id_tabela'],"idDisco");
-							$lista_autoridade = $autoridades['string'];
-							$tombo = $dados['tombo'];
-							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
-								$idReg = idReg($dados['matriz'],87);
-								$aut = retornaAutoridades($idReg);
-								$lista_autoridade = $aut['string'];
-								$matriz = recuperaDados("acervo_discoteca",$idReg,"idDisco");
-
-						
-							}										
-							
-								if($dados['planilha'] == 18){
-								$matriz = recuperaDados("acervo_discoteca",$dados['matriz'],"idDisco");
-
-								$tombo = $matriz['tombo'];
-								}
-							
-							break;
-						
-						case 97:
-							$dados = recuperaDados("acervo_partituras",$reg['id_tabela'],"idDisco");						
-								$lista_autoridade = $autoridades['string'];
-							$tombo = $dados['tombo'];
-
-							if($dados['planilha'] == 18){
-								$matriz = recuperaDados("acervo_partituras",$dados['matriz'],"matriz");
-
-							}
-
-							if($autoridades['string'] == "" AND $dados['planilha'] == 18){
-								$idReg = idReg($dados['matriz'],97);
-								$aut = retornaAutoridades($idReg);
-								$lista_autoridade = $aut['string'];
-								$matriz = recuperaDados("acervo_partituras",$idReg,"idDisco");
-								
-
-
-							}
-								if($dados['planilha'] == 18){
-								$matriz = recuperaDados("acervo_partituras",$dados['matriz'],"idDisco");
-								$tombo = $matriz['tombo']." / ".$matriz['tombo_antigo'];
-								
-								}else{
-									$sql_busca_analitica = "SELECT titulo_disco FROM acervo_partituras WHERE matriz = '".$dados['idDisco']."'";
-									$query_analitica = mysqli_query($con,$sql_busca_analitica);
-									$analiticas = "";
-									while($x = mysqli_fetch_array($query_analitica)){
-										$analiticas .= ", ".$x['titulo_disco'];
-									}
-								}
-
-							
-						break;
-											
-					}
-
 				?>
+
 	            <div class="form-group">
 		            <div class="col-md-offset-2 col-md-8">
                <div class="left">
 
-				<h6><?php echo $reg['titulo']; ?> 
-				<?php
-					if($dados['planilha'] == 17){
-						echo " (Matriz)"; 
-					}else{
-						echo " (Analítica) / ".$matriz['titulo_disco']." (Matriz)"; 
-						} ?></h6>
-                <p><?php 
-									
-				?></p>
+				<h6><?php echo $res['titulo']; ?> </h6>
                
-                <p>Tombo: <?php 
-
-					echo $tombo; 
-
-				
-				?>  <?php if($reg['tabela'] == 97){ echo " / ".$dados['tombo_antigo']; }?> 
-				<?php if($dados['planilha'] == 18 AND $dados['matriz'] == 0 ){ echo " / ".$dados['tombo']; }?> </p>
-                <p>Autoridades: <?php echo $lista_autoridade; ?> </p>
-                <p>Assuntos:<?php echo $termos['string']; ?> </p>
-				 <p>Coleção: <?php echo $colecao['acervo']; ?></p>
-				 <?php if(isset($analiticas) AND $analiticas != ""){?>
-				 <p>Conteúdo: <?php echo $analiticas; $analiticas = "";?></p>
-				 <?php } ?>
+				<p>Autoridades: <?php echo $res['autor']; ?> </p>
+                <p>Assuntos:<?php echo $res['assunto']; ?> </p>
+				 <p>Coleção: <?php echo $res['colecao']; ?></p>
                 			    </div>
 				</div>		            
         	    </div>
