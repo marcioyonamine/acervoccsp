@@ -879,11 +879,42 @@ function opcaoTermoCat($idTipo,$select = NULL){
 	
 }
 
+
 function listaTermos($idReg,$tipo){
+	$con = bancoMysqli();
+	$sql = "SELECT * FROM acervo_relacao_termo WHERE idReg = '$idReg' AND idTipo IN($tipo) AND publicado = '1'";
+	//echo $sql;
+	$query = mysqli_query($con,$sql);
+	$num = mysqli_num_rows($query);
+	if($num > 0){	
+		$y = 0;
+		while($x = mysqli_fetch_array($query)){
+			
+			$termo = recuperaDados("acervo_termo",$x['idTermo'],"id_termo");
+			$tipo = recuperaDados("acervo_tipo",$x['idTipo'],"id_tipo");
+			$w[$y]['idRel'] = $x['idRel'];
+			$w[$y]['termo'] = $termo['termo'];
+			$w[$y]['idTermo'] = $x['idTermo'];
+			$w[$y]['tipo'] = $tipo['tipo'];
+			$w[$y]['idTipo'] = $x['idTipo'];
+			$w[$y]['categoria'] = "";
+			$w[$y]['idCat'] = $x['idCat'];
+			$y++;
+			$w['total'] = $y;
+		}
+	}else{
+		$w['total'] = 0;
+	}
+	$w['sql'] = $sql;
+	return $w;
+
+
+/*
+
 	$con = bancoMysqli();
 	
 	if($tipo == 1){
-		$str_arr =[0][1]; 
+		$str_arr = [0][1]; 
 	}else{
 		$str_arr = explode (",", $tipo);  
 	}	
@@ -921,7 +952,10 @@ function listaTermos($idReg,$tipo){
 	$w['sql'] = $sql;
 	
 	return $w;
+*/
+
 }
+
 
 function extensaoArquivo($arquivo){
 
