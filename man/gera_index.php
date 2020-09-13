@@ -71,36 +71,46 @@ switch($action){
 
 	break;
 
-	/////////// Forma Genero
+	/////////// Registro Sonoro
 	case "registro_sonoro":
 	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
-	echo "<h1>Criando os registros...</h1><br />";
+	echo "<h1>Criando index...</h1><br />";
 	$hoje = date('Y-m-d H:i:s');
-	$sql = "SELECT id, forma_genero FROM temp_partituras $teste";
-	$query = mysqli_query($con,$sql);
-	while($x = mysqli_fetch_array($query)){
-		$idDisco = $x['id'];
-		$desc_geo = $x['forma_genero'];
-		$idReg = idReg($x['id'],97);
-		$idTermo = recuperaIdTermo($x['forma_genero'],15);
-		if(trim($desc_geo) != "" AND $desc_geo != NULL){
-			$sql_insert = "INSERT INTO acervo_relacao_termo (idReg,idTermo,idTipo,publicado) 
-			VALUES ( '$idReg','$idTermo','15','1')";
-			$query_insert = mysqli_query($con,$sql_insert);
-			if($query_insert){
-				echo "<p>Termo $desc_geo associado ao registro $idReg;</p>";
-			}else{
-				echo "<p>Erro ao associar termo $desc_geo ao registro $idReg</p>";
-				
-			}
-		}
-			
-		
-	}
+	$sql_delete = "DELETE FROM `acervo_busca` WHERE colecao = 'Partitura' ";
+	$query = mysqli_query($con,$sql_delete);
 	
-	$depois = strtotime(date('Y-m-d H:i:s'));
-	$tempo = $depois - $antes;
-	echo "<br /><br /> Importação executada em $tempo segundos";
+	
+	$sql = "SELECT id_registro, titulo, id_tabela FROM acervo_registro WHERE tabela = '97' AND publicado = '1' $teste";
+	$query = mysqli_query($con,$sql);
+	
+	
+	
+	while($x = mysqli_fetch_array($query)){
+		$id_registro = $x['id_registro'];
+		$titulo = $x['titulo'];
+		$autoridades = retornaAutoridades($x['id_registro']);
+		$autores = $autoridades['string'];
+		$as = retornaTermos($id_registro);
+		$assunto = $as['string'];
+		$id_tabela = $x['id_tabela'];
+		
+		$sql_conteudo = "SELECT conteudo FROM acervo_partituras WHERE idDisco = '$id_tabela'";
+		$query_conteudo = mysqli_query($con,$sql_conteudo);
+		$c = mysqli_fetch_array($query_conteudo);
+		$conteudo = $c['conteudo'];
+		$conteudo = str_replace("CONTEÚDO:", "", $string); 
+		$conteudo = str_replace("--", "", $string); 		
+		
+		
+		$indexado = $titulo." ".$autores." ".$assunto." ".$conteudo;
+		$sql_insert = "INSERT INTO `acervo_busca` (`id`, `id_registro`, `titulo`, `autor`, `assunto`, `colecao`, `indexado`, `matriz_analitica`) VALUES (NULL, '$id_registro', '$titulo', '$autores', '$assunto','Partitura' , '$indexado',  '')";
+		$insere = mysqli_query($con,$sql_insert);
+		if($insere){
+			echo "$titulo inserido.<br />";
+		}else{
+			echo "Erro ao inserir $titulo. <br />";
+		}
+	}
 	
 	break;
 

@@ -2,26 +2,8 @@
 $con = bancoMysqli();
 include 'includes/menuPartitura.php';
 
-function dataAcervo($tipo,$data){
-	switch($tipo){
-	case 5: //ano
-	
-	break;
-	case 6: //Século
-	
-	break;
-	case 7: // MM/AAAA
-	
-	break;
-	case 8: // DD/MM/AAAA
-	
-	break;
-	
-		
-	}
 
-	
-}
+echo "<p>".breadCrumb()."</p>";
 
 
 

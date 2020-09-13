@@ -1169,36 +1169,38 @@ function reColecao($id){
 	
 }
 
+
 function breadCrumb(){
-	// tipo > coleção > partitura > analítica
-	$reg = recuperaDados("acervo_registro",$_SESSION['idReg'],"id_registro");
-	$str = "";
-	$colecao = reColecao($reg['id_acervo']);
-
-		
-	switch($reg['tabela']){
+	$con = bancoMysqli();
 	
-	case 87:
-		$disco = recuperaDados("acervo_discoteca",$_SESSION['idDisco'],"idDisco");
+	$string = "> ";
 
-		if($_SESSION['idFaixa'] != 0){
-			$faixa = recuperaDados("acervo_discoteca",$_SESSION['idFaxia'],"idDisco");	
-			
-		}else{
-			
+	if(isset($_SESSION['idTabela'])){
+	
+		switch ($_SESSION['idTabela']){
+			case 87:
+				$string .= "<a href=''>FONOGRAMAS</a>";
+			break;
+		
+			case 97:
+				$string .= "<a href='?perfil=discoteca&p=frm_lista_partitura'>PARTITURAS</a>";
+			break;
 		}
 		
-		
-	break;
-	
-	case 97:
-		$partitura = recuperaDados("acervo_discoteca",$_SESSION['idDisco'],"idDisco");
+	}	
 
-	
-	break;	
-	
-	
+	if($_SESSION['idDisco'] != 0){
+		$sql_busca = "SELECT titulo_disco FROM acervo_partituras WHERE idDisco = '".$_SESSION['idDisco']."'";
+		$query_busca = mysqli_query($con,$sql_busca);
+		$reg_busca = mysqli_fetch_array($query_busca);
+		$string .= " > <a href='?perfil=discoteca&p=frm_atualiza_partitura' >".$reg_busca['titulo_disco']."</a>";
+		
+		
 	}
+
+
+	return $string;
+	
 }
 
 
@@ -1431,5 +1433,49 @@ function idRegistro($idDisco,$idTabela){
 	$idReg = mysqli_fetch_array($query);
 	return $idReg['id_registro'];
 }
+
+/*
+function breadCrumb($idRegistro){
+	$con = bancoMysqli();
+	$sql = "SELECT titulo, id_tabela, tabela FROM acervo_registro WHERE id_registro ='$idRegistro'";
+	$query = mysqli_query($con,$sql);
+	$reg = mysqli_fetch_array($query);
+	
+	$id_tabela = $reg['id_tabela'];
+	$tabela = $reg['tabela'];
+	$titulo = $reg['titulo'];
+	
+	
+	switch($tabela){
+		case 87: // registro sonoro
+		$sql_tabela = "SELECT planilha, matriz FROM acervo_discoteca WHERE idDisco = '$idTabela";
+		$query_tabela = mysqli_query($con,$sql_tabela);
+		$reg_tabela = mysqli_fetch_array($query_tabela);
+		
+		if($reg_tabela['matriz'] == 0){ // o registro é matriz
+			
+		}
+		else{
+			$matriz = $reg_tabela['matriz'];
+			$sql_matriz = "SELECT titulo_disco FROM acervo_discoteca WHERE idDisco = 'matriz']";
+			$query_matriz = mysqli_query($con,$sql_matriz);
+			$reg_matriz = mysqli_fetch_array($query_matriz);
+			
+			
+		}
+		
+		
+		break;
+		
+		case 97: //partitura
+		
+		
+		break;
+	}	
+	
+	
+	
+}
+*/
 
 ?>

@@ -33,6 +33,8 @@ if(isset($_SESSION['idFaixa']) AND ($_SESSION['idFaixa'] != 0 AND $_SESSION['idF
 	$_SESSION['idAnalitica'] = $_SESSION['idFaixa'];	
 }
 
+echo "<p>".breadCrumb()."</p>";
+
 include 'includes/menuTermos.php';
 if(isset($_GET['pag'])){
 	$pag = $_GET['pag'];

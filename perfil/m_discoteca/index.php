@@ -1,6 +1,15 @@
 <?php 
 // reseta todas as sessions
 
+if (!isset($_SESSION)) {
+
+// server should keep session data for AT LEAST 24 hour
+ini_set('session.gc_maxlifetime', 60 * 60 * 24);
+
+// each client should remember their session id for EXACTLY 24 hour
+session_set_cookie_params(60 * 60 * 24);
+session_start();
+}
 
 	$_SESSION['idDisco'] = 0;	
 	$_SESSION['idFaixa'] = 0;	

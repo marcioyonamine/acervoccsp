@@ -1,4 +1,7 @@
 ﻿<?php 
+
+echo "<p>".breadCrumb()."</p>";
+
 $con = bancoMysqli();
 $idDisco = $_SESSION['idDisco'];
 $disco = recuperaDados("acervo_partituras",$idDisco,"idDisco");
