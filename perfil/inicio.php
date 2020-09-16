@@ -22,17 +22,18 @@
 
 
 <?php
+
+// limpa o id
 if(isset($_SESSION['idEvento'])){
 	unset($_SESSION['idEvento']);	
 }
-
-
 
 if(isset($_GET['secao'])){
 	$secao = $_GET['secao'];
 }else{
 	$secao = "inicio";
 }
+
 ?>
 <?php switch($secao){
 	
@@ -103,7 +104,7 @@ case "perfil";
 					</thead>
 					<tbody>
 						
-                         <?php listaModulosAlfa($_SESSION['perfil']); ?>
+                         <?php listaModulosBeta($_SESSION['perfil']); ?>
                         
 
 						

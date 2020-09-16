@@ -695,16 +695,16 @@ case "inicio":
 ?>
 <h1>Importação dos termos para a base</h1>
 
-<a href="?action=gravadora">Importar as gravadoras para a tabela "termos"</a><br />
+<a href="?action=gravadora">Importar as gravadoras para a tabela "termos" (INSERT temp_editoras)</a><br />
 <br />
-<a href="?action=editoras">Importar as editoras para a tabela "termos"</a><br />
+<a href="?action=editoras">Importar as editoras para a tabela "termos" (INSERT temp_disco_gravadoras)</a><br />
 <br />
-<a href="?action=meios">Importar meios de expressão para a tabela "termos"</a><br />
+<a href="?action=meios">Importar meios de expressão para a tabela "termos" (temp_meio)</a><br />
 <br />
-<a href="?action=autoridades">Importar autoridades para a tabela "termos"</a><br />
+<a href="?action=autoridades">Importar autoridades para a tabela "termos" (acervo_autoridades)</a><br />
 <br />
-<a href="?action=forma">Importar Forma e Gênero para a tabela "termos"</a><br />
-<a href="?action=formapreteridos">Atualizar Forma e Gênero para autoridades</a><br />
+<a href="?action=forma">Importar Forma e Gênero para a tabela "termos" (temp_forma)</a><br />
+<a href="?action=formapreteridos">Atualizar Forma e Gênero para autoridades </a><br />
 <br />
 <a href="?action=locais">Importar locais para a tabela "termos"</a><br />
 <a href="?action=locaispreteridos">Atualizar preteridos para locais</a><br />

@@ -1,8 +1,8 @@
 <?php 
 
 /*
-igSmc v0.1 - 2015
-ccsplab.org - centro cultural são paulo
+Acervos CCSP v0.1 - 2020
+Estúdio Amarelinha - estudioamarelinha.com
 
 Esta é a página para as funções gerais do sistema.
 
@@ -14,7 +14,6 @@ Esta é a página para as funções gerais do sistema.
 */
 
 // Testes e verificações
-
 
 
 // Conecta-se ao banco de dados MySQL
@@ -68,6 +67,16 @@ function verificaSessao($idUsuario){
 	}
 }
 
+function converterObjParaArray($data) { //função que transforma objeto vindo do json em array
+	if(is_object($data)) {
+		$data = get_object_vars($data);
+	}
+	if(is_array($data)) {
+		return array_map(__FUNCTION__, $data);
+	}else{
+		return $data;
+	}
+}
 
 // Framework
 
@@ -411,6 +420,26 @@ function listaModulosAlfa($perfil){ //gera as tds dos módulos a carregar
 	}	
 }
 
+function listaModulosBeta($perfil){
+	$con = bancoMysqli();
+	$sql = "SELECT * FROM ig_papelusuario WHERE idPapelUsuario = $perfil"; 
+	$campoFetch = mysqli_fetch_array(mysqli_query($con,$sql));
+	$perfil = json_decode($campoFetch['modulos']);
+	
+	foreach($perfil as $f){
+		$descricao = recuperaModulo($f);
+		echo "<tr>";
+		echo "<td class='list_description'><b>".$descricao['nome']."</b></td>";
+		echo "<td class='list_description'>".$descricao['descricao']."</td>";
+		echo "
+		<td class='list_description'>
+		<form method='POST' action='?perfil=".$f."' >
+		<input type ='submit' class='btn btn-theme btn-lg btn-block' value='carregar'></td></form>"	;
+				echo "</tr>";
+		
+	}
+	
+}
 
 function verificaAcesso($usuario,$pagina){ //verifica se o usuário tem permissão de acesso a uma determinada página
 	$sql = "SELECT * FROM ig_usuario,ig_papelusuario WHERE ig_usuario.idUsuario = $usuario AND ig_usuario.ig_papelusuario_idPapelUsuario = ig_papelusuario.idPapelUsuario LIMIT 0,1";
@@ -1050,18 +1079,25 @@ function retornaTermos($registro,$analitica = NULL){
 	
 	
 	
+		}else{
+			$x = array();
 		}
 
 
 	}
 				$str = ",";
+
+		if(sizeof($x) > 0){				
 			for($a = 0; $a < sizeof($x); $a++){
 				$str = ", ".$x[$a]['termo']." ( ".$x[$a]['categoria']. " ) ";
 				$string = $string.$str;
 			} 
-			$x['total'] = $num;
-			$x['string'] = substr($string, 1);
-			return $x;
+		}else{
+			$string = "";
+		}	
+			$y['total'] = $num;
+			$y['string'] = substr($string, 1);
+			return $y;
 	
 }
 }
