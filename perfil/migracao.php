@@ -1,9 +1,26 @@
-﻿<?php
+﻿<section id="services" class="home-section bg-white">
+	<div class="container">
+		<div class="row">
+			 <div class="col-md-offset-2 col-md-8">
+				<div class="section-heading">
+                     <h2>Módulo Discoteca Oneyda Alvarenga</h2>
+					<p><a href="?perfil=man">Retornar a página inicial</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+<?php
    @ini_set('display_errors', '1');
 	error_reporting(E_ALL); 
 
 include "../funcoes/funcoesGerais.php";
 include "../funcoes/funcoesConecta.php";
+$con = bancoMysqli();
+
 
 ?>
 
@@ -12,9 +29,10 @@ include "../funcoes/funcoesConecta.php";
 			  <div class="row">
 				  <div class="col-md-offset-2 col-md-8">
 					<div class="section-heading">
-					 <h3>Migração</h3>
+					 <h1>Migração</h1>
+					 
 					<?php
-					$con = bancoMysqli();
+
 					
 					
 					
@@ -76,6 +94,7 @@ include "../funcoes/funcoesConecta.php";
 						break;
 						
 						case "instrumentacao":
+						echo "<h3>Instrumentação</h3>";
 
 					$con = bancoMysqli();
 					$string = "INSTRUMENTAÇÃO: Voz Solista ; Piano ; . ; . ; . ; . ; . ; . ; . ; .";

@@ -705,7 +705,7 @@ function retornaMes($mes){
 
 }
 
-
+/*
 function validaCPF($cpf = null) {
  
     // Verifica se um número foi informado
@@ -752,6 +752,7 @@ function validaCPF($cpf = null) {
         return true;
     }
 }
+*/
 
 function listaArquivosRegistro($id_registro){ //lista arquivos de determinado registro
 	$con = bancoMysqli();
@@ -998,7 +999,7 @@ return $extensao;
 	
 }
 
-function retornaAutoridades($registro,$analitica = NULL){
+function retornaAutoridades($registro,$analitica = NULL,$tainacan = NULL){
 	$con = bancoMysqli(); //conecta no banco
 	// seleciona todos os termos autoridades ligados ao registro
 	
@@ -1020,19 +1021,27 @@ function retornaAutoridades($registro,$analitica = NULL){
 				
 			}
 	
-			$str = ",";
+			if($tainacan == NULL){
+				$str = ",";
+			}else{
+				$str = " || ";
+			}
 			$string = "";
+			$palavra = "";
 			for($a = 0; $a <= ($num - 1); $a++){
+
 				$str = ", ".$x[$a]['termo']." ( ".$x[$a]['categoria']. " ) ";
 				$string = $string.$str;
+				$palavra .= " || ".$x[$a]['termo'];
 			} 	
 	
 		}else{
-	
+				$palavra = "";
 			$string = "";			
 		}
 		$x['total'] = $num;
 		$x['string'] = trim(substr($string, 1));
+		$x['palavra'] = trim(substr($palavra, 3));
 		if($num == 0){
 			$x['string'] = "";
 			
@@ -1041,6 +1050,19 @@ function retornaAutoridades($registro,$analitica = NULL){
 	}
 	
 }
+
+function retornaTermo($id_termo){
+	$con = bancoMysqli();
+	$sql = "SELECT termo FROM acervo_termo WHERE id_termo = '$id_termo'";
+	$query = mysqli_query($con,$sql);
+	$res = mysqli_fetch_array($query);
+	if(!isset($res['termo']) OR $res['termo'] == NULL){
+		return NULL;
+	}else{
+		return $res['termo'];
+	}
+}
+
 
 function retornaTermos($registro,$analitica = NULL){
 	$con = bancoMysqli(); //conecta no banco
@@ -1191,18 +1213,21 @@ function resumoAutoridades($string){
 }
 
 function reColecao($id){
-	$i= 1;
-	$col[$i] = recuperaDados("acervo_acervos",$id,"id_acervo");
-	$bread = array(1 => $col[$i]['acervo']);
-	while($col[$i]['pai'] != 0){
-		$i++;
-		$col[$i] = recuperaDados("acervo_acervos",$col[$i-1]['id_acervo'],"id_acervo");
-		echo $i;
-		echo $col[$i]['acervo'];
-	}
-	return $bread;	
-
+	$col = recuperaDados("acervo_acervos",$id,"id_acervo");
+	if($col['pai'] == 0){
+		return $col['acervo'];
+	}else{
+		$col2 = recuperaDados("acervo_acervos",$col['pai'],"id_acervo");
+		if($col2['pai'] == 0){
+			return $col['acervo']." || ".$col2['acervo'];
+		}else{
+			$col3 = recuperaDados("acervo_acervos",$col2['pai'],"id_acervo");
+				return $col['acervo']." || ".$col2['acervo'].$col3['acervo'];
+		}
+	}	
 	
+	
+
 }
 
 

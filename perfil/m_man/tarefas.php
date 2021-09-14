@@ -15,6 +15,9 @@
 	<div class="row">
 
 <?php
+//http://localhost/acervo/visual/index.php?perfil=man&p=tarefas&action=tainaca&teste=100
+
+
 @ini_set('display_errors', '1');
 error_reporting(E_ALL); 
 
@@ -251,6 +254,179 @@ switch($_GET['action']){
 	echo "<br /><br /> Importação executada em $tempo segundos";
 	
 	break;
+
+	case "tainacan":
+	
+
+	function descricaoTainacan($id){
+		$idReg = idRegistro($id,97);
+		
+	}
+	
+	
+
+	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+	echo "<h1>Criando index...</h1><br />";
+	$hoje = date('Y-m-d H:i:s');
+	$sql_limpa = "TRUNCATE TABLE `acervo_tainacan`";
+	$query_limpa = mysqli_query($con,$sql_limpa);
+	
+	// partituras
+	
+	$sql = "SELECT id_registro, titulo, id_tabela FROM acervo_registro WHERE tabela = '97' AND publicado = '1' $teste";
+	$query = mysqli_query($con,$sql);
+	
+	$branco = 0;
+	$n2 = 0;
+	
+	while($x = mysqli_fetch_array($query)){
+		$partitura = recuperaDados("acervo_partituras",$x['id_tabela'],"idDisco");
+	
+		//echo "<pre>";
+		//var_dump($x);
+		//echo "</pre>";
+		//$n2++;
+	
+	$colecao; 
+	$titulo = $x['titulo']; 
+	$tombo = $partitura['tombo']." / ".$partitura['tombo_antigo']; 
+	if($partitura['planilha'] == 17){
+		$catalogacao = "Matriz"; 
+		if($partitura['editora'] != NULL){
+			$gravadora = retornaTermo($partitura['editora']); 		
+		}
+		$data = $partitura['data_gravacao'];
+		$medida = $partitura['paginas']." pags";
+		$autor = retornaAutoridades($x['id_tabela']);
+		$autoridade = $autor['palavra'];
+		//$descricao = descricaoTainacan($x['id_registro');
+		
+	}else{
+		$catalogacao = "Analítica"; 
+		$matriz = recuperaDados("acervo_partituras",$partitura['matriz'],"idDisco");
+		if($matriz['editora'] != NULL){
+			$gravadora = retornaTermo($matriz['editora']); 		
+		}
+		$data = $matriz['data_gravacao'];
+		$medida = $matriz['paginas']." pags";
+		$autor = retornaAutoridades(idReg($x['id_tabela'],97));
+		$autoridade = $autor['palavra'];
+	}
+
+	$matriz = "vzo";
+
+	$descricao; 
+	$forma_genero; 
+	$instrumentacao; 
+	$descritores;
+	
+	
+	
+	$sql_insert = "INSERT INTO `acervo_tainacan` (`id`, `colecao`, `tombo`, `catalogacao`, `gravadora`, `medida`, `data`, `titulo`, `autoridade`, `descricao`, `forma_genero`, `instrumentacao`, `descritores`) VALUES (NULL, '', '$tombo', '$catalogacao', '$gravadora', '$medida', '$data', '$titulo', '$autoridade', '', '', '', '')";
+	if(mysqli_query($con,$sql_insert)){
+		echo $titulo." inserido<br />";
+	}
+	
+	
+	}
+
+	$depois = strtotime(date('Y-m-d H:i:s'));
+	$tempo = $depois - $antes;
+	echo "<br /><br /> Importação executada em $tempo segundos";
+	echo "<br /> $n2 registros.<br />";	
+	
+	
+	break;
+	
+	
+	// Migração forma_genero
+	
+	case "tainacan":
+	
+
+	function descricaoTainacan($id){
+		$idReg = idRegistro($id,97);
+		
+	}
+	
+	
+
+	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+	echo "<h1>Criando index...</h1><br />";
+	$hoje = date('Y-m-d H:i:s');
+	$sql_limpa = "TRUNCATE TABLE `acervo_tainacan`";
+	$query_limpa = mysqli_query($con,$sql_limpa);
+	
+	// partituras
+	
+	$sql = "SELECT id_registro, titulo, id_tabela FROM acervo_registro WHERE tabela = '97' AND publicado = '1' $teste";
+	$query = mysqli_query($con,$sql);
+	
+	$branco = 0;
+	$n2 = 0;
+	
+	while($x = mysqli_fetch_array($query)){
+		$partitura = recuperaDados("acervo_partituras",$x['id_tabela'],"idDisco");
+	
+		//echo "<pre>";
+		//var_dump($x);
+		//echo "</pre>";
+		//$n2++;
+	
+	$colecao; 
+	$titulo = $x['titulo']; 
+	$tombo = $partitura['tombo']." / ".$partitura['tombo_antigo']; 
+	if($partitura['planilha'] == 17){
+		$catalogacao = "Matriz"; 
+		if($partitura['editora'] != NULL){
+			$gravadora = retornaTermo($partitura['editora']); 		
+		}
+		$data = $partitura['data_gravacao'];
+		$medida = $partitura['paginas']." pags";
+		$autor = retornaAutoridades($x['id_tabela']);
+		$autoridade = $autor['palavra'];
+		//$descricao = descricaoTainacan($x['id_registro');
+		
+	}else{
+		$catalogacao = "Analítica"; 
+		$matriz = recuperaDados("acervo_partituras",$partitura['matriz'],"idDisco");
+		if($matriz['editora'] != NULL){
+			$gravadora = retornaTermo($matriz['editora']); 		
+		}
+		$data = $matriz['data_gravacao'];
+		$medida = $matriz['paginas']." pags";
+		$autor = retornaAutoridades(idReg($x['id_tabela'],97));
+		$autoridade = $autor['palavra'];
+	}
+
+	$matriz = "vzo";
+
+	$descricao; 
+	$forma_genero; 
+	$instrumentacao; 
+	$descritores;
+	
+	
+	
+	$sql_insert = "INSERT INTO `acervo_tainacan` (`id`, `colecao`, `tombo`, `catalogacao`, `gravadora`, `medida`, `data`, `titulo`, `autoridade`, `descricao`, `forma_genero`, `instrumentacao`, `descritores`) VALUES (NULL, '', '$tombo', '$catalogacao', '$gravadora', '$medida', '$data', '$titulo', '$autoridade', '', '', '', '')";
+	if(mysqli_query($con,$sql_insert)){
+		echo $titulo." inserido<br />";
+	}
+	
+	
+	}
+
+	$depois = strtotime(date('Y-m-d H:i:s'));
+	$tempo = $depois - $antes;
+	echo "<br /><br /> Importação executada em $tempo segundos";
+	echo "<br /> $n2 registros.<br />";	
+	
+	
+	break;
+	
+	
+
+
 
 }
 ?>

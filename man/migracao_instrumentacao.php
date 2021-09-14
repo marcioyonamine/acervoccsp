@@ -66,13 +66,13 @@ switch($action){
 	$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
 	echo "<h1>Criando os registros...</h1><br />";
 	$hoje = date('Y-m-d H:i:s');
-	$sql = "SELECT id, forma_genero FROM temp_partituras $teste";
+	$sql = "SELECT id, `Forma/Gênero` FROM temp_partituras $teste";
 	$query = mysqli_query($con,$sql);
 	while($x = mysqli_fetch_array($query)){
 		$idDisco = $x['id'];
-		$desc_geo = $x['forma_genero'];
+		$desc_geo = $x['Forma/Gênero'];
 		$idReg = idReg($x['id'],97);
-		$idTermo = recuperaIdTermo($x['forma_genero'],15);
+		$idTermo = recuperaIdTermo($decs_geo,15);
 		if(trim($desc_geo) != "" AND $desc_geo != NULL){
 			$sql_insert = "INSERT INTO acervo_relacao_termo (idReg,idTermo,idTipo,publicado) 
 			VALUES ( '$idReg','$idTermo','15','1')";

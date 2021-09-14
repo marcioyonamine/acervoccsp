@@ -62,6 +62,10 @@ session_start();
 							<td><a href="?perfil=man&p=tarefas&action=limpatabela">Limpa tabela indexado</td>
 							<td>Limpa a tabela indexado. Utilize se for gerar uma indexação do zero.</td>
 						</tr>					
+						<tr>
+							<td><a href="?perfil=man&p=migracao&action=instrumentacao">Migração instrumentação - partituras</td>
+							<td>Migra o campo instrumentação da base antiga de partituras para a nova.</td>
+						</tr>
 					
 					</tbody>
 					</table> 	
