@@ -732,8 +732,12 @@ function termosRuins($termo){
 						$hoje = date('Y-m-d H:i:s');
 						$i = 0;
 						
-						$update_busca_termos = "UPDATE acervo_relacao_termo SET publicado = 0 WHERE idTermo IN(SELECT id_termo FROM acervo_termo WHERE termo = '')";
+						$update_busca_termos = "DELETE FROM `acervo_relacao_termo` WHERE idTermo IN(SELECT id_termo FROM acervo_termo WHERE termo = '')";
 						$query_busca_termos = mysqli_query($con,$update_busca_termos);
+
+						$delete_termos = "DELETE FROM `acervo_termo` WHERE termo = ''";
+						$query_delete_termos = mysqli_query($con,$delete_termos);
+
 						echo "<pre>";
 						var_dump($query_busca_termos);
 						echo "</pre>";

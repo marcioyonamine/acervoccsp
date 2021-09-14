@@ -70,6 +70,11 @@ session_start();
 							<td><a href="?perfil=man&p=migracao&action=termos_fonogramas">Migração Termos - partituras</td>
 							<td>Migra o campo instrumentação, meio de expressão, forma/gênero, descritor geográfico e descritor cronológico da base antiga de partituras para a base nova.</td>
 						</tr>					
+						<tr>
+							<td><a href="?perfil=man&p=migracao&action=limpa_termos">Limpa termos</td>
+							<td>Deleta registros com termos vazios.</td>
+						</tr>	
+
 					</tbody>
 					</table> 	
 				</div>
