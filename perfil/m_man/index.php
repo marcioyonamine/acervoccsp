@@ -63,10 +63,13 @@ session_start();
 							<td>Limpa a tabela indexado. Utilize se for gerar uma indexação do zero.</td>
 						</tr>					
 						<tr>
-							<td><a href="?perfil=man&p=migracao&action=instrumentacao">Migração instrumentação - partituras</td>
-							<td>Migra o campo instrumentação da base antiga de partituras para a nova.</td>
+							<td><a href="?perfil=man&p=migracao&action=termos_partituras">Migração Termos - partituras</td>
+							<td>Migra o campo instrumentação, meio de expressão, forma/gênero, descritor geográfico e descritor cronológico da base antiga de partituras para a base nova.</td>
 						</tr>
-					
+						<tr>
+							<td><a href="?perfil=man&p=migracao&action=termos_fonogramas">Migração Termos - partituras</td>
+							<td>Migra o campo instrumentação, meio de expressão, forma/gênero, descritor geográfico e descritor cronológico da base antiga de partituras para a base nova.</td>
+						</tr>					
 					</tbody>
 					</table> 	
 				</div>
