@@ -4,7 +4,7 @@
 
 $con = bancoMysqli();
 $teste = "3";
-//$limite = " LIMIT 0,200";
+//$limite = " LIMIT 0,1000";
 $limite = "";
 set_time_limit(0);
 
@@ -430,7 +430,7 @@ function termosRuins($termo){
 						//echo $sql_busca;
 						while($res = mysqli_fetch_array($query_busca)){
 							
-							$sql_busca_temp = "SELECT * FROM temp_discoteca WHERE idDisco = '".$res['idDisco']."'";		
+							$sql_busca_temp = "SELECT * FROM temp_discoteca WHERE idDisco = '".$res['idTemp']."'";		
 							$query_busca_temp = mysqli_query($con,$sql_busca_temp);
 							
 							while($res_temp = mysqli_fetch_array($query_busca_temp)){ // while 2
@@ -749,6 +749,220 @@ function termosRuins($termo){
 						echo "<br /><br /> Importação executada em $tempo segundos";						
 						
 						break;
+						
+
+
+						case "matriz_analiticas_fonogramas":
+				
+						echo "<h3>Associar Matrizes e Analíticas - Fonogramas</h3>";
+						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+						echo "<h1>Criando os registros...</h1><br />";
+						$hoje = date('Y-m-d H:i:s');
+						$i = 0;
+						
+						$sql_busca = "SELECT idDisco,tombo FROM acervo_discoteca WHERE planilha = '18' AND idTemp <> '0' $limite"; // busca todos as analíticas
+						//echo $sql_busca;
+						$query_busca = mysqli_query($con,$sql_busca);
+						while($res = mysqli_fetch_array($query_busca)){
+							$id_analitica = $res['idDisco'];
+							$tombo = $res['tombo'];
+							$id_matriz = retornaMatrizId($tombo);
+							if($id_matriz['status'] > 0){
+								//atualiza o banco
+								$sql_update = "UPDATE acervo_discoteca SET matriz = '".$id_matriz['matriz']."' WHERE idDisco = '$id_analitica'";
+								if(mysqli_query($con,$sql_update)){
+									//echo $id_analitica." atualizado.<br />";
+								}else{
+									//echo "erro ao atualizar registro $id_analitica<br />";
+								}
+							}
+							
+							if($id_matriz['status'] == 0){
+								echo "O $tombo ($id_analitica) não possui matriz.<br />";
+							}		
+							if($id_matriz['status'] > 1){
+								echo "O $tombo está duplicado(".$id_matriz['status'].").<br />";
+							}
+							
+							
+							
+						}
+						
+						
+
+						//echo "<pre>";
+						//var_dump($query_busca_termos);
+						//echo "</pre>";
+						
+						
+
+						$depois = strtotime(date('Y-m-d H:i:s'));
+						$tempo = $depois - $antes;
+						echo "<br /><br /> Importação executada em $tempo segundos";						
+						
+						break;
+
+
+						case "matriz_analiticas_partituras":
+				
+						echo "<h3>Associar Matrizes e Analíticas - Partituras</h3>";
+						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+						echo "<h1>Criando os registros...</h1><br />";
+						$hoje = date('Y-m-d H:i:s');
+						$i = 0;
+						
+						$sql_busca = "SELECT idDisco,tombo FROM acervo_partituras WHERE planilha = '18'  AND idTemp <> '0' $limite"; // busca todos as analíticas
+						//echo $sql_busca;
+						$query_busca = mysqli_query($con,$sql_busca);
+						while($res = mysqli_fetch_array($query_busca)){
+							$id_analitica = $res['idDisco'];
+							$tombo = $res['tombo'];
+							$id_matriz = retornaMatrizId($tombo);
+							if($id_matriz['status'] > 0){
+								//atualiza o banco
+								$sql_update = "UPDATE acervo_partituras SET matriz = '".$id_matriz['matriz']."' WHERE idDisco = '$id_analitica'";
+								if(mysqli_query($con,$sql_update)){
+									//echo $id_analitica." atualizado.<br />";
+								}else{
+									//echo "erro ao atualizar registro $id_analitica<br />";
+								}
+							}
+							
+							if($id_matriz['status'] == 0){
+								echo "O $tombo ($id_analitica) não possui matriz.<br />";
+							}		
+							if($id_matriz['status'] > 1){
+								echo "O $tombo está duplicado(".$id_matriz['status'].").<br />";
+							}
+							
+							
+							
+						}
+						
+						
+
+						//echo "<pre>";
+						//var_dump($query_busca_termos);
+						//echo "</pre>";
+						
+						
+
+						$depois = strtotime(date('Y-m-d H:i:s'));
+						$tempo = $depois - $antes;
+						echo "<br /><br /> Importação executada em $tempo segundos";						
+						
+						break;						
+						
+						
+						
+						
+						case "numero_partituras": // numero de partituras, exemplares, registro, data da edição/publicação(21)(cXXXX).
+				
+				
+				
+						echo "<h3>Número de partituras, exemplares, registro e data da edição/publicação - Partituras</h3>";
+						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+						echo "<h1>Criando os registros...</h1><br />";
+						$hoje = date('Y-m-d H:i:s');
+						$i = 0;
+						
+						$sql_busca = "SELECT idDisco,tombo FROM temp_partituras WHERE planilha = '18' $limite"; // busca todos as analíticas
+						//echo $sql_busca;
+						$query_busca = mysqli_query($con,$sql_busca);
+						while($res = mysqli_fetch_array($query_busca)){
+							$id_analitica = $res['idDisco'];
+							$tombo = $res['tombo'];
+							$id_matriz = retornaMatrizId($tombo);
+							if($id_matriz['status'] > 0){
+								//atualiza o banco
+								$sql_update = "UPDATE acervo_partituras SET matriz = '".$id_matriz['matriz']."' WHERE idDisco = '$id_analitica'";
+								if(mysqli_query($con,$sql_update)){
+									echo $id_analitica." atualizado.<br />";
+								}else{
+									echo "erro ao atualizar registro $id_analitica<br />";
+								}
+							}
+							
+							if($id_matriz['status'] == 0){
+								echo "O $tombo não possui matriz.<br />";
+							}		
+							if($id_matriz['status'] > 1){
+								echo "O $tombo está duplicado(".$id_matriz['status'].").<br />";
+							}
+							
+							
+							
+						}
+						
+						
+
+						//echo "<pre>";
+						//var_dump($query_busca_termos);
+						//echo "</pre>";
+						
+						
+
+						$depois = strtotime(date('Y-m-d H:i:s'));
+						$tempo = $depois - $antes;
+						echo "<br /><br /> Importação executada em $tempo segundos";						
+						
+						break;							
+						
+						case "numero_discoteca": // numero de faixas, exemplares, registro, data da edição/publicação(21)(pXXXX).
+				
+				
+				
+						echo "<h3>Número de partituras, exemplares, registro e data da edição/publicação - Partituras</h3>";
+						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+						echo "<h1>Criando os registros...</h1><br />";
+						$hoje = date('Y-m-d H:i:s');
+						$i = 0;
+						
+						$sql_busca = "SELECT idDisco,tombo FROM temp_partituras WHERE planilha = '18' $limite"; // busca todos as analíticas
+						//echo $sql_busca;
+						$query_busca = mysqli_query($con,$sql_busca);
+						while($res = mysqli_fetch_array($query_busca)){
+							$id_analitica = $res['idDisco'];
+							$tombo = $res['tombo'];
+							$id_matriz = retornaMatrizId($tombo);
+							if($id_matriz['status'] > 0){
+								//atualiza o banco
+								$sql_update = "UPDATE acervo_partituras SET matriz = '".$id_matriz['matriz']."' WHERE idDisco = '$id_analitica'";
+								if(mysqli_query($con,$sql_update)){
+									echo $id_analitica." atualizado.<br />";
+								}else{
+									echo "erro ao atualizar registro $id_analitica<br />";
+								}
+							}
+							
+							if($id_matriz['status'] == 0){
+								echo "O $tombo não possui matriz.<br />";
+							}		
+							if($id_matriz['status'] > 1){
+								echo "O $tombo está duplicado(".$id_matriz['status'].").<br />";
+							}
+							
+							
+							
+						}
+						
+						
+
+						//echo "<pre>";
+						//var_dump($query_busca_termos);
+						//echo "</pre>";
+						
+						
+
+						$depois = strtotime(date('Y-m-d H:i:s'));
+						$tempo = $depois - $antes;
+						echo "<br /><br /> Importação executada em $tempo segundos";						
+						
+						break;							
+
+						
+						
+						
 						
 						
 						

@@ -1539,4 +1539,69 @@ function breadCrumb($idRegistro){
 }
 */
 
+
+function retornaMatrizId($tombo){
+	/*
+	
+	DISC P.00044 //12
+	D-22172 - Lado 1 - Faixa 01
+	D78-44528 - Lado 2
+	CD-00003 - Faixa 16
+	*/
+
+	// Verifica o tipo de tombo
+	
+	$tipo = NULL;
+	$sql_busca = NULL;
+	$con = bancoMysqli();
+	$x['status'] = NULL;
+	$x['matriz'] = NULL;
+
+	if (mb_strpos($tombo, 'DISC P.') !== false) {
+		$tipo = "Partitura";
+		$tombo_busca = substr($tombo, 0, 12);
+		$sql_busca = "SELECT idDisco FROM acervo_partituras WHERE tombo LIKE '$tombo_busca'";
+	}
+
+	if (mb_strpos($tombo, 'D-') !== false) {
+		$tipo = "Disco";
+		$tombo_busca = substr($tombo, 0, 7);
+		$sql_busca = "SELECT idDisco FROM acervo_discoteca WHERE tombo LIKE '$tombo_busca'";
+	}
+
+	if (mb_strpos($tombo, 'D78-') !== false) {
+		$tipo = "Disco 78RPM";
+		$tombo_busca = substr($tombo, 0, 9);
+		$sql_busca = "SELECT idDisco FROM acervo_discoteca WHERE tombo LIKE '$tombo_busca'";
+	}
+
+	if (mb_strpos($tombo, 'CD-') !== false) {
+		$tipo = "CD";
+		$tombo_busca = substr($tombo, 0, 8);
+		$sql_busca = "SELECT idDisco FROM acervo_discoteca WHERE tombo LIKE '$tombo_busca'";
+	}
+	
+	if($sql_busca != NULL){
+		$query_busca = mysqli_query($con,$sql_busca);
+		$res = mysqli_fetch_array($query_busca);
+		if($query_busca->num_rows != 0 ){
+			$x['status'] = $query_busca->num_rows;
+			$x['matriz'] = $res['idDisco'];	
+		}
+	}
+
+
+	return $x;
+	
+	
+
+
+
+
+
+
+	
+}
+
+
 ?>

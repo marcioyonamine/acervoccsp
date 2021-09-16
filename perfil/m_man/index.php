@@ -75,6 +75,14 @@ session_start();
 							<td>Deleta registros com termos vazios.</td>
 						</tr>	
 
+						<tr>
+							<td><a href="?perfil=man&p=migracao&action=matriz_analiticas_fonogramas">Analíticas Fonogramas</a></td>
+							<td>Relaciona as analíticas às matrizes nos fonogramas</td>
+						</tr>
+						<tr>
+							<td><a href="?perfil=man&p=migracao&action=matriz_analiticas_partituras">Analíticas Partituras</a></td>
+							<td>Relaciona as analíticas às matrizes nas partituras</td>
+						</tr>
 					</tbody>
 					</table> 	
 				</div>
