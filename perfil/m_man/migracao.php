@@ -784,11 +784,21 @@ function termosRuins($termo){
 								echo "O $tombo está duplicado(".$id_matriz['status'].").<br />";
 							}
 							
-							
-							
+							// número de analíticas
+							$sql_conta = "SELECT idDisco FROM acervo_discoteca WHERE planilha = '18' AND tombo LIKE '%$tombo%'";
+							$n = mysqli_query($con,$sql_conta);
+							if($n->num_rows > 1){
+								$update_conta = "UPDATE acervo_discoteca SET faixas = '".$n->num_rows."' WHERE tombo = '$tombo' AND planilha = '17'";
+								if(mysqli_query($con,$update_conta)){
+									echo "Número de faixas atualizados no tombo $tombo.<br />";
+									
+								}else{
+									echo "Erro ao atualizar múmero de faixas no tombo $tombo.<br />";
+								
+								}
+							}
+						
 						}
-						
-						
 
 						//echo "<pre>";
 						//var_dump($query_busca_termos);
@@ -835,6 +845,20 @@ function termosRuins($termo){
 								echo "O $tombo está duplicado(".$id_matriz['status'].").<br />";
 							}
 							
+							// número de analíticas
+							$sql_conta = "SELECT idDisco FROM acervo_partituras WHERE planilha = '18' AND tombo LIKE '%$tombo%'";
+							$n = mysqli_query($con,$sql_conta);
+							if($n->num_rows > 1){
+								$update_conta = "UPDATE acervo_partituras SET faixas = '".$n->num_rows."' WHERE tombo = '$tombo' AND planilha = '17'";
+								if(mysqli_query($con,$update_conta)){
+									echo "Número de faixas atualizados no tombo $tombo.<br />";
+									
+								}else{
+									echo "Erro ao atualizar múmero de faixas no tombo $tombo.<br />";
+								
+								}
+							}
+
 							
 							
 						}
