@@ -7,6 +7,7 @@ $teste = "3";
 //$limite = " LIMIT 0,1000";
 $limite = "";
 set_time_limit(0);
+$semdata = array("sem data",NULL,"NÃO DELETAR ESTE REGISTRO","c [sem data]","sem data sp","","NÃO DELETAR ESTE REGISTRO","[sem data]","[s.d]");
 
 
 
@@ -932,42 +933,45 @@ function termosRuins($termo){
 						
 						break;							
 						
-						case "numero_discoteca": // numero de faixas, exemplares, registro, data da edição/publicação(21)(pXXXX).
+						case "registro_discoteca": // numero de faixas, exemplares, registro, data da edição/publicação(21)(pXXXX).
 				
 				
 				
-						echo "<h3>Número de partituras, exemplares, registro e data da edição/publicação - Partituras</h3>";
+						echo "<h3>Registro e data da edição/publicação - Partituras</h3>";
 						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
 						echo "<h1>Criando os registros...</h1><br />";
 						$hoje = date('Y-m-d H:i:s');
 						$i = 0;
 						
-						$sql_busca = "SELECT idDisco,tombo FROM temp_partituras WHERE planilha = '18' $limite"; // busca todos as analíticas
+
+						
+						$sql_busca = "SELECT id,Data,n_chapa FROM temp_partituras WHERE planilha = '17' $limite"; // busca todos as matrizes
 						//echo $sql_busca;
 						$query_busca = mysqli_query($con,$sql_busca);
 						while($res = mysqli_fetch_array($query_busca)){
-							$id_analitica = $res['idDisco'];
-							$tombo = $res['tombo'];
-							$id_matriz = retornaMatrizId($tombo);
-							if($id_matriz['status'] > 0){
-								//atualiza o banco
-								$sql_update = "UPDATE acervo_partituras SET matriz = '".$id_matriz['matriz']."' WHERE idDisco = '$id_analitica'";
-								if(mysqli_query($con,$sql_update)){
-									echo $id_analitica." atualizado.<br />";
-								}else{
-									echo "erro ao atualizar registro $id_analitica<br />";
-								}
+							$idTemp = $res['id'];
+							$data = $res['Data'];
+							$registro = $res['n_chapa'];
+							if(in_array($data,$semdata)){
+								$data = '9999';	
+							}else{
+								$data = preg_replace('/[^0-9]/', '', $data);
+							}
+						
+							$sql_atualiza = "UPDATE `acervo_partituras` SET 
+							`tipo_data` = '21',
+							`registro` = '$registro',
+							`data_gravacao` = '$data'							
+							WHERE `acervo_partituras`.`idTemp` = $idTemp;";
+							if(mysqli_query($con,$sql_atualiza)){
+								echo "Registro $idTemp atualizado com sucesso.<br />";
+							}else{
+								echo "Erro ao atualizar o regisgro $idTemp. / $sql_atualiza<br />";
+								
 							}
 							
-							if($id_matriz['status'] == 0){
-								echo "O $tombo não possui matriz.<br />";
-							}		
-							if($id_matriz['status'] > 1){
-								echo "O $tombo está duplicado(".$id_matriz['status'].").<br />";
-							}
 							
-							
-							
+
 						}
 						
 						

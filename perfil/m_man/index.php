@@ -83,6 +83,12 @@ session_start();
 							<td><a href="?perfil=man&p=migracao&action=matriz_analiticas_partituras">Analíticas Partituras</a></td>
 							<td>Relaciona as analíticas às matrizes nas partituras</td>
 						</tr>
+						<tr>
+							<td><a href="?perfil=man&p=migracao&action=registro_partituras">Registro e Data Partituras</a></td>
+							<td>Atualiza o campo registro e data das partituras.</td>
+						</tr>
+
+
 					</tbody>
 					</table> 	
 				</div>
