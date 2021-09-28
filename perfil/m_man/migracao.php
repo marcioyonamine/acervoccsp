@@ -891,7 +891,7 @@ function termosRuins($termo){
 						$hoje = date('Y-m-d H:i:s');
 						$i = 0;
 						
-						$sql_busca = "SELECT id,tombo FROM temp_partituras WHERE planilha = '18' $limite"; // busca todos as analíticas
+						$sql_busca = "SELECT id,resumo_tombo FROM temp_partituras WHERE planilha = '18' $limite"; // busca todos as analíticas
 						//echo $sql_busca;
 						$query_busca = mysqli_query($con,$sql_busca);
 						while($res = mysqli_fetch_array($query_busca)){
