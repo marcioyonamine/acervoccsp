@@ -900,7 +900,7 @@ function termosRuins($termo){
 							$id_matriz = retornaMatrizId($tombo);
 							if($id_matriz['status'] > 0){
 								//atualiza o banco
-								$sql_update = "UPDATE acervo_partituras SET matriz = '".$id_matriz['matriz']."' WHERE idDisco = '$id_analitica'";
+								$sql_update = "UPDATE acervo_partituras SET matriz = '".$id_matriz['matriz']."' WHERE idTemp = '$id_analitica'";
 								if(mysqli_query($con,$sql_update)){
 									echo $id_analitica." atualizado.<br />";
 								}else{
