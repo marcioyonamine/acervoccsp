@@ -896,7 +896,7 @@ function termosRuins($termo){
 						$query_busca = mysqli_query($con,$sql_busca);
 						while($res = mysqli_fetch_array($query_busca)){
 							$id_analitica = $res['id'];
-							$tombo = $res['tombo'];
+							$tombo = $res['resumo_tombo'];
 							$id_matriz = retornaMatrizId($tombo);
 							if($id_matriz['status'] > 0){
 								//atualiza o banco
