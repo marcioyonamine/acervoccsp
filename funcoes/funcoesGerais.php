@@ -913,6 +913,19 @@ function opcaoTermoCat($idTipo,$select = NULL){
 function listaTermos($idReg,$tipo){
 	$con = bancoMysqli();
 	$sql = "SELECT * FROM acervo_relacao_termo WHERE idReg = '$idReg' AND idTipo IN($tipo) AND publicado = '1'";
+	/*
+	15 // Forma / Gênero
+	13 // Meio de Expressão
+	85 // Série
+	119 // Descritor Geográfico
+	121 // Instrumentação
+	14 // Local
+	78 // Categoria
+	12 // Gravadora
+	100 // Editora
+	122 // Descritor Cronológico
+	*/
+	
 	//echo $sql;
 	$query = mysqli_query($con,$sql);
 	$num = mysqli_num_rows($query);
@@ -921,16 +934,18 @@ function listaTermos($idReg,$tipo){
 		while($x = mysqli_fetch_array($query)){
 			
 			$termo = recuperaDados("acervo_termo",$x['idTermo'],"id_termo");
-			$tipo = recuperaDados("acervo_tipo",$x['idTipo'],"id_tipo");
-			$w[$y]['idRel'] = $x['idRel'];
-			$w[$y]['termo'] = $termo['termo'];
-			$w[$y]['idTermo'] = $x['idTermo'];
-			$w[$y]['tipo'] = $tipo['tipo'];
-			$w[$y]['idTipo'] = $x['idTipo'];
-			$w[$y]['categoria'] = "";
-			$w[$y]['idCat'] = $x['idCat'];
-			$y++;
-			$w['total'] = $y;
+			if($termo != "" OR $termo != NULL){
+				$tipo = recuperaDados("acervo_tipo",$x['idTipo'],"id_tipo");
+				$w[$y]['idRel'] = $x['idRel'];
+				$w[$y]['termo'] = $termo['termo'];
+				$w[$y]['idTermo'] = $x['idTermo'];
+				$w[$y]['tipo'] = $tipo['tipo'];
+				$w[$y]['idTipo'] = $x['idTipo'];
+				$w[$y]['categoria'] = "";
+				$w[$y]['idCat'] = $x['idCat'];
+				$y++;
+				$w['total'] = $y;
+			}
 		}
 	}else{
 		$w['total'] = 0;
@@ -1593,15 +1608,38 @@ function retornaMatrizId($tombo){
 
 	return $x;
 	
-	
-
-
-
-
-
-
-	
 }
 
+function retornaTipo($id){
+	return recuperaDados("acervo_tipo",$id,"id_tipo");
+}
+
+function geraConteudo($idDisco){
+	$con = bancoMysqli();
+	$sql_matriz = "SELECT matriz FROM acervo_partituras WHERE idDisco = '$idDisco'";
+	$query_matriz = mysqli_fetch_array(mysqli_query($con,$sql_matriz));
+	$matriz = $query_matriz['matriz'];
+
+	$conteudo = "";
+	if($matriz == 0){ // ela é a matriz, busca as analíticas
+		$sql_busca_analiticas = "SELECT idDisco,id_registro,titulo FROM acervo_registro, acervo_partituras WHERE acervo_partituras.idDisco = acervo_registro.id_tabela  AND matriz = '$idDisco' AND publicado = '1' AND tabela = '97'";
+		$query_busca_analiticas = mysqli_query($con,$sql_busca_analiticas);
+		while($res = mysqli_fetch_array($query_busca_analiticas)){
+			$autor = retornaAutoridades($res['id_registro']);
+			$conteudo .= addslashes($res['titulo']." ( ".$autor['string']." )<br />");		
+		}
+	}else{ // ela é a analítica, busca dos dados da matriz
+		$conteudo = "Registro Matriz: ";	
+		$sql = "SELECT titulo,id_registro FROM acervo_registro, acervo_partituras WHERE acervo_partituras.idDisco = acervo_registro.id_tabela AND  idDisco = '$matriz' AND publicado = '1' AND tabela = '97'";
+		$query = mysqli_query($con,$sql);
+		$res = mysqli_fetch_array($query);
+		$autor = retornaAutoridades($res['id_registro']);
+		$conteudo .= addslashes($res['titulo']." / ".$autor['string']." <br />");		
+		
+	}
+	
+	return $conteudo;
+	
+}
 
 ?>

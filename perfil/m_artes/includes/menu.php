@@ -4,7 +4,7 @@ if(isset($_SESSION['tabela'])){
 	
 }
 //geram o insert pro framework da igsis
-$pasta = "?perfil=discoteca&p=";
+$pasta = "?perfil=artes&p=";
 ?>
 
 
@@ -12,26 +12,18 @@ $pasta = "?perfil=discoteca&p=";
 			<div id="dl-menu" class="dl-menuwrapper">
 						<button class="dl-trigger">Open Menu</button>
 						<ul class="dl-menu">
-						<li><a href="#">Registros Sonoros</a>	
+						<li><a href="#">Obras</a>	
 								<ul class="dl-submenu">
-									<li><a href="<?php echo $pasta."frm_lista_sonoro"; ?>">Listar registros</a></li>
-									<li><a href="<?php echo $pasta."frm_insere_sonoro"; ?>">Inserir registro</a></li>
-   									<li><a href="<?php echo $pasta."frm_busca_sonoro"; ?>">Busca registro</a></li>
+									<li><a href="<?php echo $pasta."frm_lista_obras"; ?>">Listar obras</a></li>
+									<li><a href="<?php echo $pasta."frm_insere_obra"; ?>">Inserir obra</a></li>
+   									<li><a href="<?php echo $pasta."frm_busca_obra"; ?>">Busca obra</a></li>
 							</ul>
 						</li>
-						<li><a href="#">Partituras</a>	
+						<li><a href="#">Arte Postal</a>	
 								<ul class="dl-submenu">
-									<li><a href="<?php echo $pasta."frm_lista_partitura"; ?>">Listar partituras</a></li>
-									<li><a href="<?php echo $pasta."frm_insere_partitura"; ?>">Inserir partitura</a></li>
-   									<li><a href="<?php echo $pasta."frm_busca_partitura"; ?>">Busca partitura</a></li>
-									</ul>
-						</li>
-						<li><a href="#">Audiovisual</a>	
-								<ul class="dl-submenu">
-									<li><a href="<?php echo $pasta."frm_lista_av"; ?>">Listar filmes</a></li>
-									<li><a href="<?php echo $pasta."frm_insere_av"; ?>">Inserir filme</a></li>
-									<li><a href="<?php echo $pasta."frm_insere_av"; ?>">Buscar filme</a></li>
-
+									<li><a href="<?php echo $pasta."frm_lista_postal"; ?>">Listar partituras</a></li>
+									<li><a href="<?php echo $pasta."frm_insere_postal"; ?>">Inserir partitura</a></li>
+   									<li><a href="<?php echo $pasta."frm_busca_postal"; ?>">Busca partitura</a></li>
 									</ul>
 						</li>
                        	<li><a href="#">Autoridades</a>	
@@ -46,7 +38,7 @@ $pasta = "?perfil=discoteca&p=";
 									<li><a href="<?php echo $pasta."frm_insere_termo"; ?>">Inserir termo</a></li>
 									</ul>
 						</li>
-                        <li><a href="<?php echo $pasta."frm_lista_ultimo"; ?>">Últimos registros inseridos</a></li>
+                        <li><a href="<?php echo $pasta."frm_lista_ultimo"; ?>">Últimas obras inseridas</a></li>
 						<li><a href="#">Outras Opções</a> 
     
                                     <ul class="dl-submenu">

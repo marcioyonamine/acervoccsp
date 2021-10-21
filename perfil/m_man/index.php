@@ -11,13 +11,6 @@ session_set_cookie_params(60 * 60 * 24);
 session_start();
 }
 
-	$_SESSION['idDisco'] = 0;	
-	$_SESSION['idFaixa'] = 0;	
-	$_SESSION['idTabela'] = 0;	
-	$_SESSION['idReg'] = 0;	
-	$_SESSION['idAnalitica'] = 0;
-
-
 ?>
 
 
@@ -87,7 +80,14 @@ session_start();
 							<td><a href="?perfil=man&p=migracao&action=registro_partituras">Registro e Data Partituras</a></td>
 							<td>Atualiza o campo registro e data das partituras.</td>
 						</tr>
-
+						<tr>
+							<td><a href="?perfil=man&p=migracao&action=ronoel">Acervo Ronoel</a></td>
+							<td>Importa tabela Ronoel para o sistema.</td>
+						</tr>
+						<tr>
+							<td><a href="?perfil=man&p=migracao&action=tainacan_partituras">Tainacan - partituras</a></td>
+							<td>Gera Tabela para Tainacan Partituras.</td>
+						</tr>
 
 					</tbody>
 					</table> 	

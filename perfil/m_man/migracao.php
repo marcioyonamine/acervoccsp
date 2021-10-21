@@ -4,7 +4,7 @@
 
 $con = bancoMysqli();
 $teste = "3";
-//$limite = " LIMIT 0,1000";
+//$limite = " LIMIT 0,2000";
 $limite = "";
 set_time_limit(0);
 $semdata = array("sem data",NULL,"NÃO DELETAR ESTE REGISTRO","c [sem data]","sem data sp","","NÃO DELETAR ESTE REGISTRO","[sem data]","[s.d]");
@@ -933,7 +933,7 @@ function termosRuins($termo){
 						
 						break;							
 						
-						case "registro_discoteca": // numero de faixas, exemplares, registro, data da edição/publicação(21)(pXXXX).
+						case "registro_partituras": // numero de faixas, exemplares, registro, data da edição/publicação(21)(pXXXX).
 				
 				
 				
@@ -988,9 +988,254 @@ function termosRuins($termo){
 						
 						break;							
 
+						case "ronoel":
+						echo "<h3>Migração da tabela Ronoel</h3>";
+						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+						echo "<h1>Criando os registros...</h1><br />";
+						$hoje = date('Y-m-d H:i:s');						
+						
+						$sql_busca = "SELECT * FROM temp_ronoel ORDER BY id ASC";
+						$query_busca = mysqli_query($con,$sql_busca);
+						$i = 0;
+						$tombo_comp = "teste";
+						$fora = array("291490", "69003-D", "24146", "24146", "29320","48.227");
+						while($res = mysqli_fetch_array($query_busca)){
+							
+							// tombo
+							$tombo = $res['TOMBO'];
+							if(mb_strpos($tombo, 'D78-') !== false){ // verifica se é um tombo válido
+								echo $tombo."<br />";
+								$tombo_comp = $tombo; // caso não seja
+							}else if($tombo == "não tombado"){
+								$monta_tombo = explode("-", $tombo_comp);
+								$tombo = "D78-".($monta_tombo[1]+1); 
+								$tombo_comp = $tombo;	
+								echo $tombo."<br />";
+							}else if($tombo == NULL){
+								echo $tombo_comp."/2 <br />";
+							}	
+
+							// Cria a matriz na tabela acervo_discoteca
+							// Cria o registro na tabela acervo_registro
+							// Relaciona as analíticas às matrizes
+							// Relaciona os termos às analíticas (autores, genero);
+							
+							//Jerezana 291490, 69003-D, 24146, 24146, 29320,48.227 1183, 1184, 1185, 1186, 
+
+							// Cria matriz na tabela acervo_discoteca
+							if($res['LADO'] == 'A' AND !in_array($res['N_DISCO'],$fora)){
+							$planilha = 17;
+							$catalogador = ""; //cod Jefferson
+							$tipo_geral = 19;
+							$tipo_especifico = 38;
+							//$gravadora
+							$registro = $res['N_DISCO'];
+							$tipo_data = 21;
+							$data_gravacao = $res['ANO'];
+							$estereo = 29;
+							$descricao_fisica = 26;
+							$polegadas = 32;
+							$faixas = 2;
+							$exemplares = $res['QTDE. EXEMPLARES'];
+							$titulo_disco = $res['TÍTULO'];
+
+							//$conteudo
+							$notas;
+							$obs = $res['OBSERVAÇÕES'];
+							$idTemp = $res['id'];
+
+
+								$sql_insere = "INSERT INTO `acervo_discoteca` (`idDisco`, `editado`, `fim`, `planilha`, `matriz`, `catalogador`, `tipo_geral`, `tipo_especifico`, `tombo_tipo`, `lado`, `faixa`, `pag_inicial`, `pag_final`, `tombo`, `gravadora`, `registro`, `comp_registro`, `tipo_data`, `data_gravacao`, `local_gravacao`, `estereo`, `descricao_fisica`, `polegadas`, `faixas`, `duracao`, `exemplares`, `titulo_disco`, `titulo_faixa`, `titulo_uniforme`, `conteudo`, `titulo_resumo`, `serie`, `notas`, `obs`, `disponivel`, `idTemp`) VALUES (NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', '', '', '', NULL, NULL, NULL, '', '', NULL, NULL, '', NULL, '', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '');";
+								
+							}
+							
+							
+						
+						//insere na tabela acervo_discoteca
+
+							
+
+
+
+
+						}
+
 						
 						
 						
+
+						$depois = strtotime(date('Y-m-d H:i:s'));
+						$tempo = $depois - $antes;
+						echo "<br /><br /> Importação executada em $tempo segundos";
+						
+						break;
+						
+
+						case "partituras_paginas": //retirar o número do resumo tombo (depois do p. até o final da string)
+						echo "<h3>Default</h3>";
+						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+						echo "<h1>Criando os registros...</h1><br />";
+						$hoje = date('Y-m-d H:i:s');						
+						
+
+						$depois = strtotime(date('Y-m-d H:i:s'));
+						$tempo = $depois - $antes;
+						echo "<br /><br /> Importação executada em $tempo segundos";
+						
+						break;
+
+						case "tainacan_partituras":
+						echo "<h3>Gera Tainacan Partituras</h3>";
+						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+						echo "<h1>Criando os registros...</h1><br />";
+						$hoje = date('Y-m-d H:i:s');						
+
+						// limpa tabaela acervo_tainacan
+						$sql_limpa = "TRUNCATE `acervo_tainacan`";
+						$query_limpa = mysqli_query($con,$sql_limpa);
+						
+						//
+						$sql_busca = "SELECT tombo,id_acervo,planilha,editora,medidas,paginas,data_gravacao,titulo,idDisco,id_registro  FROM acervo_registro, acervo_partituras WHERE acervo_registro.id_tabela = acervo_partituras.idDisco AND acervo_registro.publicado = '1' AND acervo_registro.tabela = '97' $limite";
+						
+						$query_busca = mysqli_query($con,$sql_busca);
+						
+						while($res = mysqli_fetch_array($query_busca)){
+							//echo $res['titulo']."<br />";
+							$colecao = reColecao($res['id_acervo']);
+							
+							//var_dump($col);
+							$tombo = $res['tombo'];
+							if($res['planilha'] == 17){
+								$catalogacao = "Matriz";
+							}else if($res['planilha'] == 18){
+								$catalogacao = "Analítica";
+							}
+							$idDisco = $res['idDisco'];
+							$grav = recuperaDados("acervo_termo",$res['editora'],"id_termo");
+							
+							$gravadora = addslashes($grav['termo']);
+							$medida = $res['medidas']."cm / ".$res['paginas']."página(s)";
+							if($res['data_gravacao'] == '9999'){
+								$data = "[ s. d. ]";
+							}else{
+								$data = $res['data_gravacao'];
+							}
+							$titulo = addslashes($res['titulo']);
+							$autor = retornaAutoridades($res['id_registro']);
+							$autoridade = addslashes($autor['string']);
+							$descricao = geraConteudo($res['idDisco']);
+							
+							$forma_genero = "";
+							$instrumentacao = "";
+							$descritores = "";
+							$palavra_chave = "";
+							$meio_expressao = "";
+							
+								/*
+								15 // Forma / Gênero
+								13 // Meio de Expressão
+								85 // Série
+								119 // Descritor Geográfico
+								121 // Instrumentação
+								14 // Local
+								78 // Categoria
+								12 // Gravadora
+								100 // Editora
+								122 // Descritor Cronológico
+								*/
+							
+							
+							
+							$termos = listaTermos($res['id_registro'],"1,15,13,119,121,78,12,100,122");
+							
+							
+							
+							for($i = 0; $i < $termos['total']; $i++){
+								if($termos[$i]['tipo'] == "Meio de Expressão"){
+										$meio_expressao .= $termos[$i]['termo']." || ";
+								}else if($termos[$i]['tipo'] == "Forma / Gênero"){
+										$forma_genero .= $termos[$i]['termo']." || ";
+								}else if($termos[$i]['tipo'] == "Instrumentação"){
+										$instrumentacao .= $termos[$i]['termo']." || ";
+								}else if($termos[$i]['tipo'] == "Descritor Geográfico"){
+										$descritores .= $termos[$i]['termo']." || ";
+								}else if($termos[$i]['tipo'] == "Descritor Cronológico"){
+										$descritores .= $termos[$i]['termo']." || ";
+								}
+								$palavra_chave .= $termos[$i]['termo']." || ";
+								//echo $termos[$i]['tipo']." / ".$termos[$i]['termo']."<br />";
+							}
+							
+							echo $tombo."<br />";
+							//echo $instrumentacao."<br />";
+							//echo $descritores."<br />";
+							//echo $palavra_chave."<br />";
+							//echo $meio_expressao."<br />";	
+							echo "<pre>";
+							var_dump($res);
+							echo "</pre>";				
+							
+						$sql_insere = "INSERT INTO `acervo_tainacan` (`id`, `colecao`, `tombo`, `catalogacao`, `gravadora`, `medida`, `data`, `titulo`, `autoridade`, `descricao`, `forma_genero`, `instrumentacao`, `meio_expressao`, `descritores`, `palavra-chave`, `idDisco`) VALUES (NULL, '$colecao', '$tombo', '$catalogacao', '$gravadora','$medida', '$data', '$titulo', '$autoridade', '$descricao', '$forma_genero', '$instrumentacao', '$meio_expressao', '$descritores', '$palavra_chave','$idDisco');";
+							if(mysqli_query($con,$sql_insere)){
+								echo $titulo." inserido com sucesso.<br />";
+							}else{
+								echo $sql_insere."<br />";
+							}							
+								
+						}
+						
+						
+						// conserta tombo, data
+					
+
+						
+						
+
+						
+
+						$depois = strtotime(date('Y-m-d H:i:s'));
+						$tempo = $depois - $antes;
+						echo "<br /><br /> Importação executada em $tempo segundos";
+						
+						break;
+
+
+						case "titulos_partituras":
+						echo "<h3>Títulos partituras</h3>";
+						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+						echo "<h1>Criando os registros...</h1><br />";
+						$hoje = date('Y-m-d H:i:s');	
+
+						$sql_busca = "SELECT conteudo FROM acervo_partituras WHERE (titulo_disco LIKE '' OR titulo_disco LIKE '.')  AND NOT idTemp = '0'" ;
+						$query_busca = mysqli_query($con,$sql_busca);
+						while($res = mysqli_fetch_array($query_busca)){
+							$titulo = str_replace("TÍTULO DA PARTITURA:", "", $res['conteudo']);
+							
+							
+							
+						}
+						
+
+						$depois = strtotime(date('Y-m-d H:i:s'));
+						$tempo = $depois - $antes;
+						echo "<br /><br /> Importação executada em $tempo segundos";
+						
+						break;
+						
+						default:
+						echo "<h3>Default</h3>";
+						$antes = strtotime(date('Y-m-d H:i:s')); // note que usei hífen
+						echo "<h1>Criando os registros...</h1><br />";
+						$hoje = date('Y-m-d H:i:s');	
+
+
+						
+
+						$depois = strtotime(date('Y-m-d H:i:s'));
+						$tempo = $depois - $antes;
+						echo "<br /><br /> Importação executada em $tempo segundos";
+						
+						break;
 						
 						
 						

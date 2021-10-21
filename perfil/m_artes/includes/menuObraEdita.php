@@ -11,7 +11,9 @@ $pasta = "?perfil=artes&p=";
 						<li><a href="<?php echo $pasta."frm_lista_obras"; ?>">Listar obras</a></li>
 						<li><a href="<?php echo $pasta."frm_insere_obra"; ?>">Inserir obra</a></li>
 						<li><a href="<?php echo $pasta."frm_busca_obra"; ?>">Busca obra</a></li>
-                      	<!--<li><a href="#">Autoridades</a>	
+
+						
+                      	<li><a href="#">Autoridades</a>	
 								<ul class="dl-submenu">
 									<li><a href="<?php echo $pasta."frm_busca_autoridades"; ?>">Buscar Autoridades</a></li>
 									<li><a href="<?php echo $pasta."frm_insere_autoridade"; ?>">Inserir Autoridades</a></li>
@@ -22,7 +24,12 @@ $pasta = "?perfil=artes&p=";
 									<li><a href="<?php echo $pasta."frm_lista_av"; ?>">Buscar termo</a></li>
 									<li><a href="<?php echo $pasta."frm_insere_av"; ?>">Inserir termo</a></li>
 									</ul>
-						</li>-->
+						</li>							
+						<li><a href="<?php echo $pasta."frm_lista_obras"; ?>">Ficha Técnica</a></li>						
+						<li><a href="<?php echo $pasta."frm_lista_obras"; ?>">Documentação</a></li>
+						<li><a href="<?php echo $pasta."frm_lista_obras"; ?>">Eventos</a></li>
+						<li><a href="<?php echo $pasta."frm_lista_obras"; ?>">Arquivos</a></li>
+
                             <li><a href="?perfil=discoteca">Inicio</a></li>
  							<li><a href="#">Outras Opções</a> 
     
